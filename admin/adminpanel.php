@@ -44,32 +44,32 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
             </div>
             <ul class="sidebar-nav">
                 <li class="sidebar-item ">
-                    <a href="admin/dashboard" class="sidebar-link active" id="dashboard-link">
+                    <a href="dashboard.php" class="sidebar-link active">
                         <i class="fa-solid fa-table-cells-large"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="admin/profile" class="sidebar-link" id="profile-link">
+                    <a href="profile.php" class="sidebar-link">
                         <i class="fa-solid fa-user"></i>
                         <span>Profile</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="admin/manageUser" class="sidebar-link" id="manage-user-link">
+                    <a href="manageUser.php" class="sidebar-link">
                         <i class="fa-solid fa-user-plus"></i>
                         <span>Manage User</span>
                     </a>
                 </li>
 
                 <li class="sidebar-item">
-                    <a href="admin/class" class="sidebar-link" id="class-link">
+                    <a href="manageClass.php" class="sidebar-link">
                         <i class="fa-solid fa-house-user"></i>
                         <span>Class</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/studentClasses" class="sidebar-link" id="student-classes-link">
+                    <a href="manageStudentClasses.php" class="sidebar-link">
                         <i class="fa-solid fa-circle-plus"></i>
                         <span>Student Classes</span>
                     </a>
@@ -84,7 +84,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
         </aside>
 
         <div class="main">
-            <nav class="navbar navbar-expand px-4 py-3 shadow p-3 mb-5 bg-body rounded">
+            <nav class="navbar navbar-expand px-4 py-3 shadow p-3 mb-5 bg-body roundedsticky-top">
                 <form action="#" class="d-none d-sm-inline-block">
                 </form>
                 <div class="navbar-collapse">
@@ -97,56 +97,49 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                 <img src="../img/cartoon-man-leaving-review.jpg" class="avatar img-fluid" alt="">
                             </a>
                             <div class="dropdown-menu dropdown-menu-end rounded">
-
+                            <i class="fa-solid fa-circle-plus"></i>
                             </div>
                         </li>
                     </ul>
                 </div>
             </nav>
-            <main class="content px-3 py-4">
+            <div id="page-content" class="container-lg" >
                 <!-- Content will be dynamically loaded here -->
-            </main>
+            </div>
         </div>
     </div>
+    
     <!-- Your custom scripts -->
     <script src="script.js"></script>
     <script>
-        $(document).ready(function () {
-            $(".sidebar-link").click(function (event) {
-                event.preventDefault();
-
-                var linkId = $(this).attr("id");
-                var url = '';
-
-                switch (linkId) {
-                    case 'dashboard-link':
-                        url = 'dashboard.php';
-                        break;
-                    case 'profile-link':
-                        url = 'profile.php';
-                        break;
-                    case 'manage-user-link':
-                        url = 'manageUser.php';
-                        break;
-                    case 'class-link':
-                        url = 'manageClass.php';
-                        break;
-                    case 'student-classes-link':
-                        url = 'manageStudentClasses.php';
-                        break;
-                    // Add more cases for additional links
-                }
-
+        $(document).ready(function() {
+            // Function to load manageUser.php into page-content section
+            function loadManageUserPage() {
                 $.ajax({
-                    type: 'GET',
-                    url: url,
-                    success: function (data) {
-                        $('main.content').html(data);
-                        // Change the URL
-                        window.history.pushState("", "", linkId);
+                    url: "dashboard.php", // URL of the page to load
+                    success: function(response) {
+                        $("#page-content").html(response); // Insert fetched content into page-content section
                     },
-                    error: function () {
-                        alert('Error loading content.');
+                    error: function(xhr, status, error) {
+                        console.error("Error loading page:", error); // Log any errors
+                    }
+                });
+            }
+
+            // Call the function to load manageUser.php initially
+            loadManageUserPage();
+
+            // Event listener for sidebar links (if sidebar links exist)
+            $(document).on("click", ".sidebar-link", function(event) {
+                event.preventDefault(); // Prevent default link behavior
+                var url = $(this).attr("href"); // Get the URL of the clicked link
+                $.ajax({
+                    url: url, // URL of the page to load
+                    success: function(response) {
+                        $("#page-content").html(response); // Insert fetched content into page-content section
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error loading page:", error); // Log any errors
                     }
                 });
             });
