@@ -1,44 +1,61 @@
 <?php
    include "connect.php";
+          session_start();
 
-   // Check if the form is submitted
-   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-       $username = $_POST['email'];
-       $password = $_POST['password'];
-       $userType = $_POST['user_type']; // Get selected user type from the form
+          // Function to authenticate user
+          function authenticateUser($username, $password) {
+              global $con;
+          
+              $query = "SELECT * FROM user WHERE email = ? AND password = ? LIMIT 1";
+          
+              $stmt = $con->prepare($query);
+              $stmt->bind_param("ss", $username, $password);
+          
+              $stmt->execute();
+              $result = $stmt->get_result();
+          
+              if ($result->num_rows === 1) {
+                  $user = $result->fetch_assoc();
+                  return $user;
+              } else {
+                  return null;
+              }
+          
+              $stmt->close();
+          }
+          
+          if (isset($_POST['login'])) {
+              $username = $_POST['email'];
+              $password = $_POST['password'];
+          
+              $user = authenticateUser($username, $password);
+          
+              if ($user) {
+                  // Authentication successful
+                  // Store user type in the session
+                  $_SESSION['type'] = $user['type'];
+          
+                  // Redirect to the appropriate dashboard based on user role
+                  if ($user['type'] == 'admin') {
+                      header("Location: admin/adminpanel.php");
+                  } elseif ($user['type'] == 2) {
+                      header("Location: guidance/dashboard.php");
+                  } elseif ($user['type'] == 3) {
+                      header("Location: student/dashboard.php");
+                  } else {
+                      // Handle other roles if needed
+                      echo "Invalid user type";
+                  }
+          
+                  exit();
+              } else {
+                  // Authentication failed
+                  // Handle accordingly, e.g., show an error message
+                  echo "Invalid username or password";
+              }
+          }
    
-       // Perform SQL query to check user credentials
-       $query = "SELECT * FROM user WHERE email='$username' AND password='$password' AND type='$userType'";
-       $result = $con->query($query);
-   
-       if ($result->num_rows > 0) {
-           // User found, store user type in the session
-           session_start();
-           $_SESSION['user_type'] = $userType;
-   
-           // Redirect based on user type
-           switch ($userType) {
-               case '3':
-                   header("Location: student/dashboard.php");
-                   break;
-               case '2':
-                   header("Location: guidance/dashboard.php");
-                   break;
-               case '1':
-                   header("Location: admin/adminpanel.php");
-                   break;
-               default:
-                   echo "Invalid user type.";
-           }
-       } else {
-           echo "Invalid username or password.";
-       }
-   }
-   
-   // Close the database connection
-   $con->close();
-
-?>
+        ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,17 +80,17 @@
 
         <form method="POST">
 
-           <!-- select user -->
+           <!-- select user
            <select class="form-select" aria-label="Default select example" name="user_type">
            <option selected>Login As</option>
                 <option value="1">Admin</option>
                 <option value="2">Guidance</option>
                 <option value="3">Student</option>
-            </select>
+            </select> -->
 
           <!-- Email input -->
           <div class="form-outline mb-4 mt-4">
-            <input type="email" id="form3Example3" class="form-control form-control-lg"
+            <input type="email" class="form-control form-control-lg"
                 placeholder="Enter a valid email address" name="email" />
             <label class="form-label" for="form3Example3">Email address</label>
             </div>
@@ -96,11 +113,11 @@
             </div>
            
             <div class="d-grid gap-2 col-6 mx-end">
-            <input class="btn btn-primary" type="submit" value="Login"/>
+            <input class="btn btn-primary" type="submit" value="Login" name="login"/>
             </div>
          
           </div>
-          
+        
         </form>
       </div>
     </div>
