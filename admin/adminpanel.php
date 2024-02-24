@@ -17,17 +17,22 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
     <!-- Your custom CSS -->
     <link rel="stylesheet" href="css/dashboard.css">
-
-    <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/658ff99b54.js" crossorigin="anonymous"></script>
+    
+    
+     <!-- DataTables CSS -->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+         <!-- DataTables JS -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+     <!-- Font Awesome -->
+     <script src="https://kit.fontawesome.com/658ff99b54.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+   
 
 </head>
 
@@ -104,44 +109,85 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                 </div>
             </nav>
             <div id="page-content" class="container-lg" >
-                <!-- Content will be dynamically loaded here -->
+            <div class="row">
+                        <div class="col-sm-3">
+                            <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
             </div>
         </div>
     </div>
     
+    
+
     <!-- Your custom scripts -->
     <script src="script.js"></script>
     <script>
+        
         $(document).ready(function() {
-            // Function to load manageUser.php into page-content section
-            function loadManageUserPage() {
+            function loadPage(url) {
                 $.ajax({
-                    url: "dashboard.php", // URL of the page to load
+                    async: true,
+                    url: url,
                     success: function(response) {
-                        $("#page-content").html(response); // Insert fetched content into page-content section
+                        $("#page-content").html(response);
                     },
                     error: function(xhr, status, error) {
-                        console.error("Error loading page:", error); // Log any errors
+                        console.error("Error loading page:", error);
                     }
                 });
             }
 
-            // Call the function to load manageUser.php initially
-            loadManageUserPage();
+            // Load dashboard.php initially
+            loadPage("dashboard.php");
 
-            // Event listener for sidebar links (if sidebar links exist)
+            // Event listener for sidebar links
             $(document).on("click", ".sidebar-link", function(event) {
-                event.preventDefault(); // Prevent default link behavior
-                var url = $(this).attr("href"); // Get the URL of the clicked link
-                $.ajax({
-                    url: url, // URL of the page to load
-                    success: function(response) {
-                        $("#page-content").html(response); // Insert fetched content into page-content section
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error loading page:", error); // Log any errors
-                    }
-                });
+                event.preventDefault();
+                var url = $(this).attr("href");
+                loadPage(url);
             });
         });
     </script>
