@@ -37,7 +37,7 @@
           
                   // Redirect to the appropriate dashboard based on user role
                   if ($user['type'] == 'admin') {
-                      header("Location: admin/adminpanel.php");
+                      header("Location: admin/dashboard.php");
                   } elseif ($user['type'] == 2) {
                       header("Location: guidance/dashboard.php");
                   } elseif ($user['type'] == 3) {

@@ -1,10 +1,3 @@
-<?php
-session_start();
-if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
-    header("Location: unauthorized_access.php");
-    exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,10 +25,9 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
      <!-- Font Awesome -->
      <script src="https://kit.fontawesome.com/658ff99b54.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    <style>
-    body{
-        
-    }
+   
    </style>
 
 </head>
@@ -92,12 +84,12 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
             </div>
         </aside>
     
-        <div class="main">
-            <nav class="navbar navbar-expand px-1 py-1 shadow p-1 mb-3 bg-body roundedsticky-top">
+        <div class="main" style="background-color: #F5F5F5;">
+            <nav class="navbar navbar-expand px-1 py-2 shadow p-1 mb-3 bg-body roundedsticky-top">
                 <form action="#" class="d-none d-sm-inline-block">
                 </form>
                 <div class="navbar-collapse">
-                    <label for="">Faculty Evaluation System</label>
+                    <label>Faculty Evaluation System</label>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav ms-auto">
@@ -114,14 +106,14 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
             </nav>
             <div id="page-content" class="col-md-12 px-5 py-1" >
             <div class="row">
-            <div class="container-fluid shadow p-3 mb-5 bg-body rounded">
+            <div class="container-fluid shadow p-3 mb-5 bg-body rounded ">
         <div class="d-grid gap-2 col-2 mx-2">
             <h5>
-                <p class="font-monospace">Manage User</p>
+                <p class="font-monospace "  style=" font-size: 20px !important;">Manage User</p>
             </h5>
         </div>
   
-            <button type="button" class="btn btn-primary mx-auto " data-bs-toggle="modal"
+            <button type="button" class="btn btn-primary mx-auto "  style=" font-size: 12px !important;" data-bs-toggle="modal"
             data-bs-target="#staticBackdrop">
             <i class="fa-solid fa-plus"></i>
             Add User
@@ -138,7 +130,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                             <form class="row g-3" method="POST">
                                 <div class="col-5">
                                     <label for="inputID4" class="form-label">Guidance ID</label>
-                                    <input type="text" class="form-control" id="inputID4" name="id">
+                                    <input type="text" class="form-control" id="inputID4" name="user_id">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="inputEmail4" class="form-label">Email</label>
@@ -152,9 +144,10 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                     <label for="inputType" class="form-label">Type</label>
                                     <select id="inputType" class="form-select" name="type">
                                         <option selected>Choose...</option>
-                                        <option value="admin">admin</option>
-                                        <option value="guidance">guidance</option>
-                                        <option value="student">student</option>
+                                        <option value="admin">Admin</option>
+                                        <option value="guidance">Guidance</option>
+                                        <option value="student">Student</option>
+                                        <option value="teacher">Teacher</option>
                                     </select>
                                 </div>
                                 <div class="col-12">
@@ -168,7 +161,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
                                     </button>
-                                    <button class="btn btn-primary" name="save_changes">Submit</button>
+                                    <button id="saveChangesBtn" class="btn btn-primary" name="save_changes">Submit</button>
                                 </div>
                             </form>
                         </div>
@@ -192,6 +185,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
             </div>
         </div>
             <div class="mt-3"></div>
+            <div class="table-responsive">
         <table id="example" class="table table-striped" style="width:100%; font-size: 12px !important;">
             <thead>
                 <tr>
@@ -208,13 +202,13 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
             </thead>
             <tbody>
                 <?php
-                $sqlquery = mysqli_query($con, "SELECT * FROM user ORDER BY id DESC");
+                $sqlquery = mysqli_query($con, "SELECT * FROM user ORDER BY id DESC;");
                 $i = 1;
                 while ($rows = mysqli_fetch_array($sqlquery)) {
                 ?>
                 <tr class="mt-4">
+                     <td><?php echo $i++; ?></td>
                     <td style="display:none;"><?php echo $rows['id']; ?></td>
-                    <td><?php echo $i++; ?></td>
                     <td><?php echo $rows['user-id']; ?></td>
                     <td><?php echo $rows['email']; ?></td>
                     <td><?php echo $rows['type']; ?></td>
@@ -223,35 +217,43 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                     <td><?php echo $rows['date_created']; ?></td>
                     <td><?php echo $rows['date_updated']; ?></td>
                     <td>
-                        <div class="d-inline d-lg-none">
+                    <div class="d-inline d-lg-none">
                             <button class="btn btn-primary btn-sm" id="ellipsisButton">
                                 <i class="fas fa-ellipsis-v"></i>
                             </button>
+                            <div class="ellipsis-menu" style="display: none;">
+                                <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" style="font-size: 12px !important;"
+                                    data-bs-target="#editModal" data-user-id="<?php echo $rows['user-id']; ?>">Edit
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm delete-btn" style="font-size: 12px !important;" data-id="<?php echo $rows['id']; ?>">Delete</button>
+                            </div>
                         </div>
+
                         <div class="d-none d-lg-inline">
-                            <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" style="font-size: 12px !important;"
                                 data-bs-target="#editModal" data-user-id="<?php echo $rows['user-id']; ?>">Edit
                             </button>
-                            <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                            <button type="button" class="btn btn-danger btn-sm delete-btn" style="font-size: 12px !important;" data-id="<?php echo $rows['id']; ?>">Delete</button>
                         </div>
-                    </td>
                 </tr>
                 <?php
                 }
                 ?>
             </tbody>
         </table>
+            </div>
             <script src="manageUser.js"></script>
         </div>
             </div>
         </div>
     </div>
-    
-    
-
+                <script> $(document).ready(function () {
+        $("#ellipsisButton").on("click", function () {
+            $(".ellipsis-menu").toggle();
+        });
+    });</script>
     <!-- Your custom scripts -->
     <script src="script.js">
-       
     </script> 
 </body>
 

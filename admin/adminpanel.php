@@ -109,53 +109,9 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                 </div>
             </nav>
             <div id="page-content" class="container-lg" >
-            <div class="row">
-                        <div class="col-sm-3">
-                            <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
+                 <div class="row">
+                       
+                </div>
             </div>
         </div>
     </div>
@@ -165,31 +121,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
     <!-- Your custom scripts -->
     <script src="script.js"></script>
     <script>
-        
-        // $(document).ready(function() {
-        //     function loadPage(url) {
-        //         $.ajax({
-        //             async: true,
-        //             url: url,
-        //             success: function(response) {
-        //                 $("#page-content").html(response);
-        //             },
-        //             error: function(xhr, status, error) {
-        //                 console.error("Error loading page:", error);
-        //             }
-        //         });
-        //     }
-
-        //     // Load dashboard.php initially
-        //     loadPage("dashboard.php");
-
-        //     // Event listener for sidebar links
-        //     $(document).on("click", ".sidebar-link", function(event) {
-        //         event.preventDefault();
-        //         var url = $(this).attr("href");
-        //         loadPage(url);
-        //     });
-        // });
+       
     </script>
 </body>
 

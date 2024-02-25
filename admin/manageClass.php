@@ -1,79 +1,128 @@
+<?php
+session_start();
+if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
+    header("Location: unauthorized_access.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage User</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css" /> 
-    <script src="https://cdn.datatables.net/2.0.0/js/dataTables.js"></script>
+    <title>Sidebar With Bootstrap</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+    <!-- Your custom CSS -->
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    
+     <!-- DataTables CSS -->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+         <!-- DataTables JS -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+     <!-- Font Awesome -->
+     <script src="https://kit.fontawesome.com/658ff99b54.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+   
 
 </head>
+
 <body>
- 
-    <div class="container">
-        
-        <table id="example" class="table table-striped" style="width:100%">
-            <thead>
-                <tr>
-                     <th>Class Code</th>
-                    <th>Class Name</th>
-                    <th>Instructor ID</th>
-                    <th>Date Created</th>
-                    <th>Date Updated</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                // Include database connection
-                include "../connect.php";
-                
-                // SQL query to fetch data
-                $sql = "SELECT classCode, className, instructorID, date_created, date_updated FROM tblclass";
-                $result = mysqli_query($con, $sql);
+    <div class="wrapper">
+        <aside id="sidebar">
+            <div class="d-flex">
+                <button class="toggle-btn" type="button">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="sidebar-logo">
+                    <a href="#">Faculty Evaluation System</a>
+                </div>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-item ">
+                    <a href="dashboard.php" class="sidebar-link active">
+                        <i class="fa-solid fa-table-cells-large"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="profile.php" class="sidebar-link">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="manageUser.php" class="sidebar-link">
+                        <i class="fa-solid fa-user-plus"></i>
+                        <span>Manage User</span>
+                    </a>
+                </li>
 
-                // Check if there are any rows returned
-                if (mysqli_num_rows($result) > 0) {
-                    // Loop through each row of data
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<tr>";
-                        echo "<td>" . $row["classCode"] . "</td>";
-                        echo "<td>" . $row["className"] . "</td>";
-                        echo "<td>" . $row["instructorID"] . "</td>";
-                        echo "<td>" . $row["date_created"] . "</td>";
-                        echo "<td>" . $row["date_updated"] . "</td>";
-                        echo '<td><a href="#" class="btn btn-primary">Edit</a> 
-                                  <a href="#" class="btn btn-danger">Delete</a></td>';
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='5'>No data found</td></tr>";
-                }
-
-                // Close connection
-                mysqli_close($con);
-                ?>
-            </tbody>
-        </table>
+                <li class="sidebar-item">
+                    <a href="manageClass.php" class="sidebar-link">
+                        <i class="fa-solid fa-house-user"></i>
+                        <span>Class</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="manageStudentClasses.php" class="sidebar-link">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <span>Student Classes</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="#" class="sidebar-link">
+                    <i class="lni lni-exit"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+    
+        <div class="main" style="background-color: #F5F5F5;">
+            <nav class="navbar navbar-expand px-4 py-3 shadow p-3 mb-5 bg-body roundedsticky-top">
+                <form action="#" class="d-none d-sm-inline-block">
+                </form>
+                <div class="navbar-collapse">
+                    <label for="">Faculty Evaluation System</label>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
+                                <img src="../img/cartoon-man-leaving-review.jpg" class="avatar img-fluid" alt="">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end rounded">
+                            <i class="fa-solid fa-circle-plus"></i>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div id="page-content" class="container-lg" >
+                 <div class="row">
+                       <h1>Manage Class</h1>
+                </div>
+            </div>
+        </div>
     </div>
+    
+    
 
-    <!-- Add Class Modal -->
-    <div class="modal fade" id="addClassModal" tabindex="-1" role="dialog" aria-labelledby="addClassModalLabel" aria-hidden="true">
-        <!-- Modal content here -->
-    </div>
-
-    <!-- Edit Class Modal -->
-    <div class="modal fade" id="editClassModal" tabindex="-1" role="dialog" aria-labelledby="editClassModalLabel" aria-hidden="true">
-        <!-- Modal content here -->
-    </div>
-
-    <!-- Your custom script -->
+    <!-- Your custom scripts -->
+    <script src="script.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#example').DataTable();
-        });
+       
     </script>
 </body>
+
 </html>
