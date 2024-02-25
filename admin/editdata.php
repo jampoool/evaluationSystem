@@ -20,27 +20,27 @@ if(isset($_POST['id'])){
         $html = '<form action="update.php" method="POST">';
         $html .= '<input type="hidden" name="user_id" value="' . $row['user-id'] . '">';
         $html .= '<div class="form-group">';
-        $html .= '<label for="editEmail">Email</label>';
-        $html .= '<input type="email" name="email" class="form-control" id="editEmail" value="' . $row['email'] . '" required>';
+        $html .= '<label for="editEmail" class="form-label">Email</label>';
+        $html .= '<input type="email" name="email" class="form-control mb-2" id="editEmail" value="' . $row['email'] . '" required>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label for="editType">Type</label>';
-        $html .= '<select id="editType" class="form-select" name="editType">';
+        $html .= '<label for="editType" class="form-label">Type</label>';
+        $html .= '<select id="editType" class="form-select mb-2" name="editType">';
         $html .= '<option value="admin" ' . ($row['type'] == 'admin' ? 'selected' : '') . '>admin</option>';
         $html .= '<option value="guidance" ' . ($row['type'] == 'guidance' ? 'selected' : '') . '>guidance</option>';
         $html .= '<option value="student" ' . ($row['type'] == 'student' ? 'selected' : '') . '>student</option>';
         $html .= '</select>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label for="editDepartment">Department</label>';
-        $html .= '<select id="editDepartment" class="form-select" name="editDepartment">';
+        $html .= '<label for="editDepartment" class="form-label">Department</label>';
+        $html .= '<select id="editDepartment" class="form-select mb-2" name="editDepartment">';
         $html .= '<option value="1" ' . ($row['department'] == '1' ? 'selected' : '') . '>Basic Education Department</option>';
         $html .= '<option value="2" ' . ($row['department'] == '2' ? 'selected' : '') . '>Higher Education Department</option>';
         $html .= '</select>';
         $html .= '</div>';
         // Add more fields as needed
         
-        $html .= '<button type="submit" class="btn btn-primary">Update</button>';
+        $html .= '<button type="submit" class="btn btn-primary mt-5">Update</button>';
         $html .= '</form>';
 
         // Output the HTML content

@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Execute the update query
         if (mysqli_query($con, $sql)) {
             // If update successful, redirect to the page where the update was initiated
-            header("Location: http://localhost/evaluationSystem/admin/adminpanel.php");
+            header("Location: http://localhost/evaluationSystem/admin/manageUser.php");
             exit();
         } else {
             // If update fails, display an error message

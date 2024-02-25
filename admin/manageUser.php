@@ -1,36 +1,136 @@
+<?php
+session_start();
+if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
+    header("Location: unauthorized_access.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Evaluation System</title>
-    <link rel="stylesheet" href="css/mGuidance.css">
-       
-    <style>
-        .container {
-            background-color: #ffffff;
-        }
-    </style>
+    <title>Sidebar With Bootstrap</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+    <!-- Your custom CSS -->
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    
+     <!-- DataTables CSS -->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+         <!-- DataTables JS -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+     <!-- Font Awesome -->
+     <script src="https://kit.fontawesome.com/658ff99b54.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+   <style>
+    body{
+        
+    }
+   </style>
+
 </head>
 
 <body>
-    <div class="container-fluid shadow p-3 mb-5 bg-body rounded">
-        <div class="d-grid gap-2 col-1 mx-2">
+    <div class="wrapper">
+        <aside id="sidebar">
+            <div class="d-flex">
+                <button class="toggle-btn" type="button">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="sidebar-logo">
+                    <a href="#">Faculty Evaluation System</a>
+                </div>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-item ">
+                    <a href="dashboard.php" class="sidebar-link active">
+                        <i class="fa-solid fa-table-cells-large"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="profile.php" class="sidebar-link">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="manageUser.php" class="sidebar-link">
+                        <i class="fa-solid fa-user-plus"></i>
+                        <span>Manage User</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a href="manageClass.php" class="sidebar-link">
+                        <i class="fa-solid fa-house-user"></i>
+                        <span>Class</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="manageStudentClasses.php" class="sidebar-link">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <span>Student Classes</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="#" class="sidebar-link">
+                    <i class="lni lni-exit"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+    
+        <div class="main">
+            <nav class="navbar navbar-expand px-1 py-1 shadow p-1 mb-3 bg-body roundedsticky-top">
+                <form action="#" class="d-none d-sm-inline-block">
+                </form>
+                <div class="navbar-collapse">
+                    <label for="">Faculty Evaluation System</label>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
+                                <img src="../img/cartoon-man-leaving-review.jpg" class="avatar img-fluid" alt="">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end rounded">
+                            <i class="fa-solid fa-circle-plus"></i>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div id="page-content" class="col-md-12 px-5 py-1" >
+            <div class="row">
+            <div class="container-fluid shadow p-3 mb-5 bg-body rounded">
+        <div class="d-grid gap-2 col-2 mx-2">
             <h5>
                 <p class="font-monospace">Manage User</p>
             </h5>
         </div>
+  
             <button type="button" class="btn btn-primary mx-auto " data-bs-toggle="modal"
-            data-bs-target="#exampleModal">
+            data-bs-target="#staticBackdrop">
             <i class="fa-solid fa-plus"></i>
             Add User
             </button>
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -78,15 +178,12 @@
             </div>
         </div>
 
-        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalLabel">Edit</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body gap-3">
                         <?php include "editdata.php"; ?>
@@ -95,9 +192,11 @@
             </div>
         </div>
             <div class="mt-3"></div>
-        <table id="example" class="table table-striped" style="width:100%">
+        <table id="example" class="table table-striped" style="width:100%; font-size: 12px !important;">
             <thead>
                 <tr>
+                    <th style="display:none;">No.</th>
+                    <th>No.</th>
                     <th>User ID</th>
                     <th>Email</th>
                     <th>Type</th>
@@ -109,11 +208,13 @@
             </thead>
             <tbody>
                 <?php
-                $sqlquery = mysqli_query($con, "SELECT * FROM user");
-
+                $sqlquery = mysqli_query($con, "SELECT * FROM user ORDER BY id DESC");
+                $i = 1;
                 while ($rows = mysqli_fetch_array($sqlquery)) {
                 ?>
                 <tr class="mt-4">
+                    <td style="display:none;"><?php echo $rows['id']; ?></td>
+                    <td><?php echo $i++; ?></td>
                     <td><?php echo $rows['user-id']; ?></td>
                     <td><?php echo $rows['email']; ?></td>
                     <td><?php echo $rows['type']; ?></td>
@@ -140,15 +241,18 @@
                 ?>
             </tbody>
         </table>
-     
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css" /> 
-        <script src="https://cdn.datatables.net/2.0.0/js/dataTables.js"></script>
-
-        <script src="manageUser.js"></script>
+            <script src="manageUser.js"></script>
+        </div>
+            </div>
+        </div>
     </div>
+    
+    
+
+    <!-- Your custom scripts -->
+    <script src="script.js">
+       
+    </script> 
 </body>
 
 </html>

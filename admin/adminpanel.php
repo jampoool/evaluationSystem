@@ -87,7 +87,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                 </a>
             </div>
         </aside>
-
+    
         <div class="main">
             <nav class="navbar navbar-expand px-4 py-3 shadow p-3 mb-5 bg-body roundedsticky-top">
                 <form action="#" class="d-none d-sm-inline-block">
@@ -166,30 +166,30 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
     <script src="script.js"></script>
     <script>
         
-        $(document).ready(function() {
-            function loadPage(url) {
-                $.ajax({
-                    async: true,
-                    url: url,
-                    success: function(response) {
-                        $("#page-content").html(response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error loading page:", error);
-                    }
-                });
-            }
+        // $(document).ready(function() {
+        //     function loadPage(url) {
+        //         $.ajax({
+        //             async: true,
+        //             url: url,
+        //             success: function(response) {
+        //                 $("#page-content").html(response);
+        //             },
+        //             error: function(xhr, status, error) {
+        //                 console.error("Error loading page:", error);
+        //             }
+        //         });
+        //     }
 
-            // Load dashboard.php initially
-            loadPage("dashboard.php");
+        //     // Load dashboard.php initially
+        //     loadPage("dashboard.php");
 
-            // Event listener for sidebar links
-            $(document).on("click", ".sidebar-link", function(event) {
-                event.preventDefault();
-                var url = $(this).attr("href");
-                loadPage(url);
-            });
-        });
+        //     // Event listener for sidebar links
+        //     $(document).on("click", ".sidebar-link", function(event) {
+        //         event.preventDefault();
+        //         var url = $(this).attr("href");
+        //         loadPage(url);
+        //     });
+        // });
     </script>
 </body>
 
