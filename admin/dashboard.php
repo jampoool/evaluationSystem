@@ -35,11 +35,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.3/components/charts/chart-8/assets/css/chart-8.css">
-    <!-- <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css"> -->
-
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="https://unpkg.com/bs-brain@2.0.3/components/charts/chart-8/assets/controller/chart-8.js"></script>
+  
 
     <style>
       body{
@@ -92,6 +88,214 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
       .f-right {
           float: right;
       }
+      #card{
+        background-color: #1F2377;
+      }
+      path{
+         background-color: #1F2377;
+      }
+      body{margin-top:20px;}
+      @media (min-width:992px) {
+    .page-container {
+        max-width: 1140px;
+        margin: 0 auto
+    }
+
+    .page-sidenav {
+        display: block !important
+    }
+}
+
+.padding {
+    padding: 2rem
+}
+
+.w-32 {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: .85em
+}
+
+.tl-item .avatar {
+    z-index: 2
+}
+
+.circle {
+    border-radius: 500px
+}
+
+.gd-warning {
+    color: #fff;
+    border: none;
+    background: #f4c414 linear-gradient(45deg, #f4c414, #f45414)
+}
+
+.timeline {
+    position: relative;
+    border-color: rgba(160, 175, 185, .15);
+    padding: 0;
+    margin: 0
+}
+
+.p-4 {
+    padding: 1.5rem !important
+}
+
+.block,
+.card {
+    background: #fff;
+    border-width: 0;
+    border-radius: .25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+    margin-bottom: 1.5rem
+}
+
+.mb-4,
+.my-4 {
+    margin-bottom: 1.5rem !important
+}
+
+.tl-item {
+    border-radius: 3px;
+    position: relative;
+    display: -ms-flexbox;
+    display: flex
+}
+
+.tl-item>* {
+    padding: 10px
+}
+
+.tl-item .avatar {
+    z-index: 2
+}
+
+.tl-item:last-child .tl-dot:after {
+    display: none
+}
+
+.tl-item.active .tl-dot:before {
+    border-color: #448bff;
+    box-shadow: 0 0 0 4px rgba(68, 139, 255, .2)
+}
+
+.tl-item:last-child .tl-dot:after {
+    display: none
+}
+
+.tl-item.active .tl-dot:before {
+    border-color: #448bff;
+    box-shadow: 0 0 0 4px rgba(68, 139, 255, .2)
+}
+
+.tl-dot {
+    position: relative;
+    border-color: rgba(160, 175, 185, .15)
+}
+
+.tl-dot:after,
+.tl-dot:before {
+    content: '';
+    position: absolute;
+    border-color: inherit;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%)
+}
+
+.tl-dot:after {
+    width: 0;
+    height: auto;
+    top: 25px;
+    bottom: -15px;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-radius: 0
+}
+
+tl-item.active .tl-dot:before {
+    border-color: #448bff;
+    box-shadow: 0 0 0 4px rgba(68, 139, 255, .2)
+}
+
+.tl-dot {
+    position: relative;
+    border-color: rgba(160, 175, 185, .15)
+}
+
+.tl-dot:after,
+.tl-dot:before {
+    content: '';
+    position: absolute;
+    border-color: inherit;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%)
+}
+
+.tl-dot:after {
+    width: 0;
+    height: auto;
+    top: 25px;
+    bottom: -15px;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-radius: 0
+}
+
+.tl-content p:last-child {
+    margin-bottom: 0
+}
+
+.tl-date {
+    font-size: .85em;
+    margin-top: 2px;
+    min-width: 100px;
+    max-width: 100px
+}
+
+.avatar {
+    position: relative;
+    line-height: 1;
+    border-radius: 500px;
+    white-space: nowrap;
+    font-weight: 700;
+    border-radius: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    border-radius: 500px;
+    box-shadow: 0 5px 10px 0 rgba(50, 50, 50, .15)
+}
+
+.b-warning {
+    border-color: #f4c414!important;
+}
+
+.b-primary {
+    border-color: #448bff!important;
+}
+
+.b-danger {
+    border-color: #f54394!important;
+}
     </style>
 </head>
 <body>
@@ -139,7 +343,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                 </li>
             </ul>
             <div class="sidebar-footer">
-                <a href="#" class="sidebar-link">
+                <a href="../logout.php" class="sidebar-link">
                     <i class="lni lni-exit"></i>
                     <span>Logout</span>
                 </a>
@@ -166,53 +370,103 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                     </ul>
                 </div>
             </nav>
-           
+            <?php var_dump($_SESSION) ;?>
             <div class="container">
                 <div class="row shadow-sm p-2 mb-2 bg-white rounded">
                       <div class="col-md-4 col-xl-3">
-                        <div class="card bg-c-blue order-card">
+                        <div class="card order-card" id="card">
                             <div class="card-block">
-                                <h6 class="m-b-20">Total Students</h6>
-                                <h2 class="text-right"><i class="bi bi-person"></i> <span>486</span></h2>
-                                <p class="m-b-0">Total Active Students<span class="f-right">351</span></p>
+                            <h6 class="m-b-20">Total Students</h6>
+                                <h2 class="text-right"><i class="bi bi-person"></i> <span> 
+                                         <?php
+                                                $sql = "SELECT * from user where type='student'";
+                                                if ($result = mysqli_query($con, $sql)) {
+                                                
+                                                    // Return the number of rows in result set
+                                                    $rowcount = mysqli_num_rows( $result );
+                                                    
+                                                    // Display result
+                                                    printf(" %d\n", $rowcount);
+                                                }
+                                             ?>
+                                        </span></h2>
+                                <a href="#" id="view" class="text-decoration-underline d-block mt-1 f-right" style="font-size: 13px;color: white; transition: text-decoration 0.5s;">View Details <i class="bi bi-arrow-right" style="font-size: 10px;"></i></a>
                             </div>
                         </div>
                      </div>
                     
                     <div class="col-md-4 col-xl-3">
-                        <div class="card bg-c-green order-card">
+                        <div class="card order-card" id="card">
                             <div class="card-block">
-                                <h6 class="m-b-20">Orders Received</h6>
-                                <h2 class="text-right"><i class="fa fa-rocket f-left"></i> <span>486</span></h2>
-                                <p class="m-b-0">Completed Orders<span class="f-right">351</span></p>
-                            </div>
+                                <h6 class="m-b-20">Total Guidance</h6>
+                                <h2 class="text-right"><i class="bi bi-person"></i> <span>
+                                         <?php
+                                                $sql = "SELECT * from user where type='Guidance'";
+                                                if ($result = mysqli_query($con, $sql)) {
+                                                
+                                                    // Return the number of rows in result set
+                                                    $rowcount = mysqli_num_rows( $result );
+                                                    
+                                                    // Display result
+                                                    printf(" %d\n", $rowcount);
+                                                }
+                                             ?>
+                                </span></h2>
+                                <a href="#" id="view" class="text-decoration-underline d-block mt-1 f-right" style="font-size: 13px;color: white; transition: text-decoration 0.5s;">View Details <i class="bi bi-arrow-right" style="font-size: 10px;"></i></a>
+                           </div>
                         </div>
                     </div>
                     
                     <div class="col-md-4 col-xl-3">
-                        <div class="card bg-c-yellow order-card">
+                        <div class="card order-card" id="card">
                             <div class="card-block">
-                                <h6 class="m-b-20">Orders Received</h6>
-                                <h2 class="text-right"><i class="fa fa-refresh f-left"></i> <span>486</span></h2>
-                                <p class="m-b-0">Completed Orders<span class="f-right">351</span></p>
-                            </div>
+                                <h6 class="m-b-20">Total Teacher</h6>
+                                <h2 class="text-right"><i class="bi bi-person"></i> <span>
+                                        <?php
+                                                $sql = "SELECT * from user where type='teacher'";
+                                                if ($result = mysqli_query($con, $sql)) {
+                                                
+                                                    // Return the number of rows in result set
+                                                    $rowcount = mysqli_num_rows( $result );
+                                                    
+                                                    // Display result
+                                                    printf(" %d\n", $rowcount);
+                                                }
+                                             ?>
+                                </span></h2>
+                                <a href="#" id="view" class="text-decoration-underline d-block mt-1 f-right" style="font-size: 13px;color: white; transition: text-decoration 0.5s;">View Details <i class="bi bi-arrow-right" style="font-size: 10px;"></i></a>
+                          </div>
                         </div>
                     </div>
                     
                     <div class="col-md-4 col-xl-3">
-                        <div class="card bg-c-pink order-card">
+                        <div class="card order-card" id="card">
                             <div class="card-block">
-                                <h6 class="m-b-20">Orders Received</h6>
-                                <h2 class="text-right"><i class="fa fa-credit-card f-left"></i> <span>486</span></h2>
-                                <p class="m-b-0">Completed Orders<span class="f-right">351</span></p>
+                                <h6 class="m-b-20">Total Admin</h6>
+                                <h2 class="text-right"><i class="bi bi-person"></i> <span>
+                                         <?php
+                                                $sql = "SELECT * from user where type='admin'";
+                                                if ($result = mysqli_query($con, $sql)) {
+                                                
+                                                    // Return the number of rows in result set
+                                                    $rowcount = mysqli_num_rows( $result );
+                                                    
+                                                    // Display result
+                                                    printf(" %d\n", $rowcount);
+                                                }
+                                             ?>
+                                </span></h2>
+                                <a href="#" id="view" class="text-decoration-underline d-block mt-1 f-right" style="font-size: 13px;color: white; transition: text-decoration 0.5s;">View Details <i class="bi bi-arrow-right" style="font-size: 10px;"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
           </div>
+          
                       <div class="container shadow-sm p-3 mb-5 bg-white rounded">
+                      <p class="col-md-4">Recent Added Users</p>
                                   <div class="row">
-                                  <div class="col-sm-8">
+                                  <div class="col-sm-7">
                                       <div class="table-responsive">
                                       <table id="example" class="table table-hover" style="width:100%; font-size: 12px !important;">
                                               <thead class="bg-primary text-white">
@@ -261,41 +515,56 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                       </div>
                                   </div>
 
-                                    <div class="col-sm-4">
-                                    <section class="py-3 py-md-3">
-                                          <div class="card widget-card border-light shadow-sm">
-                                            <div class="card-body p-4">
-                                              <h5 class="card-title widget-card-title mb-2">Customers</h5>
-                                              <div class="row gy-0">
-                                                <div class="col-12">
-                                                  <h4>3,131</h4>
-                                                </div>
-                                                <div class="col-12">
-                                                  <div class="d-flex align-items-center">
-                                                    <span class="fs-6 bsb-w-25 bsb-h-25 bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center me-2">
-                                                      <i class="bi bi-arrow-right-short bsb-rotate-n45"></i>
-                                                    </span>
-                                                    <div>
-                                                      <span class="fs-7">+19%</span>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              <div id="bsb-chart-8" class="mt-2"></div>
-                                            </div>
-                                          </div>
+                                  <div class="col-sm-5">
+                                  <p>Basic Timeline</p>
+                                        <div class="timeline p-4 block mb-4" id="timelineContainer">
+                                            
                                         </div>
-                                  </section>
-                              </div>
-                          </div>
-            </div>
-        </div>
-    </div>
-    
-    
+                                    </div>
 
     <!-- Your custom scripts -->
     <script src="script.js"></script>
+    <script>
+                $(document).ready(function () {
+                    loadRecentActivities();
+
+                    function loadRecentActivities() {
+                        $.ajax({
+                            url: 'adminInsert.php', // Replace with the actual path
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.status === 'success') {
+                                    displayActivities(data.activities);
+                                } else {
+                                    console.error('Failed to fetch activities.');
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('AJAX request failed:', status, error);
+                            }
+                        });
+                    }
+
+                    function displayActivities(activities) {
+                        var timelineContainer = $('#timelineContainer');
+
+                        // Clear existing content
+                        timelineContainer.empty();
+
+                        // Add new timeline items
+                        activities.forEach(function (activity) {
+                            var timelineItem = $('<div class="tl-item">');
+                            timelineItem.append('<div class="tl-dot ' + activity.dotColor + '"></div>');
+                            var tlContent = $('<div class="tl-content">');
+                            tlContent.append('<div class="">' + activity.details + '</div>');
+                            tlContent.append('<div class="tl-date text-muted mt-1">' + activity.created_at + '</div>');
+                            timelineItem.append(tlContent);
+                            timelineContainer.append(timelineItem);
+                        });
+                    }
+                });
+            </script>
     <script>
        $(document).ready(function () {
             // Initialize DataTable

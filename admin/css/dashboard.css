@@ -39,7 +39,7 @@ body {
     min-width: 70px;
     z-index: 1000;
     transition: all .25s ease-in-out;
-    background-color: #0e2238;
+    background-color: #1F2377 !important;
     display: flex;
     flex-direction: column;
 }
@@ -124,7 +124,7 @@ a.sidebar-link:hover {
     position: absolute;
     top: 0;
     left: 70px;
-    background-color: #0e2238;
+    background-color: #1F2377;
     padding: 0;
     min-width: 15rem;
     display: none;

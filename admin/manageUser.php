@@ -1,3 +1,8 @@
+<?php 
+    include "../connect.php";
+    session_start();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -109,10 +114,13 @@
             <div class="container-fluid shadow p-3 mb-5 bg-body rounded ">
         <div class="d-grid gap-2 col-2 mx-2">
             <h5>
+                <?php
+                    //  var_dump($_SESSION);
+                ?>
                 <p class="font-monospace "  style=" font-size: 20px !important;">Manage User</p>
             </h5>
         </div>
-  
+        
             <button type="button" class="btn btn-primary mx-auto "  style=" font-size: 12px !important;" data-bs-toggle="modal"
             data-bs-target="#staticBackdrop">
             <i class="fa-solid fa-plus"></i>
@@ -179,7 +187,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body gap-3">
-                        <?php include "editdata.php"; ?>
+                        <?php include "editdata.php"; 
+                        
+                        ?>
                     </div>
                 </div>
             </div>

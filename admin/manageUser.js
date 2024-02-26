@@ -28,12 +28,7 @@ $(document).ready(function () {
         }
     });
 
-
-   
-    });
-
-
-  
+    
     $('.delete-btn').on('click', function() {
         var idToDelete = $(this).data('id');
     
@@ -76,6 +71,11 @@ $(document).ready(function () {
             console.error('Data ID not set!');
         }
     });
+   
+    });
+
+
+  
 
       
     $(document).on('click', '#saveChangesBtn', function () {
@@ -101,16 +101,14 @@ $(document).ready(function () {
             success: function (response) {
                 // Show SweetAlert based on the response
                 if (response.status === 'success') {
-                    // Show simple success SweetAlert
+                
                     Swal.fire({
                         title: 'Success!',
                         text: response.message,
                         icon: 'success'
                     }).then((result) => {
                         // Reload the entire page after a delay
-                        setTimeout(function () {
-                            location.reload();
-                        }, 2000); // 2000 milliseconds = 2 seconds (adjust as needed)
+                        window.location.href('http://localhost/evaluationSystem/admin/manageUser.php');
                     });
                 } else {
                     // If the response indicates an error

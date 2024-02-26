@@ -1,5 +1,6 @@
 <?php
 include "../connect.php";
+session_start();
 
 $response = array(); // Initialize a response array
 
@@ -37,6 +38,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Execute the statement
             if ($stmt->execute()) {
+                $user_id = $_SESSION['user_id'];
+
+                // Sanitize user input
+                $email = $conn->real_escape_string($_POST['email']);
+                
+                // SQL query to insert data
+                $sql = "INSERT INTO tblactivity (user_id, email) VALUES ('$user_id', '$email')";
+                
+                // Check if the insertion was successful
+                if ($conn->query($sql) === TRUE) {
+                    echo "Data inserted successfully";
+                } else {
+                    echo "Error: " . $sql . "<br>" . $conn->error;
+                }
+             
                 $response['status'] = 'success';
                 $response['message'] = 'Data inserted successfully';
             } else {
