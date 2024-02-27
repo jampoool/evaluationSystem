@@ -39,7 +39,7 @@ body {
     min-width: 70px;
     z-index: 1000;
     transition: all .25s ease-in-out;
-    background-color: #1F2377 !important;
+    background-color: #1d216e !important;
     display: flex;
     flex-direction: column;
 }

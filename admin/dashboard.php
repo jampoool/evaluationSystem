@@ -39,7 +39,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
 
     <style>
       body{
-    margin-top:20px;
+   
     background:#FAFAFA;
       }
       .order-card {
@@ -94,7 +94,6 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
       path{
          background-color: #1F2377;
       }
-      body{margin-top:20px;}
       @media (min-width:992px) {
     .page-container {
         max-width: 1140px;
@@ -306,7 +305,7 @@ tl-item.active .tl-dot:before {
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <div class="sidebar-logo">
-                    <a href="#">Faculty Evaluation System</a>
+                    <a href="#">Hello, Admin</a>
                 </div>
             </div>
             <ul class="sidebar-nav">
@@ -344,14 +343,14 @@ tl-item.active .tl-dot:before {
             </ul>
             <div class="sidebar-footer">
                 <a href="../logout.php" class="sidebar-link">
-                    <i class="lni lni-exit"></i>
+                <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Logout</span>
                 </a>
             </div>
         </aside>
     
         <div class="main" style="background-color: #F5F5F5;">
-            <nav class="navbar navbar-expand px-4 py-2 shadow p-3 mb-5 bg-body roundedsticky-top">
+            <nav class="navbar navbar-expand px-4 py-2 shadow p-3 mb-5 bg-body rounded sticky-top">
                 <form action="#" class="d-none d-sm-inline-block">
                 </form>
                 <div class="navbar-collapse">
@@ -370,7 +369,7 @@ tl-item.active .tl-dot:before {
                     </ul>
                 </div>
             </nav>
-            <?php var_dump($_SESSION) ;?>
+        
             <div class="container">
                 <div class="row shadow-sm p-2 mb-2 bg-white rounded">
                       <div class="col-md-4 col-xl-3">

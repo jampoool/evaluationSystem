@@ -24,16 +24,6 @@
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
 
         <form method="POST">
-
-           <!-- select user
-           <select class="form-select" aria-label="Default select example" name="user_type">
-           <option selected>Login As</option>
-                <option value="1">Admin</option>
-                <option value="2">Guidance</option>
-                <option value="3">Student</option>
-            </select> -->
-
-          <!-- Email input -->
           <div class="form-outline mb-4 mt-4">
             <input type="email" class="form-control form-control-lg"
                 placeholder="Enter a valid email address" name="email" />
