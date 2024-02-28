@@ -28,13 +28,48 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
 
 <body>
     <div class="wrapper">
-        <aside id="sidebar">
+    <aside id="sidebar">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <div class="sidebar-logo">
-                    <a href="#">Faculty Evaluation System</a>
+                    <a href="#">
+                        <?php
+                        // Assuming that $_SESSION['user_id'] is the session variable holding the user ID
+                        $userId = $_SESSION['user_id'];
+
+                        // Ensure to properly sanitize user input to prevent SQL injection
+                        $userId = mysqli_real_escape_string($con, $userId);
+
+                        $sql = "SELECT email FROM user WHERE id = '$userId'";
+
+                        if ($result = mysqli_query($con, $sql)) {
+                            // Check if any rows were returned
+                            if (mysqli_num_rows($result) > 0) {
+                                // Fetch the result as an associative array
+                                $row = mysqli_fetch_assoc($result);
+
+                                // Access the email value
+                                $userEmail = $row['email'];
+
+                                // Display the email
+                                echo "$userEmail";
+                            } else {
+                                echo "User not found";
+                            }
+
+                            // Free the result set
+                            mysqli_free_result($result);
+                        } else {
+                            // Handle the query error
+                            echo "Error: " . mysqli_error($con);
+                        }
+
+                        // Close the database connection
+                        mysqli_close($con);
+                        ?>
+                    </a>
                 </div>
             </div>
             <ul class="sidebar-nav">
@@ -45,28 +80,28 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="profile.php" class="sidebar-link">
+                    <a href="form.php" class="sidebar-link">
                         <i class="fa-solid fa-user"></i>
                         <span>Manage Form</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="manageUser.php" class="sidebar-link">
+                    <a href="category.php" class="sidebar-link">
                         <i class="fa-solid fa-user-plus"></i>
                         <span>Manage Category</span>
                     </a>
                 </li>
 
                 <li class="sidebar-item">
-                    <a href="manageClass.php" class="sidebar-link">
+                    <a href="question.php" class="sidebar-link">
                         <i class="fa-solid fa-house-user"></i>
                         <span>Manage Question</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="manageStudentClasses.php" class="sidebar-link">
+                    <a href="report.php" class="sidebar-link">
                         <i class="fa-solid fa-circle-plus"></i>
-                        <span>Student Classes</span>
+                        <span>Evaluation Report</span>
                     </a>
                 </li>
             </ul>
@@ -100,7 +135,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
             </nav>
             <div id="page-content" class="container-lg" >
                  <div class="row">
-                       
+                       <h1>Category</h1>
                 </div>
             </div>
         </div>

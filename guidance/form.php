@@ -23,21 +23,23 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     <link rel="stylesheet" href="../admin/css/dashboard.css">
     
     
+     <!-- DataTables CSS -->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    
+         <!-- DataTables JS -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
      <!-- Font Awesome -->
      <script src="https://kit.fontawesome.com/658ff99b54.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
-    <script src=""></script>
+   
+
 </head>
 
 <body>
     <div class="wrapper">
-        <aside id="sidebar">
+    <aside id="sidebar">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa-solid fa-bars"></i>
@@ -144,7 +146,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
             </nav>
             <div id="page-content" class="container-lg" >
                  <div class="row">
-                     <h1>Dashboard</h1>
+                       <h1>FORM</h1>
                 </div>
             </div>
         </div>
