@@ -10,7 +10,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sidebar With Bootstrap</title>
@@ -22,7 +22,9 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     <!-- Your custom CSS -->
     <link rel="stylesheet" href="../admin/css/dashboard.css">
     
-    
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     
@@ -30,9 +32,12 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
      <script src="https://kit.fontawesome.com/658ff99b54.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
-    <script src=""></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.js"></script>
+
 </head>
 
 <body>
@@ -63,7 +68,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                 $userEmail = $row['email'];
 
                                 // Display the email
-                                echo "$userEmail";
+                                echo "<p style='font-size: 14px;'>$userEmail</p>";
                             } else {
                                 echo "User not found";
                             }

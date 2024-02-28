@@ -1,4 +1,64 @@
+<?php
+                    include "connect.php";
+                    session_start();
 
+                    function authenticateUser($username, $password) {
+                      global $con;
+
+                      $query = "SELECT * FROM user WHERE email = ? AND password = ? LIMIT 1";
+
+                      $stmt = $con->prepare($query);
+                      $stmt->bind_param("ss", $username, $password);
+
+                      $stmt->execute();
+                      $result = $stmt->get_result();
+
+                      if ($result->num_rows === 1) {
+                          $user = $result->fetch_assoc();
+                          $_SESSION['user_id'] = $user['id'];  // Set the user ID in the session
+                          $_SESSION['type'] = $user['type'];   // Set the user type in the session
+                          return $user;
+                      } else {
+                          return null;
+                      }
+
+                      $stmt->close();
+                    }
+
+                    if (isset($_POST['login'])) {
+                      $username = $_POST['email'];
+                      $password = $_POST['password'];
+
+                      $user = authenticateUser($username, $password);
+
+                      if ($user) {
+                          // Authentication successful
+                          // Redirect to the appropriate dashboard based on user role
+                          if ($user['type'] == 'admin') {
+                              header("Location: admin/dashboard.php");
+                          } elseif ($user['type'] == 'guidance') {
+                              header("Location: guidance/dashboard.php");
+                          } elseif ($user['type'] == 'student') {
+                              header("Location: student/dashboard.php");
+                          } elseif ($user['type'] == 'teacher') {
+                              header("Location: teacher/dashboard.php");
+                          } else {
+                              // Handle other roles if needed
+                              echo "Invalid user type";
+                          }
+
+                          exit();
+                      } else {
+                          echo '<script>
+                                  Swal.fire({
+                                      icon: "error",
+                                      title: "Invalid Credentials",
+                                      text: "Please check your email and password and try again.",
+                                  });
+                                </script>';
+                      }
+                    }
+                    ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,110 +74,50 @@
     <link href="index.css" rel="stylesheet">
 </head>
 <body>
-<section class="vh-100">
-  <div class="container-fluid h-custom">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-md-9 col-lg-6 col-xl-5">
-        <img src="img/cartoon-man-leaving-review.jpg"
-          class="img-fluid" alt="Sample image">
-      </div>
-      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        <section class="vh-100">
+          <div class="container-fluid h-custom">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+              <div class="col-md-9 col-lg-6 col-xl-5">
+                <img src="img/cartoon-man-leaving-review.jpg"
+                  class="img-fluid" alt="Sample image">
+              </div>
+              <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
 
-        <form method="POST">
-          <div class="form-outline mb-4 mt-4">
-            <input type="email" class="form-control form-control-lg"
-                placeholder="Enter a valid email address" name="email" />
-            <label class="form-label" for="form3Example3">Email address</label>
+                <form method="POST">
+                  <div class="form-outline mb-4 mt-4">
+                    <input type="email" class="form-control form-control-lg"
+                        placeholder="Enter a valid email address" name="email" />
+                    <label class="form-label" for="form3Example3">Email address</label>
+                    </div>
+                  <!-- Password input -->
+                  <div class="form-outline mb-3">
+                    <input type="password" id="form3Example4" class="form-control form-control-lg"
+                      placeholder="Enter password" name="password"/>
+                    <label class="form-label" for="form3Example4">Password</label>
+                  </div>
+
+                
+                  <div class="d-flex justify-content-between align-items-center mt-4">
+                    <!-- Checkbox -->
+                    <div class="form-check mb-0">
+                      <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
+                      <label class="form-check-label" for="form2Example3">
+                      Show Password
+                      </label>
+                    
+                    </div>
+                  
+                    <div class="d-grid gap-2 col-6 mx-end">
+                    <input class="btn btn-primary" type="submit" value="Login" name="login"/>
+                    </div>
+                
+                  </div>
+                
+                </form>
+              </div>
             </div>
-          <!-- Password input -->
-          <div class="form-outline mb-3">
-            <input type="password" id="form3Example4" class="form-control form-control-lg"
-              placeholder="Enter password" name="password"/>
-            <label class="form-label" for="form3Example4">Password</label>
           </div>
-
-         
-          <div class="d-flex justify-content-between align-items-center mt-4">
-            <!-- Checkbox -->
-            <div class="form-check mb-0">
-              <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-              <label class="form-check-label" for="form2Example3">
-               Show Password
-              </label>
-            
-            </div>
-           
-            <div class="d-grid gap-2 col-6 mx-end">
-            <input class="btn btn-primary" type="submit" value="Login" name="login"/>
-            </div>
-         
-          </div>
-        
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
-</body>
-<?php
-include "connect.php";
-session_start();
-
-function authenticateUser($username, $password) {
-  global $con;
-
-  $query = "SELECT * FROM user WHERE email = ? AND password = ? LIMIT 1";
-
-  $stmt = $con->prepare($query);
-  $stmt->bind_param("ss", $username, $password);
-
-  $stmt->execute();
-  $result = $stmt->get_result();
-
-  if ($result->num_rows === 1) {
-      $user = $result->fetch_assoc();
-      $_SESSION['user_id'] = $user['id'];  // Set the user ID in the session
-      $_SESSION['type'] = $user['type'];   // Set the user type in the session
-      return $user;
-  } else {
-      return null;
-  }
-
-  $stmt->close();
-}
-
-if (isset($_POST['login'])) {
-  $username = $_POST['email'];
-  $password = $_POST['password'];
-
-  $user = authenticateUser($username, $password);
-
-  if ($user) {
-      // Authentication successful
-      // Redirect to the appropriate dashboard based on user role
-      if ($user['type'] == 'admin') {
-          header("Location: admin/dashboard.php");
-      } elseif ($user['type'] == 'guidance') {
-          header("Location: guidance/dashboard.php");
-      } elseif ($user['type'] == 'student') {
-          header("Location: student/dashboard.php");
-      } elseif ($user['type'] == 'teacher') {
-          header("Location: teacher/dashboard.php");
-      } else {
-          // Handle other roles if needed
-          echo "Invalid user type";
-      }
-
-      exit();
-  } else {
-      echo '<script>
-              Swal.fire({
-                  icon: "error",
-                  title: "Invalid Credentials",
-                  text: "Please check your email and password and try again.",
-              });
-            </script>';
-  }
-}
-?>
+        </section>
+   </body>
+                 
 </html>

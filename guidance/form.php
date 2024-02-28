@@ -10,7 +10,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sidebar With Bootstrap</title>
@@ -22,24 +22,27 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     <!-- Your custom CSS -->
     <link rel="stylesheet" href="../admin/css/dashboard.css">
     
-    
-     <!-- DataTables CSS -->
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-         <!-- DataTables JS -->
-    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    
      <!-- Font Awesome -->
      <script src="https://kit.fontawesome.com/658ff99b54.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-   
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.js"></script>
 
 </head>
 
 <body>
     <div class="wrapper">
-    <aside id="sidebar">
+        <aside id="sidebar">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa-solid fa-bars"></i>
@@ -65,7 +68,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                 $userEmail = $row['email'];
 
                                 // Display the email
-                                echo "$userEmail";
+                                echo "<p style='font-size: 14px;'>$userEmail</p>";
                             } else {
                                 echo "User not found";
                             }
@@ -123,7 +126,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                 </a>
             </div>
         </aside>
-    
+                        
         <div class="main">
             <nav class="navbar navbar-expand px-4 py-3 shadow p-3 mb-5 bg-body roundedsticky-top">
                 <form action="#" class="d-none d-sm-inline-block">
@@ -144,9 +147,33 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                     </ul>
                 </div>
             </nav>
-            <div id="page-content" class="container-lg" >
-                 <div class="row">
-                       <h1>FORM</h1>
+                <h5>
+                <small class="text-muted p-4">Manage Form</small>
+                </h5>
+            <div id="page-content" class="col-md-12 px-5 py-1">
+                 <div class="col-md-auto">
+                    <table id="example" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Office</th>
+                                <th>Age</th>
+                                <th>Start date</th>
+                                <th>Salary</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tiger Nixon</td>
+                                <td>System Architect</td>
+                                <td>Edinburgh</td>
+                                <td>61</td>
+                                <td>2011-04-25</td>
+                                <td>$320,800</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -157,7 +184,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     <!-- Your custom scripts -->
     <script src="../admin/script.js"></script>
     <script>
-       
+       new DataTable('#example');
     </script>
 </body>
 

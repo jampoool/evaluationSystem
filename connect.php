@@ -1,5 +1,5 @@
 <?php
-    $server = "127.0.0.1:3307";
+    $server = "127.0.0.1:3306";
     $username = "root";
     $password = "";
     $database = "evaluation_db";
