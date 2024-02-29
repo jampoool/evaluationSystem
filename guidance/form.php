@@ -80,8 +80,6 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                             echo "Error: " . mysqli_error($con);
                         }
 
-                        // Close the database connection
-                        mysqli_close($con);
                         ?>
                     </a>
                 </div>
@@ -148,34 +146,139 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                 </div>
             </nav>
                 <h5>
-                <small class="text-muted p-4">Manage Form</small>
+                <small class="text-muted p-5">Manage Form</small>
                 </h5>
-            <div id="page-content" class="col-md-12 px-5 py-1">
-                 <div class="col-md-auto">
-                    <table id="example" class="table table-striped" style="width:100%">
+                <div id="page-content" class="col-md-12 px-5 py-1">
+                <div class="row">
+                <div class="shadow p-3 mb-5 bg-body rounded ">
+                       <!-- Add Modal -->
+          <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Manage Form</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-element">
+                            <form class="row g-3" method="POST">
+                                <div class="col-6">
+                                    <label class="form-label">Form Number</label>
+                                    <input type="text" id="addFormNo" class="form-control" name="addFormNo">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label">Category</label>
+                                    <select id="categoryForm" name="categoryForm" class="form-select" aria-label="Default select example">
+                                        <option selected disabled>Choose</option>
+                                            <?php
+                                               $sqlquery = mysqli_query($con, "SELECT * FROM tbl_category");
+                                               while($rows = mysqli_fetch_array($sqlquery))
+                                                   { ?>
+                                                      <option value="<?php echo $rows['id'];?>"><?php echo $rows['category_description'];?></option>
+                                                    <?php
+                                                   }
+                                                ?>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Form Description</label>
+                                    <input type="text" id="addform" class="form-control" name="addform">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                    </button>
+                                    <button id="saveChangesBtn" class="btn btn-primary" name="save_changes">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+                        <!-- end of modal -->
+
+                        <!-- edit modal -->
+                        <div class="modal fade" id="editModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editModalLabel">Edit Category</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                    <div class="form-element">
+                                                <form class="row g-3" method="POST">
+                                                <div class="col-7">
+                                                        <label class="form-label">Form No</label>
+                                                        <input type="text" class="form-control" id="updateFormID" name="updateFormID">
+                                                    </div>
+                                                    <div class="col-7">
+                                                        <label class="form-label">Category Description</label>
+                                                        <input type="text" class="form-control" id="updatedFormDescription" name="updatedFormDescription">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                                        </button>
+                                                        <button id="updateBtn" class="btn btn-primary" name="update">Submit</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                <button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    <i class="fa-solid fa-plus"></i> Add Form
+                </button>
+                 <table id="example" class="table table-striped" style="width:100%; font-size: 12px !important;">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Position</th>
-                                <th>Office</th>
-                                <th>Age</th>
-                                <th>Start date</th>
-                                <th>Salary</th>
+                                <th style="display:none;">No.</th>
+                                <th>No.</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Date Created</th>
+                                <th>Date Updated</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <?php
+                            $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form ORDER BY id DESC;");
+                            $i = 1;
+                            while ($rows = mysqli_fetch_array($sqlquery)) {
+                            ?>
                             <tr>
-                                <td>Tiger Nixon</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011-04-25</td>
-                                <td>$320,800</td>
+                                <td><?php echo $i++; ?></td>
+                                <td style="display:none;"><?php echo $rows['id']; ?></td>
+                                <td><?php echo $rows['category_id']; ?></td>
+                                <td><?php echo $rows['form_description']; ?></td>
+                                <td><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
+                                <td><?php echo date('F j, Y, g:i A', strtotime($rows['created_at'])); ?></td>
+                                <td> <?php 
+                                    if (!empty($rows['updated_at'])) {
+                                        echo date('F j, Y, g:i A', strtotime($rows['updated_at'])); 
+                                    } 
+                                ?>
+                                </td>
+                                <td>
+                                    <div class="btn-group d-flex gap-1">
+                                        <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-form-id="<?php echo $rows['id']; ?>">Edit</button>
+                                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-form-id="<?php echo $rows['id']; ?>">Delete</button>
+                                    </div>
+                                </td>
                             </tr>
-                        </tbody>
+                            <?php
+                            }
+                            ?>
+                            </tbody>
                     </table>
-                </div>
-            </div>
+                 </div>
+             </div>
+         </div>
         </div>
     </div>
     
@@ -185,6 +288,167 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     <script src="../admin/script.js"></script>
     <script>
        new DataTable('#example');
+    </script>
+      <script>
+      $(document).ready(function() {
+                    $('.edit-btn').click(function() {
+                    var formID = $(this).data('form-id');
+
+                    // AJAX request to fetch category description based on catID
+                    $.ajax({
+                        type: 'POST',
+                        url: 'fetch_form.php',
+                        data: {
+                            formID: formID
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.status === 'success' && response.formDescription) {
+                                $('#updatedFormDescription').val(response.formDescription);
+                                $('#updateFormID').val(formID);
+                                $('#editModal').modal('show');
+                            } else {
+                                alert('Form description not found');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                            alert('An error occurred while fetching category description. Please try again.');
+                        }
+                    });
+                });
+
+
+                $('#updateBtn').click(function() {
+                var catID = $('#updateCat').val();
+                var updatedCatDescription = $('#updatedCatDescription').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'update_form.php',
+                    data: {
+                        update: true,
+                        editID: catID, // Change 'catID' to 'editID'
+                        editCatDescription: updatedCatDescription // Change 'updatedCatDescription' to 'editCatDescription'
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(function() {
+                                $('#editModal').modal('hide');
+                                $('.modal-backdrop').remove();
+                            });
+                        } else {
+                            alert('Failed to update category');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        alert('An error occurred while updating the category. Please try again.');
+                    }
+                });
+            });
+              $('#saveChangesBtn').click(function(e) {
+    e.preventDefault();
+    var formNo = $('#addFormNo').val(); 
+    var formDescription = $('#addform').val(); 
+    var formCategory = $('#categoryForm').val();
+    $.ajax({
+        type: 'POST',
+        url: 'save_form.php',
+        data: {
+            addFormNo: formNo,
+            addform: formDescription,
+            categoryForm: formCategory,
+            save_changes: 1
+        },
+        dataType: 'json',
+        success: function(response) {
+            // Display SweetAlert confirmation
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: response.message,
+                showConfirmButton: false,
+                timer: 1500 // Hide after 1.5 seconds
+            }).then(function() {
+                // Close modal after showing the SweetAlert
+                $('#staticBackdrop').modal('hide');
+                $('.modal-backdrop').remove();
+                // Optionally, you can reload the page or perform other actions here
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            alert('An error occurred while saving the category. Please try again.');
+        }
+    });
+});
+                $('.delete-btn').click(function() {
+                        var catID = $(this).data('category-id');
+
+                        // Use SweetAlert for confirmation
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: 'You will not be able to recover this category!',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes, delete it!',
+                            cancelButtonText: 'No, cancel!',
+                            reverseButtons: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // AJAX request to delete category
+                                $.ajax({
+                                    type: 'POST',
+                                    url: 'delete_category.php',
+                                    data: {
+                                        categoryID: catID
+                                    },
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        if (response.status === 'success') {
+                                            // Display success message using SweetAlert
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Deleted!',
+                                                text: response.message,
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                            }).then(function() {
+                                                // Reload the page or remove the deleted row from the table
+                                                location.reload(); // Reload the page
+                                            });
+                                        } else {
+                                            // Display error message using SweetAlert
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Error!',
+                                                text: response.message
+                                            });
+                                        }
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error(xhr.responseText);
+                                        // Display error message using SweetAlert
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error!',
+                                            text: 'An error occurred while deleting the category. Please try again.'
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    });
+            });
+
     </script>
 </body>
 

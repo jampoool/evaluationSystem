@@ -252,11 +252,12 @@
             </tbody>
         </table>
             </div>
-            <script src="manageUser.js"></script>
+           
         </div>
             </div>
         </div>
     </div>
+     <script src="manageUser.js"></script>
                 <script> $(document).ready(function () {
         $("#ellipsisButton").on("click", function () {
             $(".ellipsis-menu").toggle();

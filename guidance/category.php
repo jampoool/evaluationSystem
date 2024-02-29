@@ -146,40 +146,38 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                 </div>
             </nav>
            
-            <!-- Add Modal -->
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-element">
-                            <form class="row g-3" method="POST">
-                                <div class="col-8">
-                                    <label class="form-label">Category Number</label>
-                                    <input type="text" id="addCategoryID" class="form-control" name="catID">
+      <div id="page-content" class="col-md-12 px-5 py-1">
+      <div class="row">
+      <div class="container-fluid shadow p-3 mb-5 bg-body rounded ">
+          <!-- Add Modal -->
+          <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-element">
+                                    <form class="row g-3" method="POST">
+                                        <!-- Remove Category ID input field -->
+                                        <div class="col-8">
+                                            <label class="form-label">Category Description</label>
+                                            <input type="text" id="categoryDescription" class="form-control" name="catDescription">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button id="saveChangesBtn" class="btn btn-primary" name="save_changes">Submit</button>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="col-8">
-                                    <label class="form-label">Category Description</label>
-                                    <input type="text" id="categoryDescription" class="form-control" name="catDescription">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                    </button>
-                                    <button id="saveChangesBtn" class="btn btn-primary" name="save_changes">Submit</button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
-
                     </div>
                 </div>
-            </div>
-        </div>
                         <!-- end of modal -->
 
-                        <!-- edit modal -->
+                    <!-- edit modal -->
                         <div class="modal fade" id="editModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -188,72 +186,87 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                    <div class="form-element">
-                                                <form class="row g-3" method="POST">
+                                        <div class="form-element">
+                                            <form class="row g-3" method="POST">
+                                                 <div class="col-7">
+                                                    <label hidden class="form-label">Category ID</label>
+                                                    <input hidden type="text" class="form-control" id="updateCat" name="updateCat">
+                                                </div>
                                                 <div class="col-7">
-                                                        <label class="form-label">Category ID</label>
-                                                        <input type="text" class="form-control" id="updateCat" name="editID">
-                                                    </div>
-                                                    <div class="col-7">
-                                                        <label class="form-label">Category Description</label>
-                                                        <input type="text" class="form-control" id="updatedCatDescription" name="editCatDescription">
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                                        </button>
-                                                        <button id="updateBtn" class="btn btn-primary" name="update">Submit</button>
-                                                    </div>
-                                                </form>
-                                            </div>
+                                                    <label class="form-label">Category Description</label>
+                                                    <input type="text" class="form-control" id="updatedCatDescription" name="editCatDescription">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button id="updateBtn" class="btn btn-primary" name="update">Submit</button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- end of modal -->
-                <div id="page-content" class="container-fluid px-5 py-2">
-                <button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    <i class="fa-solid fa-plus"></i>
-                    Add Category
-                </button>
-                <div class="table-responsive mt-3">
-                    <table id="example" class="table table-striped " style="width:100%">
-                        <thead>
-                            <tr>
-                                <th style="display:none;">No.</th>
-                                <th>No.</th>
-                                <th>Category Description</th>
-                                <th>Status</th>
-                                <th>Date Created</th>
-                                <th>Date Updated</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $sqlquery = mysqli_query($con, "SELECT * FROM tbl_category ORDER BY id DESC;");
-                            $i = 1;
-                            while ($rows = mysqli_fetch_array($sqlquery)) {
-                            ?>
-                            <tr>
-                                <td><?php echo $i++; ?></td>
-                                <td style="display:none;"><?php echo $rows['id']; ?></td>
-                                <td><?php echo $rows['category_description']; ?></td>
-                                <td><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
-                                <td><?php echo $rows['created_at']; ?></td>
-                                <td><?php echo $rows['updated_at']; ?></td>
-                                <td>
-                                    <div class="btn-group d-flex gap-1">
-                                        <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-category-id="<?php echo $rows['id']; ?>">Edit</button>
-                                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-category-id="<?php echo $rows['id']; ?>">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
+<!-- end of modal -->
+                       
+    <button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        <i class="fa-solid fa-plus"></i> Add Category
+    </button>
+    <div class="mt-2"></div>
+    <div class="table-responsive">
+        <table id="example" class="table table-striped" style="width:100%; font-size: 12px !important;">
+            <thead>
+                <tr>
+                    <th style="display:none;">No.</th>
+                    <th>No.</th>
+                    <th>Category Description</th>
+                    <th>Status</th>
+                    <th>Date Created</th>
+                    <th>Date Updated</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $sqlquery = mysqli_query($con, "SELECT * FROM tbl_category ORDER BY id DESC;");
+                $i = 1;
+                while ($rows = mysqli_fetch_array($sqlquery)) {
+                ?>
+                <tr>
+                    <td><?php echo $i++; ?></td>
+                    <td style="display:none;"><?php echo $rows['id']; ?></td>
+                    <td><?php echo $rows['category_description']; ?></td>
+                    <td><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
+                    <td><?php echo date('F j, Y, g:i A', strtotime($rows['created_at'])); ?></td>
+                    <td> <?php 
+                        if (!empty($rows['updated_at'])) {
+                            echo date('F j, Y, g:i A', strtotime($rows['updated_at'])); 
+                        } 
+                    ?>
+                    </td>
+                    <td>
+                        <div class="d-inline d-lg-none">
+                        <button class="btn btn-primary btn-sm" id="ellipsisButton">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div class="ellipsis-menu" style="display: none;">
+                            <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-category-id="<?php echo $rows['id']; ?>">Edit</button>
+                            <button type="button" class="btn btn-danger btn-sm delete-btn" data-category-id="<?php echo $rows['id']; ?>">Delete</button>
+                            </div>
+                        </div>
+                        <div class="d-none d-lg-inline">
+                           <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-category-id="<?php echo $rows['id']; ?>">Edit</button>
+                            <button type="button" class="btn btn-danger btn-sm delete-btn" data-category-id="<?php echo $rows['id']; ?>">Delete</button>
+                            </div>
+                    </td>
+                </tr>
+                <?php
+                }
+                ?>
+                 </tbody>
+        </table>
+            </div>
+           
+        </div>
             </div>
         </div>
     </div>
@@ -266,90 +279,79 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     </script>
     <script>
       $(document).ready(function() {
-              $('.edit-btn').click(function() {
-                    var catID = $(this).data('category-id'); // Get the category ID from data attribute
-                    var categoryID = $(catID).append();
-                    // AJAX request to fetch category description based on catID
+        $('.edit-btn').click(function() {
+                var catID = $(this).data('category-id');
+
+                // AJAX request to fetch category description based on categoryID
+                $.ajax({
+                    type: 'POST',
+                    url: 'fetch_category.php',
+                    data: {
+                        categoryID: catID
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success' && response.categoryDescription) {
+                            $('#updatedCatDescription').val(response.categoryDescription);
+                            $('#updateCat').val(catID); // Set the category ID in the hidden input field
+                            $('#editModal').modal('show');
+                        } else {
+                            alert('Category description not found');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        alert('An error occurred while fetching category description. Please try again.');
+                    }
+                });
+            });
+            $('#updateBtn').click(function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                    var updatedCatDescription = $('#updatedCatDescription').val();
+                    var catID = $('#updateCat').val(); // Retrieve the category ID from the hidden input
+
                     $.ajax({
                         type: 'POST',
-                        url: 'fetch_category.php', // Create a PHP script to fetch category description based on ID
+                        url: 'update_category.php',
                         data: {
-                            categoryID = $('updateCat').val();
+                            update: true,
+                            editID: catID, // Pass the category ID
+                            editCatDescription: updatedCatDescription
                         },
                         dataType: 'json',
                         success: function(response) {
-                            // Check if the response contains the category description
-                            if (response.status === 'success' && response.categoryDescription) {
-                                // Populate the category description in the input field
-                                $('#updatedCatDescription').val(response.categoryDescription);
-                                
-                                // Set the category ID value in the edit modal form
-                                $('#updateCat').val(catID);
-
-                                // Show the modal
-                                $('#editModal').modal('show');
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(function() {
+                                    $('#editModal').modal('hide');
+                                    $('.modal-backdrop').remove();
+                                    location.reload();
+                                });
                             } else {
-                                // Handle the case where category description is not found
-                                alert('Category description not found');
+                                alert('Failed to update category');
                             }
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
-                            alert('An error occurred while fetching category description. Please try again.');
+                            alert('An error occurred while updating the category. Please try again.');
                         }
                     });
                 });
+                    $('#saveChangesBtn').click(function(event) {
+                    event.preventDefault(); // Prevent default form submission
 
-                $('#updateBtn').click(function() {
-
-                    var catID = $('#updateCat').val(); // Get the category ID from the hidden input field
-                    var updatedCatDescription = $('#updatedCatDescription').val();
-
-            // AJAX request to update category description
-                $.ajax({
-                type: 'POST',
-                url: 'update_category.php',
-                data: {
-                    update: true,
-                    catID: $('#updateCat').val(), // Get the category ID from the hidden input field
-                    updatedCatDescription: updatedCatDescription
-                },
-                dataType: 'json',
-                success: function(response) {
-                    // Display SweetAlert confirmation for successful update
-                    if (response.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: response.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(function() {
-                            // Hide modal after showing the SweetAlert
-                            $('#editModal').modal('hide');
-                            $('.modal-backdrop').remove();
-                        });
-                    } else {
-                        alert('Failed to update category');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    alert('An error occurred while updating the category. Please try again.');
-                }
-            });
-        });
-                // AJAX call for saving category
-                $('#saveChangesBtn').click(function(e) {
-                    e.preventDefault();
-                    var catID = $('#addCategoryID').val();
                     var catDescription = $('#categoryDescription').val();
 
                     $.ajax({
                         type: 'POST',
                         url: 'save_category.php',
                         data: {
-                            catID: catID,
                             catDescription: catDescription,
                             save_changes: 1
                         },
@@ -366,6 +368,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                 // Hide modal after showing the SweetAlert
                                 $('#staticBackdrop').modal('hide');
                                 $('.modal-backdrop').remove();
+                                location.reload();
                             });
                         },
                         error: function(xhr, status, error) {
@@ -374,6 +377,63 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                         }
                     });
                 });
+                $('.delete-btn').click(function() {
+                        var catID = $(this).data('category-id');
+
+                        // Use SweetAlert for confirmation
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: 'You will not be able to recover this category!',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes, delete it!',
+                            cancelButtonText: 'No, cancel!',
+                            reverseButtons: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // AJAX request to delete category
+                                $.ajax({
+                                    type: 'POST',
+                                    url: 'delete_category.php',
+                                    data: {
+                                        categoryID: catID
+                                    },
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        if (response.status === 'success') {
+                                            // Display success message using SweetAlert
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Deleted!',
+                                                text: response.message,
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                            }).then(function() {
+                                                // Reload the page or remove the deleted row from the table
+                                                location.reload(); // Reload the page
+                                            });
+                                        } else {
+                                            // Display error message using SweetAlert
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Error!',
+                                                text: response.message
+                                            });
+                                        }
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error(xhr.responseText);
+                                        // Display error message using SweetAlert
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error!',
+                                            text: 'An error occurred while deleting the category. Please try again.'
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    });
             });
 
     </script>

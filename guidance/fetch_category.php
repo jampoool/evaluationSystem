@@ -1,31 +1,36 @@
 <?php
-include "../connect.php"; // Include your database connection file
+include "../connect.php";
 
-if(isset($_POST['updateCat'])) {
-    $catID = $_POST['updateCat'];
+// Check if categoryID is provided and it's a valid integer
+if(isset($_POST['categoryID']) && is_numeric($_POST['categoryID'])) {
+    // Sanitize the input
+    $categoryID = mysqli_real_escape_string($con, $_POST['categoryID']);
 
-    // Fetch the category description from the database based on catID
+    // Query to fetch category description based on categoryID
     $query = "SELECT category_description FROM tbl_category WHERE id = ?";
     $stmt = mysqli_prepare($con, $query);
-    mysqli_stmt_bind_param($stmt, "i", $catID);
+
+    // Bind parameters and execute the statement
+    mysqli_stmt_bind_param($stmt, "i", $categoryID);
     mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $categoryDescription);
-    
-    if(mysqli_stmt_fetch($stmt)) {
-        // Category description found, send it in the response
-        $response = array('status' => 'success', 'categoryDescription' => $categoryDescription);
-        echo json_encode($response);
-        exit();
+    $result = mysqli_stmt_get_result($stmt);
+
+    // Check if query was successful and at least one row was returned
+    if($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $categoryDescription = $row['category_description'];
+
+        // Return category description in JSON format
+        echo json_encode(array('status' => 'success', 'categoryDescription' => $categoryDescription));
+        exit;
     } else {
         // Category not found
-        $response = array('status' => 'error', 'message' => 'Category not found');
-        echo json_encode($response);
-        exit();
+        echo json_encode(array('status' => 'error', 'message' => 'Category not found'));
+        exit;
     }
 } else {
-    // Invalid request
-    $response = array('status' => 'error', 'message' => 'Invalid request');
-    echo json_encode($response);
-    exit();
+    // Invalid request or categoryID not provided
+    echo json_encode(array('status' => 'error', 'message' => 'Invalid request'));
+    exit;
 }
 ?>

@@ -8,19 +8,20 @@ if ($con->connect_error) {
 }
 
 if(isset($_POST['save_changes'])) {
-    $catID = $_POST['catID'];
+    
+    date_default_timezone_set('Asia/Manila');
     $catDescription = $_POST['catDescription'];
-    $isActive = 1;
     $user_ID = $_SESSION['user_id'];
+    $timestamp = date('Y-m-d H:i:s'); // Get current timestamp
 
     // Perform database insertion
-    $insertQuery = "INSERT INTO tbl_category (category_no, category_description, is_active, user_id) VALUES (?, ?, ?, ?)";
+    $insertQuery = "INSERT INTO tbl_category (category_description, user_id, created_at) VALUES (?, ?, ?)";
     $stmt = $con->prepare($insertQuery);
     
     // Check if the prepare statement succeeded
     if ($stmt) {
         // Bind parameters to the prepared statement
-        $stmt->bind_param("ssii", $catID, $catDescription, $isActive, $user_ID);
+        $stmt->bind_param("sis", $catDescription, $user_ID, $timestamp);
         
         // Execute the prepared statement
         if ($stmt->execute()) {
@@ -50,4 +51,5 @@ if(isset($_POST['save_changes'])) {
     echo json_encode($response);
     exit();
 }
+
 ?>

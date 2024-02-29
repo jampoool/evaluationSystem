@@ -2,13 +2,13 @@
 include "../connect.php";
 session_start();
 
-if (isset($_POST["updateBtn"])) {
-    $catID = $_POST['catID']; // Correctly retrieve catID
-    $updatedCatDescription = $_POST['updatedCatDescription'];
+if (isset($_POST["update"])) {
+    date_default_timezone_set('Asia/Manila');
+    $catID = $_POST['editID']; // Retrieve the category ID
+    $updatedCatDescription = $_POST['editCatDescription'];
     $user_ID = $_SESSION['user_id'];
-    $timestamp = date('Y-m-d H:i:s'); // Get current timestamp
+    $timestamp = date('Y-m-d H:i:s');
 
-    // Update the category description in the database
     $query = "UPDATE tbl_category SET category_description = ?, user_id = ?, updated_at = ? WHERE id = ?";
     $stmt = mysqli_prepare($con, $query);
     mysqli_stmt_bind_param($stmt, "sisi", $updatedCatDescription, $user_ID, $timestamp, $catID);
