@@ -11,7 +11,8 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
 
 <head>
 <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sidebar With Bootstrap</title>
 
@@ -37,12 +38,12 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 
 <body>
     <div class="wrapper">
-        <aside id="sidebar">
+    <aside id="sidebar">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa-solid fa-bars"></i>
@@ -68,7 +69,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                 $userEmail = $row['email'];
 
                                 // Display the email
-                                echo "<p style='font-size: 14px;'>$userEmail</p>";
+                                echo "<p style='font-size:14px;'>$userEmail</p>";
                             } else {
                                 echo "User not found";
                             }
@@ -86,34 +87,40 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
             </div>
             <ul class="sidebar-nav">
                 <li class="sidebar-item ">
-                    <a href="dashboard.php" class="sidebar-link active">
+                    <a href="dashboard.php" class="sidebar-link">
                         <i class="fa-solid fa-table-cells-large"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a href="form.php" class="sidebar-link">
-                        <i class="fa-solid fa-user"></i>
+                        <i class="fa-regular fa-file-lines"></i>
                         <span>Manage Form</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a href="category.php" class="sidebar-link">
-                        <i class="fa-solid fa-user-plus"></i>
+                        <i class="fa-solid fa-layer-group fa-fw"></i>
                         <span>Manage Category</span>
                     </a>
                 </li>
 
                 <li class="sidebar-item">
                     <a href="question.php" class="sidebar-link">
-                        <i class="fa-solid fa-house-user"></i>
+                        <i class="fa-solid fa-clipboard-question fa-fw"></i>
                         <span>Manage Question</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a href="report.php" class="sidebar-link">
-                        <i class="fa-solid fa-circle-plus"></i>
+                        <i class="fa-solid fa-flag fa-fw"></i>
                         <span>Evaluation Report</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="assign.php" class="sidebar-link">
+                        <i class="fa-solid fa-check fa-fw"></i>
+                        <span>Assign Teacher</span>
                     </a>
                 </li>
             </ul>
@@ -148,7 +155,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                 <h5>
                 <small class="text-muted p-5">Manage Form</small>
                 </h5>
-                <div id="page-content" class="col-md-12 px-5 py-1">
+                <div id="page-content" class="col-md-12 px-5 py-1" >
                 <div class="row">
                 <div class="shadow p-3 mb-5 bg-body rounded ">
                        <!-- Add Modal -->
@@ -213,6 +220,21 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                                         <label class="form-label">Form No</label>
                                                         <input type="text" class="form-control" id="updateFormID" name="updateFormID">
                                                     </div>
+                                                    <input type="hidden" id="formID" name="formID">
+                                                    <div class="col-6">
+                                                    <label class="form-label">Category</label>
+                                                    <select id="updateCategory" name="updateCategory" class="form-select" aria-label="Default select example">
+                                                        <option selected disabled>Choose</option>
+                                                            <?php
+                                                            $sqlquery = mysqli_query($con, "SELECT * FROM tbl_category");
+                                                            while($rows = mysqli_fetch_array($sqlquery))
+                                                                { ?>
+                                                                    <option value="<?php echo $rows['id'];?>"><?php echo $rows['category_description'];?></option>
+                                                                    <?php
+                                                                }
+                                                                ?>
+                                                    </select>
+                                                </div>
                                                     <div class="col-7">
                                                         <label class="form-label">Category Description</label>
                                                         <input type="text" class="form-control" id="updatedFormDescription" name="updatedFormDescription">
@@ -232,50 +254,66 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                 <button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     <i class="fa-solid fa-plus"></i> Add Form
                 </button>
-                 <table id="example" class="table table-striped" style="width:100%; font-size: 12px !important;">
-                        <thead>
-                            <tr>
-                                <th style="display:none;">No.</th>
-                                <th>No.</th>
-                                <th>Category</th>
-                                <th>Description</th>
-                                <th>Status</th>
-                                <th>Date Created</th>
-                                <th>Date Updated</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form ORDER BY id DESC;");
-                            $i = 1;
-                            while ($rows = mysqli_fetch_array($sqlquery)) {
-                            ?>
-                            <tr>
-                                <td><?php echo $i++; ?></td>
-                                <td style="display:none;"><?php echo $rows['id']; ?></td>
-                                <td><?php echo $rows['category_id']; ?></td>
-                                <td><?php echo $rows['form_description']; ?></td>
-                                <td><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
-                                <td><?php echo date('F j, Y, g:i A', strtotime($rows['created_at'])); ?></td>
-                                <td> <?php 
-                                    if (!empty($rows['updated_at'])) {
-                                        echo date('F j, Y, g:i A', strtotime($rows['updated_at'])); 
-                                    } 
+                <div class="table-responsive">
+                <table id="example" class="table table-striped" style="width:100%; font-size: 12px !important;">
+                                        <thead>
+                                            <tr>
+                                                <th style="display:none;">No.</th>
+                                                <th>No.</th>
+                                                <th>Category</th>
+                                                <th>Description</th>
+                                                <th>Status</th>
+                                                <th>Date Created</th>
+                                                <th>Date Updated</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                        <?php
+                        $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form ORDER BY id DESC;");
+                        $i = 1;
+                        while ($rows = mysqli_fetch_array($sqlquery)) {
+                        ?>
+                        <tr>
+                            <td><?php echo $i++; ?></td>
+                            <td style="display:none;"><?php echo $rows['id']; ?></td>
+                            <td style="width: 15%;">
+                                <?php 
+                                // Fetching category description from tbl_category based on category_id
+                                $category_id = $rows['category_id'];
+                                $category_query = mysqli_query($con, "SELECT category_description FROM tbl_category WHERE id = $category_id");
+                                $category_row = mysqli_fetch_assoc($category_query);
+                                echo $category_row['category_description'];
                                 ?>
-                                </td>
-                                <td>
-                                    <div class="btn-group d-flex gap-1">
-                                        <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-form-id="<?php echo $rows['id']; ?>">Edit</button>
-                                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-form-id="<?php echo $rows['id']; ?>">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php
-                            }
+                            </td>
+                            <td style="width: 30%;"><?php echo $rows['form_description']; ?></td>
+                            <td style="width: 10%;"><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
+                            <td style="width: 15%;"><?php echo date('F j, Y, g:i A', strtotime($rows['created_at'])); ?></td>
+                            <td style="width: 15%;"> <?php 
+                                if (!empty($rows['updated_at'])) {
+                                    echo date('F j, Y, g:i A', strtotime($rows['updated_at'])); 
+                                } 
                             ?>
-                            </tbody>
+                            </td>
+                            <td style="width: 10%;">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-form-id="<?php echo $rows['id']; ?>">Edit</button>
+                                        </div>
+                                        <div class="col-5">
+                                            <button type="button" class="btn btn-danger btn-sm delete-btn" data-form-id="<?php echo $rows['id']; ?>">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php
+                        }
+                        ?>
+                    </tbody>
                     </table>
+                    </div>
                  </div>
              </div>
          </div>
@@ -291,9 +329,9 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     </script>
       <script>
       $(document).ready(function() {
-                    $('.edit-btn').click(function() {
+        $('.edit-btn').click(function() {
                     var formID = $(this).data('form-id');
-
+                    var id = $('#formID').val(formID); // Retrieve the category ID from the hidden input
                     // AJAX request to fetch category description based on catID
                     $.ajax({
                         type: 'POST',
@@ -305,7 +343,11 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                         success: function(response) {
                             if (response.status === 'success' && response.formDescription) {
                                 $('#updatedFormDescription').val(response.formDescription);
-                                $('#updateFormID').val(formID);
+                                $('#updateFormID').val(response.formNo);
+                                
+                                // Select the correct category in the dropdown
+                                $('#updateCategory').val(response.categoryID);
+                                
                                 $('#editModal').modal('show');
                             } else {
                                 alert('Form description not found');
@@ -318,80 +360,82 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                     });
                 });
 
+                $('#updateBtn').click(function(event) {
+                    event.preventDefault(); // Prevent default form submission
+                                var formNo = $('#updateFormID').val();
+                                var categoryID = $('#updateCategory').val();
+                                var formDescription = $('#updatedFormDescription').val();
+                                var id = $('#formID').val();
 
-                $('#updateBtn').click(function() {
-                var catID = $('#updateCat').val();
-                var updatedCatDescription = $('#updatedCatDescription').val();
-
-                $.ajax({
-                    type: 'POST',
-                    url: 'update_form.php',
-                    data: {
-                        update: true,
-                        editID: catID, // Change 'catID' to 'editID'
-                        editCatDescription: updatedCatDescription // Change 'updatedCatDescription' to 'editCatDescription'
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success!',
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(function() {
-                                $('#editModal').modal('hide');
-                                $('.modal-backdrop').remove();
+                                // AJAX request to update form data
+                                $.ajax({
+                                    type: 'POST',
+                                    url: 'update_form.php',
+                                    data: {
+                                        id: id,
+                                        updateFormID: formNo,
+                                        updateCategory: categoryID,
+                                        updatedFormDescription: formDescription
+                                    },
+                                                dataType: 'json',
+                                    success: function(response) {
+                                        // Display SweetAlert confirmation
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Success!',
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 1500 // Hide after 1.5 seconds
+                                        }).then(function() {
+                                            // Hide modal after showing the SweetAlert
+                                            $('#staticBackdrop').modal('hide');
+                                            $('.modal-backdrop').remove();
+                                            location.reload();
+                                        });
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error(xhr.responseText);
+                                        alert('An error occurred while saving the category. Please try again.');
+                                    }
+                                });
                             });
-                        } else {
-                            alert('Failed to update category');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                        alert('An error occurred while updating the category. Please try again.');
-                    }
-                });
-            });
-              $('#saveChangesBtn').click(function(e) {
-    e.preventDefault();
-    var formNo = $('#addFormNo').val(); 
-    var formDescription = $('#addform').val(); 
-    var formCategory = $('#categoryForm').val();
-    $.ajax({
-        type: 'POST',
-        url: 'save_form.php',
-        data: {
-            addFormNo: formNo,
-            addform: formDescription,
-            categoryForm: formCategory,
-            save_changes: 1
-        },
-        dataType: 'json',
-        success: function(response) {
-            // Display SweetAlert confirmation
-            Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: response.message,
-                showConfirmButton: false,
-                timer: 1500 // Hide after 1.5 seconds
-            }).then(function() {
-                // Close modal after showing the SweetAlert
-                $('#staticBackdrop').modal('hide');
-                $('.modal-backdrop').remove();
-                // Optionally, you can reload the page or perform other actions here
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-            alert('An error occurred while saving the category. Please try again.');
-        }
-    });
-});
+                 $('#saveChangesBtn').click(function(e) {
+                            e.preventDefault();
+                            var formNo = $('#addFormNo').val(); 
+                            var formDescription = $('#addform').val(); 
+                            var formCategory = $('#categoryForm').val();
+                            $.ajax({
+                                type: 'POST',
+                                url: 'save_form.php',
+                                data: {
+                                    addFormNo: formNo,
+                                    addform: formDescription,
+                                    categoryForm: formCategory,
+                                    save_changes: 1
+                                },
+                                success: function(response) {
+                                        // Display SweetAlert confirmation
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Success!',
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 1500 // Hide after 1.5 seconds
+                                        }).then(function() {
+                                            // Hide modal after showing the SweetAlert
+                                            $('#staticBackdrop').modal('hide');
+                                            $('.modal-backdrop').remove();
+                                            location.reload();
+                                        });
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error(xhr.responseText);
+                                        alert('An error occurred while saving the form. Please try again.');
+                                    }
+                                });
+                            });
                 $('.delete-btn').click(function() {
-                        var catID = $(this).data('category-id');
+                        var formID = $(this).data('form-id');
 
                         // Use SweetAlert for confirmation
                         Swal.fire({
@@ -407,9 +451,9 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                 // AJAX request to delete category
                                 $.ajax({
                                     type: 'POST',
-                                    url: 'delete_category.php',
+                                    url: 'delete_form.php',
                                     data: {
-                                        categoryID: catID
+                                        formID: formID
                                     },
                                     dataType: 'json',
                                     success: function(response) {

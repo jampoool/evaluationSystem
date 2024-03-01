@@ -42,7 +42,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
 
 <body>
     <div class="wrapper">
-        <aside id="sidebar">
+    <aside id="sidebar">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa-solid fa-bars"></i>
@@ -68,7 +68,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                 $userEmail = $row['email'];
 
                                 // Display the email
-                                echo "<p style='font-size: 14px;'>$userEmail</p>";
+                                echo "<p style='font-size:14px;'>$userEmail</p>";
                             } else {
                                 echo "User not found";
                             }
@@ -80,42 +80,46 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                             echo "Error: " . mysqli_error($con);
                         }
 
-                        // Close the database connection
-                        mysqli_close($con);
                         ?>
                     </a>
                 </div>
             </div>
             <ul class="sidebar-nav">
                 <li class="sidebar-item ">
-                    <a href="dashboard.php" class="sidebar-link active">
+                    <a href="dashboard.php" class="sidebar-link">
                         <i class="fa-solid fa-table-cells-large"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a href="form.php" class="sidebar-link">
-                        <i class="fa-solid fa-user"></i>
+                        <i class="fa-regular fa-file-lines"></i>
                         <span>Manage Form</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a href="category.php" class="sidebar-link">
-                        <i class="fa-solid fa-user-plus"></i>
+                        <i class="fa-solid fa-layer-group fa-fw"></i>
                         <span>Manage Category</span>
                     </a>
                 </li>
 
                 <li class="sidebar-item">
                     <a href="question.php" class="sidebar-link">
-                        <i class="fa-solid fa-house-user"></i>
+                        <i class="fa-solid fa-clipboard-question fa-fw"></i>
                         <span>Manage Question</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a href="report.php" class="sidebar-link">
-                        <i class="fa-solid fa-circle-plus"></i>
+                        <i class="fa-solid fa-flag fa-fw"></i>
                         <span>Evaluation Report</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="assign.php" class="sidebar-link">
+                        <i class="fa-solid fa-check fa-fw"></i>
+                        <span>Assign Teacher</span>
                     </a>
                 </li>
             </ul>

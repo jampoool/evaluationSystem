@@ -68,7 +68,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                 $userEmail = $row['email'];
 
                                 // Display the email
-                                echo "$userEmail";
+                                echo "<p style='font-size:14px;'>$userEmail</p>";
                             } else {
                                 echo "User not found";
                             }
@@ -86,34 +86,40 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
             </div>
             <ul class="sidebar-nav">
                 <li class="sidebar-item ">
-                    <a href="dashboard.php" class="sidebar-link active">
+                    <a href="dashboard.php" class="sidebar-link">
                         <i class="fa-solid fa-table-cells-large"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a href="form.php" class="sidebar-link">
-                        <i class="fa-solid fa-user"></i>
+                        <i class="fa-regular fa-file-lines"></i>
                         <span>Manage Form</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a href="category.php" class="sidebar-link">
-                        <i class="fa-solid fa-user-plus"></i>
+                        <i class="fa-solid fa-layer-group fa-fw"></i>
                         <span>Manage Category</span>
                     </a>
                 </li>
 
                 <li class="sidebar-item">
                     <a href="question.php" class="sidebar-link">
-                        <i class="fa-solid fa-house-user"></i>
+                        <i class="fa-solid fa-clipboard-question fa-fw"></i>
                         <span>Manage Question</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a href="report.php" class="sidebar-link">
-                        <i class="fa-solid fa-circle-plus"></i>
+                        <i class="fa-solid fa-flag fa-fw"></i>
                         <span>Evaluation Report</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="assign.php" class="sidebar-link">
+                        <i class="fa-solid fa-check fa-fw"></i>
+                        <span>Assign Teacher</span>
                     </a>
                 </li>
             </ul>
@@ -213,7 +219,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     </button>
     <div class="mt-2"></div>
     <div class="table-responsive">
-        <table id="example" class="table table-striped" style="width:100%; font-size: 12px !important;">
+        <table id="example" class="table table-striped" style="width:100%; font-size: 14px !important;">
             <thead>
                 <tr>
                     <th style="display:none;">No.</th>
@@ -232,18 +238,18 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                 while ($rows = mysqli_fetch_array($sqlquery)) {
                 ?>
                 <tr>
-                    <td><?php echo $i++; ?></td>
+                    <td style="width: 5%;"><?php echo $i++; ?></td>
                     <td style="display:none;"><?php echo $rows['id']; ?></td>
-                    <td><?php echo $rows['category_description']; ?></td>
-                    <td><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
-                    <td><?php echo date('F j, Y, g:i A', strtotime($rows['created_at'])); ?></td>
-                    <td> <?php 
+                    <td style="width: 25%;"><?php echo $rows['category_description']; ?></td>
+                    <td style="width: 15%;"><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
+                    <td style="width: 20%;"><?php echo date('F j, Y, g:i A', strtotime($rows['created_at'])); ?></td>
+                    <td style="width: 20%;"> <?php 
                         if (!empty($rows['updated_at'])) {
                             echo date('F j, Y, g:i A', strtotime($rows['updated_at'])); 
                         } 
                     ?>
                     </td>
-                    <td>
+                    <td style="width: 10%;">
                         <div class="d-inline d-lg-none">
                         <button class="btn btn-primary btn-sm" id="ellipsisButton">
                                 <i class="fas fa-ellipsis-v"></i>
@@ -377,6 +383,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                         }
                     });
                 });
+
                 $('.delete-btn').click(function() {
                         var catID = $(this).data('category-id');
 

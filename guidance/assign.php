@@ -1,6 +1,6 @@
 <?php
     include "../connect.php";
-    session_start();
+   session_start();
 if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     header("Location: unauthorized_access.php");
     exit();
@@ -164,30 +164,41 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Manage Question</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel">Assign Teacher Evaluation</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="form-element">
                             <form class="row g-3" method="POST">
                                 <div class="col-6">
-                                    <label class="form-label">Form Number</label>
-                                    <select id="formNumber" name="formNumber" class="form-select" aria-label="Default select example">
+                                    <label class="form-label">Teacher Name</label>
+                                    <select id="teacherID" name="teacherID" class="form-select" aria-label="Default select example">
                                         <option selected disabled>Choose</option>
                                             <?php
-                                               $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form");
+                                               $sqlquery = mysqli_query($con, "SELECT * FROM user where type='teacher' ");
                                                while($rows = mysqli_fetch_array($sqlquery))
                                                    { ?>
-                                                      <option value="<?php echo $rows['id'];?>"><?php echo $rows['form_description'];?></option>
+                                                      <option value="<?php echo $rows['id'];?>"><?php echo $rows['email'];?></option>
                                                     <?php
                                                    }
                                                 ?>
                                     </select>
                                 </div>
-                                <div class="col-12">
-                                    <label class="form-label">Question</label>
-                                    <input type="text" id="question" class="form-control" name="question">
-                                </div>
+                                <div class="col-6">
+                                                    <label class="form-label">Form No</label>
+                                                    <select id="formID" name="formID" class="form-select" aria-label="Default select example">
+                                                        <option selected disabled>Choose</option>
+                                                            <?php
+                                                            $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form");
+                                                            while($rows = mysqli_fetch_array($sqlquery))
+                                                                { ?>
+                                                                    <option value="<?php echo $rows['id'];?>"><?php echo $rows['form_description'];?></option>
+                                                                    <?php
+                                                                }
+                                                                ?>
+                                                    </select>
+                               </div>
+
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
                                     </button>
@@ -203,11 +214,11 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                         <!-- end of modal -->
 
                         <!-- edit modal -->
-                        <div class="modal fade" id="editModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                        <!-- <div class="modal fade" id="editModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="editModalLabel">Edit Question</h5>
+                                        <h5 class="modal-title" id="editModalLabel">Edit Assign</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -218,14 +229,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                                     <label class="form-label">Form No</label>
                                                     <select id="updateForm" name="updateForm" class="form-select" aria-label="Default select example">
                                                         <option selected disabled>Choose</option>
-                                                            <?php
-                                                            $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form");
-                                                            while($rows = mysqli_fetch_array($sqlquery))
-                                                                { ?>
-                                                                    <option value="<?php echo $rows['id'];?>"><?php echo $rows['form_description'];?></option>
-                                                                    <?php
-                                                                }
-                                                                ?>
+                                                           
                                                     </select>
                                                 </div>
                                                     <div class="col-7">
@@ -242,10 +246,10 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                        
                 <button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    <i class="fa-solid fa-plus"></i> Add Question
+                    <i class="fa-solid fa-plus"></i> Assign Teacher
                 </button>
                 <div class="table-responsive">
                 <table id="example" class="table table-striped" style="width:100%; font-size: 12px !important;">
@@ -253,52 +257,43 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                             <tr>
                                                 <th style="display:none;">No.</th>
                                                 <th>No.</th>
-                                                <th>Form</th>
-                                                <th>Question</th>
+                                                <th>Teacher</th>
                                                 <th>Status</th>
                                                 <th>Date Created</th>
                                                 <th>Date Updated</th>
-                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                         <?php
-                        $sqlquery = mysqli_query($con, "SELECT * FROM tbl_question ORDER BY id DESC;");
+                        $sqlquery = mysqli_query($con, "SELECT * FROM tbl_assign ORDER BY id DESC;");
                         $i = 1;
                         while ($rows = mysqli_fetch_array($sqlquery)) {
                         ?>
                         <tr>
-                            <td><?php echo $i++; ?></td>
+                            <td style="width: 10%;"><?php echo $i++; ?></td>
                             <td style="display:none;"><?php echo $rows['id']; ?></td>
-                            <td style="width: 15%;">
+                            <td style="width: 25%;">
                                 <?php 
                                 // Fetching category description from tbl_category based on category_id
-                                $form_id = $rows['evaluation_form_id'];
-                                $form_query = mysqli_query($con, "SELECT form_description FROM tbl_evaluation_form WHERE id = $form_id");
-                                $form_row = mysqli_fetch_assoc($form_query);
-                                echo $form_row['form_description'];
+                                $teacherID = $rows['instructor_id'];
+                                $teacherQuery = mysqli_query($con, "SELECT email FROM user WHERE id = $teacherID");
+                                $teacherRow = mysqli_fetch_assoc($teacherQuery);
+                                echo $teacherRow['email'];
                                 ?>
                             </td>
-                            <td style="width: 30%;"><?php echo $rows['question']; ?></td>
-                            <td style="width: 10%;"><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
+                            <td style="width: 10%;">
+                                <?php if($rows['is_active'] == 1): ?>
+                                    <button type="button" class="btn btn-success btn-sm enable-btn" data-enable-id="<?php echo $rows['id']; ?>" data-is-active="<?php echo $rows['is_active']; ?>">Enabled</button>
+                                <?php elseif ($rows['is_active'] == 0): ?>
+                                    <button type="button" class="btn btn-secondary btn-sm enable-btn" data-enable-id="<?php echo $rows['id']; ?>" data-is-active="<?php echo $rows['is_active']; ?>">Disabled</button>
+                                <?php endif; ?>
+                            </td>
                             <td style="width: 15%;"><?php echo date('F j, Y, g:i A', strtotime($rows['date_created'])); ?></td>
                             <td style="width: 15%;"> <?php 
                                 if (!empty($rows['date_updated'])) {
                                     echo date('F j, Y, g:i A', strtotime($rows['date_updated'])); 
                                 } 
                             ?>
-                            </td>
-                            <td style="width: 10%;">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-5">
-                                            <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-question-id="<?php echo $rows['id']; ?>">Edit</button>
-                                        </div>
-                                        <div class="col-5">
-                                            <button type="button" class="btn btn-danger btn-sm delete-btn" data-question-id="<?php echo $rows['id']; ?>">Delete</button>
-                                        </div>
-                                    </div>
-                                </div>
                             </td>
                         </tr>
                         <?php
@@ -321,165 +316,55 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
        new DataTable('#example');
     </script>
       <script>
-      $(document).ready(function() {
-        $('.edit-btn').click(function() {
-                    var questionID = $(this).data('question-id');
-                    var id = $('#questionID').val(questionID); // Retrieve the category ID from the hidden input
-                    // AJAX request to fetch category description based on catID
-                    $.ajax({
-                        type: 'POST',
-                        url: 'fetch_question.php',
-                        data: {
-                            questionID: questionID
-                        },
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.status === 'success' && response.question) {
-                                $('#updateQuestion').val(response.question);
-                                // Select the correct category in the dropdown
-                                $('#updateForm').val(response.formID);
-                                
-                                $('#editModal').modal('show');
-                            } else {
-                                alert('Question not found');
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(xhr.responseText);
-                            alert('An error occurred while fetching Question ID. Please try again.');
+   document.addEventListener('DOMContentLoaded', function () {
+    var saveChangesBtn = document.getElementById('saveChangesBtn');
+
+    if (saveChangesBtn) {
+        saveChangesBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            var teacherID = document.getElementById('teacherID').value;
+            var formID = document.getElementById('formID').value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'save_assign.php', true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+
+                        if (response.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(function () {
+                                $('#staticBackdrop').modal('hide');
+                                $('.modal-backdrop').remove();
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: response.message
+                            });
                         }
-                    });
-                });
-                $('#updateBtn').click(function(event) {
-                            event.preventDefault(); // Prevent default form submission
-                            var questionID = $('#questionID').val();
-                            var formID = $('#updateForm').val();
-                            var question = $('#updateQuestion').val();
-
-                            // AJAX request to update form data
-                            $.ajax({
-                                type: 'POST',
-                                url: 'update_question.php',
-                                data: {
-                                    questionID: questionID,
-                                    formID: formID,
-                                    question: question
-                                },
-                                dataType: 'json',
-                                success: function(response) {
-                                    // Display SweetAlert confirmation
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Success!',
-                                        text: response.message,
-                                        showConfirmButton: false,
-                                        timer: 1500 // Hide after 1.5 seconds
-                                    }).then(function() {
-                                        // Hide modal after showing the SweetAlert
-                                        $('#staticBackdrop').modal('hide');
-                                        $('.modal-backdrop').remove();
-                                        location.reload();
-                                    });
-                                },
-                                error: function(xhr, status, error) {
-                                    console.error(xhr.responseText);
-                                    alert('An error occurred while saving the Question. Please try again.');
-                                }
-                            });
-                        });
-                 $('#saveChangesBtn').click(function(e) {
-                            e.preventDefault();
-                            var formID = $('#formNumber').val(); 
-                            var question = $('#question').val(); 
-                            $.ajax({
-                                type: 'POST',
-                                url: 'save_question.php',
-                                data: {
-                                    formID: formID,
-                                    question: question,
-                                    save_changes: 1
-                                },
-                                success: function(response) {
-                                        // Display SweetAlert confirmation
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Success!',
-                                            text: response.message,
-                                            showConfirmButton: false,
-                                            timer: 1500 // Hide after 1.5 seconds
-                                        }).then(function() {
-                                            // Hide modal after showing the SweetAlert
-                                            $('#staticBackdrop').modal('hide');
-                                            $('.modal-backdrop').remove();
-                                            location.reload();
-                                        });
-                                    },
-                                    error: function(xhr, status, error) {
-                                        console.error(xhr.responseText);
-                                        alert('An error occurred while saving the form. Please try again.');
-                                    }
-                                });
-                            });
-                $('.delete-btn').click(function() {
-                        var questionID = $(this).data('question-id');
-
-                        // Use SweetAlert for confirmation
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: 'You will not be able to recover this category!',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonText: 'Yes, delete it!',
-                            cancelButtonText: 'No, cancel!',
-                            reverseButtons: true
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                // AJAX request to delete category
-                                $.ajax({
-                                    type: 'POST',
-                                    url: 'delete_question.php',
-                                    data: {
-                                        questionID: questionID
-                                    },
-                                    dataType: 'json',
-                                    success: function(response) {
-                                        if (response.status === 'success') {
-                                            // Display success message using SweetAlert
-                                            Swal.fire({
-                                                icon: 'success',
-                                                title: 'Deleted!',
-                                                text: response.message,
-                                                showConfirmButton: false,
-                                                timer: 1500
-                                            }).then(function() {
-                                                // Reload the page or remove the deleted row from the table
-                                                location.reload(); // Reload the page
-                                            });
-                                        } else {
-                                            // Display error message using SweetAlert
-                                            Swal.fire({
-                                                icon: 'error',
-                                                title: 'Error!',
-                                                text: response.message
-                                            });
-                                        }
-                                    },
-                                    error: function(xhr, status, error) {
-                                        console.error(xhr.responseText);
-                                        // Display error message using SweetAlert
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Error!',
-                                            text: 'An error occurred while deleting the category. Please try again.'
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    });
-            });
-
+                    } else {
+                        console.error('Error occurred during AJAX request:', xhr.statusText);
+                        alert('An error occurred while saving the form. Please try again.');
+                    }
+                }
+            };
+            xhr.send('teacherID=' + teacherID + '&formID=' + formID + '&save_changes=1');
+        });
+    }
+});
     </script>
+    <script src="assign.js"></script>
 </body>
 
 </html>
