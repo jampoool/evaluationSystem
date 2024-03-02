@@ -1,49 +1,45 @@
 <?php
-// Include your database connection file
 include "../connect.php";
 session_start();
 
-// Check if the form data is submitted
 if (isset($_POST["save_changes"])) {
     date_default_timezone_set('Asia/Manila');
     $userID = $_SESSION['user_id'];
     $formID = $_POST['formID'];
-    $teacherID = $_POST['teacherID'];
+    $teacherIDs = json_decode($_POST['teacherIDs']); // Decode the JSON string into a PHP array
+
     $timestamp = date('Y-m-d H:i:s');
+    $success = true;
 
-    // Perform database insertion
-    $insertQuery = "INSERT INTO tbl_assign(instructor_id, evaluation_form_id, user_id, date_created) VALUES (?,?,?,?)";
-    $stmt = $con->prepare($insertQuery);
+    foreach ($teacherIDs as $teacherID) {
+        $insertQuery = "INSERT INTO tbl_assign(instructor_id, evaluation_form_id, user_id, date_created) VALUES (?,?,?,?)";
+        $stmt = $con->prepare($insertQuery);
 
-    // Check if the prepare statement succeeded
-    if ($stmt) {
-        // Bind parameters to the prepared statement
-        $stmt->bind_param("iiis", $teacherID, $formID, $userID, $timestamp);
+        if ($stmt) {
+            $stmt->bind_param("iiis", $teacherID, $formID, $userID, $timestamp);
 
-        // Execute the prepared statement
-        if ($stmt->execute()) {
-            // Insertion successful
-            $response = array('status' => 'success', 'message' => 'Form data added successfully');
+            if (!$stmt->execute()) {
+                $success = false;
+                break;
+            }
         } else {
-            // Insertion failed
-            $response = array('status' => 'error', 'message' => 'Failed to add form data');
+            $success = false;
+            break;
         }
-
-        // Close the prepared statement
-        $stmt->close();
-    } else {
-        // Prepare statement failed
-        $response = array('status' => 'error', 'message' => 'Failed to prepare statement');
     }
 
-    // Send JSON response
+    if ($success) {
+        $response = array('status' => 'success', 'message' => 'Form data added successfully');
+    } else {
+        $response = array('status' => 'error', 'message' => 'Failed to add form data');
+    }
+
+    $stmt->close();
     echo json_encode($response);
     exit();
 } else {
-    // Handle invalid request
     $response = array('status' => 'error', 'message' => 'Invalid request');
     echo json_encode($response);
     exit();
 }
-
 ?>

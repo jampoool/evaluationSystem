@@ -160,94 +160,79 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                 <div class="shadow p-3 mb-5 bg-body rounded ">
 
                        <!-- Add Modal -->
-          <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Assign Teacher Evaluation</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-element">
-                            <form class="row g-3" method="POST">
-                                <div class="col-6">
-                                    <label class="form-label">Teacher Name</label>
-                                    <select id="teacherID" name="teacherID" class="form-select" aria-label="Default select example">
-                                        <option selected disabled>Choose</option>
-                                            <?php
-                                               $sqlquery = mysqli_query($con, "SELECT * FROM user where type='teacher' ");
-                                               while($rows = mysqli_fetch_array($sqlquery))
-                                                   { ?>
-                                                      <option value="<?php echo $rows['id'];?>"><?php echo $rows['email'];?></option>
-                                                    <?php
-                                                   }
-                                                ?>
-                                    </select>
-                                </div>
-                                <div class="col-6">
-                                                    <label class="form-label">Form No</label>
-                                                    <select id="formID" name="formID" class="form-select" aria-label="Default select example">
-                                                        <option selected disabled>Choose</option>
-                                                            <?php
-                                                            $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form");
-                                                            while($rows = mysqli_fetch_array($sqlquery))
-                                                                { ?>
-                                                                    <option value="<?php echo $rows['id'];?>"><?php echo $rows['form_description'];?></option>
-                                                                    <?php
-                                                                }
-                                                                ?>
-                                                    </select>
-                               </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                    </button>
-                                    <button id="saveChangesBtn" class="btn btn-primary" name="save_changes">Submit</button>
-                                </div>
-                            </form>
-                        </div>
-
-                    </div>
-                </div>
+                       <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="staticBackdropLabel">Assign Teacher Evaluation</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
-                        <!-- end of modal -->
-
-                        <!-- edit modal -->
-                        <!-- <div class="modal fade" id="editModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="editModalLabel">Edit Assign</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                    <div class="form-element">
-                                                <form class="row g-3" method="POST">
-                                                    <input type="hidden" id="questionID" name="questionID">
-                                                    <div class="col-6">
-                                                    <label class="form-label">Form No</label>
-                                                    <select id="updateForm" name="updateForm" class="form-select" aria-label="Default select example">
-                                                        <option selected disabled>Choose</option>
-                                                           
-                                                    </select>
-                                                </div>
-                                                    <div class="col-7">
-                                                        <label class="form-label">Question</label>
-                                                        <input type="text" class="form-control" id="updateQuestion" name="updateQuestion">
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                                        </button>
-                                                        <button id="updateBtn" class="btn btn-primary" name="update">Submit</button>
-                                                    </div>
-                                                </form>
-                                            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <form id="teacherForm" method="POST">
+                            <label class="form-label">Evaluation Form</label>
+                            <select id="formID" name="formID" class="form-select" aria-label="Default select example">
+                                <option selected disabled>Choose</option>
+                                <?php
+                                    $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form");
+                                    while($row = mysqli_fetch_array($sqlquery)) {
+                                ?>
+                                    <option value="<?php echo $row['id']; ?>"><?php echo $row['form_description']; ?></option>
+                                <?php
+                                    }
+                                ?>
+                            </select>
+                    </div>
+                    <div class="col-md-8">
+                        <?php
+                            $sqlquery = mysqli_query($con, "SELECT * FROM user WHERE type='teacher'");
+                            $count = 0; // Counter for tracking the number of teachers displayed
+                            while($row = mysqli_fetch_array($sqlquery)) {
+                                if ($count % 2 == 0) {
+                                    // Open a new row for every two teachers
+                                    echo '<div class="row">';
+                                }
+                        ?>
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title" style="font-size: 12pt;"><?php echo $row['email']; ?></h5>
+                                        <div class="form-check">
+                                            <input class="form-check-input form-check-sm" type="checkbox" name="teacherID[]" value="<?php echo $row['id']; ?>" id="teacher_<?php echo $row['id']; ?>">
+                                            <label class="form-check-label" for="teacher_<?php echo $row['id']; ?>">Assign</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
-                       
+                        <?php
+                                $count++;
+                                if ($count % 2 == 0) {
+                                    // Close the row after displaying two teachers
+                                    echo '</div>'; // Close the row
+                                }
+                            }
+                            // Check if there's an unclosed row
+                            if ($count % 2 != 0) {
+                                echo '</div>'; // Close the row
+                            }
+                        ?>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="assignTeachersBtn" class="btn btn-primary" name="save_changes">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+                        <!-- end of modal -->
+
                 <button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     <i class="fa-solid fa-plus"></i> Assign Teacher
                 </button>
@@ -257,6 +242,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                             <tr>
                                                 <th style="display:none;">No.</th>
                                                 <th>No.</th>
+                                                <th>Form No.</th>
                                                 <th>Teacher</th>
                                                 <th>Status</th>
                                                 <th>Date Created</th>
@@ -272,7 +258,17 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                         <tr>
                             <td style="width: 10%;"><?php echo $i++; ?></td>
                             <td style="display:none;"><?php echo $rows['id']; ?></td>
-                            <td style="width: 25%;">
+                           
+                            <td style="width: 15%;">
+                                <?php 
+                                // Fetching category description from tbl_category based on category_id
+                                $formID = $rows['evaluation_form_id'];
+                                $formQuery = mysqli_query($con, "SELECT form_no FROM tbl_evaluation_form WHERE id = $formID");
+                                $formRow = mysqli_fetch_assoc($formQuery);
+                                echo $formRow['form_no'];
+                                ?>
+                            </td>
+                             <td style="width: 25%;">
                                 <?php 
                                 // Fetching category description from tbl_category based on category_id
                                 $teacherID = $rows['instructor_id'];
@@ -316,54 +312,69 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
        new DataTable('#example');
     </script>
       <script>
-   document.addEventListener('DOMContentLoaded', function () {
-    var saveChangesBtn = document.getElementById('saveChangesBtn');
+            document.addEventListener('DOMContentLoaded', function () {
+    var assignTeachersBtn = document.getElementById('assignTeachersBtn');
 
-    if (saveChangesBtn) {
-        saveChangesBtn.addEventListener('click', function (e) {
+    if (assignTeachersBtn) {
+        assignTeachersBtn.addEventListener('click', function (e) {
             e.preventDefault();
 
-            var teacherID = document.getElementById('teacherID').value;
-            var formID = document.getElementById('formID').value;
+            var teacherCheckboxes = document.querySelectorAll('#teacherFields input[name="teacherID[]"]:checked');
+            var formID = document.getElementById('formID');
 
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'save_assign.php', true);
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        var response = JSON.parse(xhr.responseText);
+            if (formID) {
+                formID = formID.value;
 
-                        if (response.status === 'success') {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success!',
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(function () {
-                                $('#staticBackdrop').modal('hide');
-                                $('.modal-backdrop').remove();
-                                location.reload();
-                            });
+                var teacherIDs = [];
+                teacherCheckboxes.forEach(function (checkbox) {
+                    teacherIDs.push(checkbox.value);
+                });
+
+                console.log("Teacher IDs:", teacherIDs);
+                console.log("Form ID:", formID);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'save_assign.php', true);
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(function () {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: response.message
+                                });
+                            }
                         } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error!',
-                                text: response.message
-                            });
+                            console.error('Error occurred during AJAX request:', xhr.statusText);
+                            alert('An error occurred while saving the form. Please try again.');
                         }
-                    } else {
-                        console.error('Error occurred during AJAX request:', xhr.statusText);
-                        alert('An error occurred while saving the form. Please try again.');
                     }
-                }
-            };
-            xhr.send('teacherID=' + teacherID + '&formID=' + formID + '&save_changes=1');
+                };
+                xhr.send('teacherIDs=' + JSON.stringify(teacherIDs) + '&formID=' + formID + '&save_changes=1');
+            } else {
+                console.error('Form ID element not found');
+                alert('An error occurred. Please try again.');
+            }
         });
     }
 });
+
     </script>
+    
     <script src="assign.js"></script>
 </body>
 

@@ -151,15 +151,126 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                     </ul>
                 </div>
             </nav>
-            <div id="page-content" class="container-lg" >
-                 <div class="row">
-                   <h1>Report</h1>
+            <div class="container-fluid">
+    <div class="row">
+        <!-- Left side: Pie Chart -->
+        <div class="col-md-4 position-fixed left-0">
+            <div class="col-md-12">
+                <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+                    <!-- Pie Chart Canvas -->
+                    <canvas id="pieChart" style="max-width: 100%; height: auto;"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- Right side: Faculty Evaluation Form -->
+        <div class="col-md-8 offset-md-4">
+            <div class="card mt-5">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Faculty Evaluation Form</h5>
+                </div>
+                <div class="card-body">
+                    <form id="teacherForm" method="POST">
+                        <?php
+                        $sql = "SELECT Q.id, Q.question, C.category_description 
+                                FROM tbl_question Q
+                                JOIN tbl_evaluation_form F ON Q.evaluation_form_id = F.id
+                                JOIN tbl_category C ON F.category_id = C.id
+                                ORDER BY C.category_description"; // Order by category for grouping
+
+                        $result = $con->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            $currentCategory = null;
+
+                            while ($row = $result->fetch_assoc()) {
+                                if ($currentCategory !== $row["category_description"]) {
+                                    // If category changed, display new category header
+                                    $currentCategory = $row["category_description"];
+                                    echo '<h4>' . $currentCategory . '</h4>';
+                                }
+
+                                echo '<div class="mb-3">';
+                                echo '<label for="question_' . $row["id"] . '" class="form-label">' . $row["question"] . '</label>';
+                                echo '<div class="btn-group-toggle" data-toggle="buttons">';
+                                for ($i = 1; $i <= 5; $i++) {
+                                    echo '<label class="btn btn-outline-primary">';
+                                    echo '<input type="radio" name="responses[' . $row["id"] . ']" value="' . $i . '" autocomplete="off">' . $i;
+                                    echo '</label>';
+                                }
+                                echo '</div>'; // close btn-group-toggle
+                                echo '</div>'; // close mb-3
+                            }
+                        } else {
+                            echo "0 results";
+                        }
+                        ?>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
+        </div>
+    </div>
     
-    
+    <?php
+    // Your PHP code to fetch data from the database and format it as JSON
+    // For example, you might retrieve category names and corresponding counts
+    $categories = array(); // Array to store category names
+    $counts = array(); // Array to store counts
+
+    // Your database connection code here (e.g., $con = new mysqli(...);)
+
+    // Your database query to retrieve data and populate $categories and $counts arrays
+    $sql = "SELECT category_description, COUNT(*) AS count FROM tbl_category GROUP BY category_description";
+    $result = $con->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $categories[] = $row['category_description'];
+            $counts[] = $row['count'];
+        }
+    }
+
+    // Convert PHP arrays to JavaScript arrays
+    $categories_json = json_encode($categories);
+    $counts_json = json_encode($counts);
+?>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Convert PHP categories JSON to JavaScript array
+    var categories = <?php echo $categories_json; ?>;
+
+    // Generate dynamic colors based on the number of categories
+    var dynamicColors = [];
+    for (var i = 0; i < categories.length; i++) {
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+        dynamicColors.push('rgba(' + r + ', ' + g + ', ' + b + ', 0.6)');
+    }
+
+    // Create pie chart
+    var ctx = document.getElementById('pieChart').getContext('2d');
+    var pieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: categories,
+            datasets: [{
+                data: <?php echo $counts_json; ?>,
+                backgroundColor: dynamicColors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            // Your chart options
+        }
+    });
+</script>
 
     <!-- Your custom scripts -->
     <script src="../admin/script.js"></script>
