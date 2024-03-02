@@ -77,9 +77,8 @@ $(document).ready(function () {
 
   
 
-      
-    $(document).on('click', '#saveChangesBtn', function () {
-        // Reference to the form
+    $(document).on('click', '#saveChangesBtn', function (e) {
+        e.preventDefault();
         var form = $('form');  // Assuming your form selector is 'form'
     
         // Create a custom data object
@@ -99,29 +98,34 @@ $(document).ready(function () {
             url: 'adminInsert.php',
             data: customData,  // Send the custom data object
             success: function (response) {
-                // Show SweetAlert based on the response
-                if (response.status === 'success') {
-                
+                // Check the status returned from the server
+                if (response && response.status === 'success') {
                     Swal.fire({
                         title: 'Success!',
                         text: response.message,
                         icon: 'success'
                     }).then((result) => {
                         // Reload the entire page after a delay
-                        window.location.href('http://localhost/evaluationSystem/admin/manageUser.php');
+                        window.location.href = 'http://localhost/evaluationSystem/admin/manageUser.php';
                     });
                 } else {
                     // If the response indicates an error
                     Swal.fire({
                         title: 'Error!',
-                        text: response.message,
+                        text: response && response.message ? response.message : 'Unknown error occurred',
                         icon: 'error'
                     });
-                    console.error('Error in form submission:', response.message);
+                    console.error('Error in form submission:', response && response.message ? response.message : 'Unknown error occurred');
                 }
             },
             error: function (xhr, status, error) {
                 console.error("Error:", error);
+                // Handle network or server-side errors here
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while submitting the form. Please try again later.',
+                    icon: 'error'
+                });
             }
         });
     });

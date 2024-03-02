@@ -185,38 +185,27 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                             </select>
                     </div>
                     <div class="col-md-8">
-                        <?php
-                            $sqlquery = mysqli_query($con, "SELECT * FROM user WHERE type='teacher'");
-                            $count = 0; // Counter for tracking the number of teachers displayed
-                            while($row = mysqli_fetch_array($sqlquery)) {
-                                if ($count % 2 == 0) {
-                                    // Open a new row for every two teachers
-                                    echo '<div class="row">';
-                                }
-                        ?>
-                            <div class="col-md-6">
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        <h5 class="card-title" style="font-size: 12pt;"><?php echo $row['email']; ?></h5>
-                                        <div class="form-check">
-                                            <input class="form-check-input form-check-sm" type="checkbox" name="teacherID[]" value="<?php echo $row['id']; ?>" id="teacher_<?php echo $row['id']; ?>">
-                                            <label class="form-check-label" for="teacher_<?php echo $row['id']; ?>">Assign</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php
-                                $count++;
-                                if ($count % 2 == 0) {
-                                    // Close the row after displaying two teachers
-                                    echo '</div>'; // Close the row
-                                }
-                            }
-                            // Check if there's an unclosed row
-                            if ($count % 2 != 0) {
-                                echo '</div>'; // Close the row
-                            }
-                        ?>
+                    <table id="teacherTable" class="table table-striped table-hover" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Email</th>
+                                        <th>Assign</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sqlquery = mysqli_query($con, "SELECT * FROM user WHERE type='teacher'");
+                                    while ($row = mysqli_fetch_array($sqlquery)) {
+                                    ?>
+                                        <tr>
+                                            <td><?php echo $row['email']; ?></td>
+                                            <td><input type="checkbox" class="assign-checkbox" value="<?php echo $row['id']; ?>"></td>
+                                        </tr>
+                                    <?php
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
                         </form>
                     </div>
                 </div>
@@ -311,6 +300,17 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     <script>
        new DataTable('#example');
     </script>
+    <script>$(document).ready(function() {
+    $('#teacherTable').DataTable({
+        // Add any configuration options you need
+        // For example:
+        // "paging": true,
+        // "searching": true,
+        // "ordering": true,
+        // "info": true
+    });
+});</script>
+    
       <script>
             document.addEventListener('DOMContentLoaded', function () {
     var assignTeachersBtn = document.getElementById('assignTeachersBtn');

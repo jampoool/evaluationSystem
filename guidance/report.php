@@ -132,7 +132,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
         </aside>
     
         <div class="main">
-            <nav class="navbar navbar-expand px-4 py-3 shadow p-3 mb-5 bg-body roundedsticky-top">
+            <nav class="navbar navbar-expand px-4 py-3 shadow p-3 bg-body roundedsticky-top">
                 <form action="#" class="d-none d-sm-inline-block">
                 </form>
                 <div class="navbar-collapse">
@@ -151,68 +151,80 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                     </ul>
                 </div>
             </nav>
-            <div class="container-fluid">
-    <div class="row">
-        <!-- Left side: Pie Chart -->
-        <div class="col-md-4 position-fixed left-0">
-            <div class="col-md-12">
-                <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
-                    <!-- Pie Chart Canvas -->
-                    <canvas id="pieChart" style="max-width: 100%; height: auto;"></canvas>
-                </div>
-            </div>
-        </div>
-        <!-- Right side: Faculty Evaluation Form -->
-        <div class="col-md-8 offset-md-4">
-            <div class="card mt-5">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="card-title mb-0">Faculty Evaluation Form</h5>
-                </div>
-                <div class="card-body">
-                    <form id="teacherForm" method="POST">
-                        <?php
-                        $sql = "SELECT Q.id, Q.question, C.category_description 
-                                FROM tbl_question Q
-                                JOIN tbl_evaluation_form F ON Q.evaluation_form_id = F.id
-                                JOIN tbl_category C ON F.category_id = C.id
-                                ORDER BY C.category_description"; // Order by category for grouping
+            <!-- <div class="container"> -->
+                <!-- Right side: Faculty Evaluation Form -->
+                <div class="row px-5 py-5">
 
-                        $result = $con->query($sql);
+                    <form style="" id="teacherForm" method="POST" action="javascript:void(0)" accept-charset="utf-8" enctype="multipart/form-data"> 
 
-                        if ($result->num_rows > 0) {
-                            $currentCategory = null;
+                       
+                            <?php
+                                    $sql = "SELECT Q.id, Q.question, C.category_description 
+                                            FROM tbl_question Q
+                                            JOIN tbl_evaluation_form F ON Q.evaluation_form_id = F.id
+                                            JOIN tbl_category C ON F.category_id = C.id
+                                            ORDER BY C.category_description"; // Order by category for grouping
 
-                            while ($row = $result->fetch_assoc()) {
-                                if ($currentCategory !== $row["category_description"]) {
-                                    // If category changed, display new category header
-                                    $currentCategory = $row["category_description"];
-                                    echo '<h4>' . $currentCategory . '</h4>';
+                                    $result = $con->query($sql);
+                                    echo'<div class="card shadow mt-3">';
+                                    echo'<div class="card-body mt-3">';
+                                    if ($result->num_rows > 0) {
+                                        $currentCategory = null;
+                                        $j=1;
+                                        while ($row = $result->fetch_assoc()) {
+                                            if ($currentCategory !== $row["category_description"]) {
+                                                // If category changed, display new category header
+                                                $currentCategory = $row["category_description"];
+
+                                             
+                                                    echo '<div class="row">';
+                                                        echo '<div class="col">';
+                                                            echo '<h3>' . $currentCategory . '</h3>';
+                                                        echo '</div>';  
+                                                    echo '</div>';
+
+                                                echo '<hr>';
+                                                // $j=1;
+                                            }
+                                                echo '<div class="row">';
+                                                    echo '<div class="col">';
+                                                        echo '<label for="">' . $j++ . '. </label> <label for="question_' .$row["id"] . '" class="form-label">' .$row["question"] .' </label>';
+                                                    echo '</div>'; 
+                                                echo '</div>';
+                                                
+                                    
+                                          
+                                                echo '<div class="row mb-1">';
+                                            for ($i = 1; $i <= 5; $i++) {
+                                                
+                                                    echo '<div class="col">';
+                                                        echo '<label class="btn btn-outline-primary px-3 py-3">';
+                                                            echo '<input type="radio" name="responses[' . $row["id"] . ']" value="' . $i . '" autocomplete="off">' . $i;
+                                                        echo '</label> &nbsp;';
+                                                    echo '</div>';
+                                            
+                                            } 
+                                            echo '</div>';  
+                       
+                                            echo '<hr>';
+                                    } 
+                                } else {
+                                    echo "0 results";
                                 }
 
-                                echo '<div class="mb-3">';
-                                echo '<label for="question_' . $row["id"] . '" class="form-label">' . $row["question"] . '</label>';
-                                echo '<div class="btn-group-toggle" data-toggle="buttons">';
-                                for ($i = 1; $i <= 5; $i++) {
-                                    echo '<label class="btn btn-outline-primary">';
-                                    echo '<input type="radio" name="responses[' . $row["id"] . ']" value="' . $i . '" autocomplete="off">' . $i;
-                                    echo '</label>';
-                                }
-                                echo '</div>'; // close btn-group-toggle
-                                echo '</div>'; // close mb-3
-                            }
-                        } else {
-                            echo "0 results";
-                        }
-                        ?>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
+                                echo'<div class="text-center">';
+                                echo'<button type="submit" class="btn btn-primary">Submit</button>';
+                                echo'</div>';
+                                
+                                echo '</div>';
+                                echo '</div>';
+                            ?>
+                        
+                    </form> 
                 </div>
-            </div>
+                
+            <!-- </div> -->
         </div>
-    </div>
-</div>
         </div>
     </div>
     

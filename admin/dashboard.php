@@ -462,10 +462,10 @@ tl-item.active .tl-dot:before {
                 </div>
           </div>
           
-                      <div class="container shadow-sm p-3 mb-5 bg-white rounded">
+                      <div class="col-md-12 px-5 py-1">
                       <p class="col-md-4">Recent Added Users</p>
                                   <div class="row">
-                                  <div class="col-sm-7">
+                                  <div class="col-sm-7 shadow p-3 mb-5 bg-body rounded">
                                       <div class="table-responsive">
                                       <table id="example" class="table table-hover" style="width:100%; font-size: 12px !important;">
                                               <thead class="bg-primary text-white">
@@ -514,7 +514,7 @@ tl-item.active .tl-dot:before {
                                       </div>
                                   </div>
 
-                                  <div class="col-sm-5">
+                                  <div class="col-sm-5 shadow p-3 mb-5 bg-body rounded">
                                   <p>Basic Timeline</p>
                                         <div class="timeline p-4 block mb-4" id="timelineContainer">
                                             
@@ -524,7 +524,7 @@ tl-item.active .tl-dot:before {
     <!-- Your custom scripts -->
     <script src="script.js"></script>
     <script>
-                $(document).ready(function () {
+       $(document).ready(function () {
                     loadRecentActivities();
 
                     function loadRecentActivities() {

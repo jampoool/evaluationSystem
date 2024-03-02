@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Bind parameters
             $stmt = $con->prepare($sql);
             $stmt->bind_param(
-                "ssssss",
+                "isssis",
                 $_POST['user_id'],
                 $_POST['email'],
                 $_POST['password'],
@@ -38,31 +38,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Execute the statement
             if ($stmt->execute()) {
-                $user_id = $_SESSION['user_id'];
-
-                // Sanitize user input
-                $email = $conn->real_escape_string($_POST['email']);
-                
-                // SQL query to insert data
-                $sql = "INSERT INTO tblactivity (user_id, email) VALUES ('$user_id', '$email')";
-                
                 // Check if the insertion was successful
-                if ($conn->query($sql) === TRUE) {
-                    echo "Data inserted successfully";
+                $user_id = $_SESSION['user_id'] ?? null;
+                if ($user_id) {
+                    // Sanitize user input
+                    $email = $con->real_escape_string($_POST['email']);
+                    
+                    // SQL query to insert data
+                    $activity_sql = "INSERT INTO tblactivity (user_id, email) VALUES (?, ?)";
+                    
+                    // Prepare and execute activity SQL statement
+                    $activity_stmt = $con->prepare($activity_sql);
+                    $activity_stmt->bind_param("is", $user_id, $email);
+                    if ($activity_stmt->execute()) {
+                        $response['status'] = 'success';
+                        $response['message'] = 'Data inserted successfully';
+                    } else {
+                        $response['status'] = 'error';
+                        $response['message'] = 'Error inserting activity: ' . $con->error;
+                    }
+                    $activity_stmt->close();
                 } else {
-                    echo "Error: " . $sql . "<br>" . $conn->error;
+                    $response['status'] = 'error';
+                    $response['message'] = 'User ID not set in session';
                 }
-             
-                $response['status'] = 'success';
-                $response['message'] = 'Data inserted successfully';
             } else {
                 $response['status'] = 'error';
-                $response['message'] = 'Error: ' . $sql . '<br>' . $con->error;
+                $response['message'] = 'Error inserting data: ' . $stmt->error;
             }
 
-            // Close the connection
+            // Close the statement
             $stmt->close();
-            $con->close();
         }
     } else {
         $response['status'] = 'error';
