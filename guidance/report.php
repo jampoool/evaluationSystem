@@ -132,7 +132,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
         </aside>
     
         <div class="main">
-            <nav class="navbar navbar-expand px-4 py-3 shadow p-3 bg-body roundedsticky-top">
+            <nav class="navbar navbar-expand px-4 py-3 shadow p-3 bg-body rounded sticky-top">
                 <form action="#" class="d-none d-sm-inline-block">
                 </form>
                 <div class="navbar-collapse">
@@ -151,139 +151,80 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                     </ul>
                 </div>
             </nav>
-            <!-- <div class="container"> -->
-                <!-- Right side: Faculty Evaluation Form -->
+          
                 <div class="row px-5 py-5">
-
-                    <form style="" id="teacherForm" method="POST" action="javascript:void(0)" accept-charset="utf-8" enctype="multipart/form-data"> 
-
-                       
-                            <?php
-                                    $sql = "SELECT Q.id, Q.question, C.category_description 
-                                            FROM tbl_question Q
-                                            JOIN tbl_evaluation_form F ON Q.evaluation_form_id = F.id
-                                            JOIN tbl_category C ON F.category_id = C.id
-                                            ORDER BY C.category_description"; // Order by category for grouping
-
-                                    $result = $con->query($sql);
-                                    echo'<div class="card shadow mt-3">';
-                                    echo'<div class="card-body mt-3">';
-                                    if ($result->num_rows > 0) {
-                                        $currentCategory = null;
-                                        $j=1;
-                                        while ($row = $result->fetch_assoc()) {
-                                            if ($currentCategory !== $row["category_description"]) {
-                                                // If category changed, display new category header
-                                                $currentCategory = $row["category_description"];
-
-                                             
-                                                    echo '<div class="row">';
-                                                        echo '<div class="col">';
-                                                            echo '<h3>' . $currentCategory . '</h3>';
-                                                        echo '</div>';  
-                                                    echo '</div>';
-
-                                                echo '<hr>';
-                                                // $j=1;
-                                            }
-                                                echo '<div class="row">';
-                                                    echo '<div class="col">';
-                                                        echo '<label for="">' . $j++ . '. </label> <label for="question_' .$row["id"] . '" class="form-label">' .$row["question"] .' </label>';
-                                                    echo '</div>'; 
-                                                echo '</div>';
-                                                
-                                    
-                                          
-                                                echo '<div class="row mb-1">';
-                                            for ($i = 1; $i <= 5; $i++) {
-                                                
-                                                    echo '<div class="col">';
-                                                        echo '<label class="btn btn-outline-primary px-3 py-3">';
-                                                            echo '<input type="radio" name="responses[' . $row["id"] . ']" value="' . $i . '" autocomplete="off">' . $i;
-                                                        echo '</label> &nbsp;';
-                                                    echo '</div>';
-                                            
-                                            } 
-                                            echo '</div>';  
-                       
-                                            echo '<hr>';
-                                    } 
-                                } else {
-                                    echo "0 results";
-                                }
-
-                                echo'<div class="text-center">';
-                                echo'<button type="submit" class="btn btn-primary">Submit</button>';
-                                echo'</div>';
-                                
-                                echo '</div>';
-                                echo '</div>';
-                            ?>
-                        
-                    </form> 
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>1 = Disagree</span>
+                        <span>2 = Slightly Disagree</span>
+                        <span>3 = Moderate</span>
+                        <span>4 = Agree</span>
+                        <span>5 = Strongly Agree</span>
+                    </div>
                 </div>
-                
-            <!-- </div> -->
+                <form style="" id="teacherForm" method="POST" action="javascript:void(0)" accept-charset="utf-8" enctype="multipart/form-data"> 
+    <?php
+        $sql = "SELECT Q.id, Q.question, C.category_description 
+                FROM tbl_question Q
+                JOIN tbl_evaluation_form F ON Q.evaluation_form_id = F.id
+                JOIN tbl_category C ON F.category_id = C.id
+                ORDER BY C.category_description"; // Order by category for grouping
+
+        $result = $con->query($sql);
+        echo'<div class="card shadow mt-3">';
+        echo'<div class="card-body mt-3">';
+        if ($result->num_rows > 0) {
+            $currentCategory = null;
+            $j=1;
+            while ($row = $result->fetch_assoc()) {
+                if ($currentCategory !== $row["category_description"]) {
+                    // If category changed, display new category header
+                    $currentCategory = $row["category_description"];
+
+                    echo '<div class="row">';
+                        echo '<div class="col">';
+                            echo '<h3>' . $currentCategory . '</h3>';
+                        echo '</div>';  
+                    echo '</div>';
+
+                    echo '<hr>';
+                    // $j=1;
+                }
+                echo '<div class="row">';
+                    echo '<div class="col">';
+                        echo '<label for="">' . $j++ . '. </label> <label for="question_' .$row["id"] . '" class="form-label">' .$row["question"] .' </label>';
+                    echo '</div>'; 
+                echo '</div>';
+                                                
+                echo '<div class="row mb-1">';
+                for ($i = 1; $i <= 5; $i++) {
+                    echo '<div class="col-auto">';
+                        echo '<label class="radio-label btn btn-outline-primary px-2 py-2">';
+                            echo '<input type="radio" name="responses[' . $row["id"] . ']" value="' . $i . '" autocomplete="off">' . $i;
+                        echo '</label>';
+                    echo '</div>';
+                } 
+                echo '</div>';  
+                echo '<hr>';
+            } 
+        } else {
+            echo "0 results";
+        }
+
+        echo'<div class="text-center">';
+        echo'<button type="submit" class="btn btn-primary">Submit</button>';
+        echo'</div>';
+        
+        echo '</div>';
+        echo '</div>';
+    ?>
+</form> 
+
+                </div>
         </div>
         </div>
     </div>
     
-    <?php
-    // Your PHP code to fetch data from the database and format it as JSON
-    // For example, you might retrieve category names and corresponding counts
-    $categories = array(); // Array to store category names
-    $counts = array(); // Array to store counts
-
-    // Your database connection code here (e.g., $con = new mysqli(...);)
-
-    // Your database query to retrieve data and populate $categories and $counts arrays
-    $sql = "SELECT category_description, COUNT(*) AS count FROM tbl_category GROUP BY category_description";
-    $result = $con->query($sql);
-
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $categories[] = $row['category_description'];
-            $counts[] = $row['count'];
-        }
-    }
-
-    // Convert PHP arrays to JavaScript arrays
-    $categories_json = json_encode($categories);
-    $counts_json = json_encode($counts);
-?>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // Convert PHP categories JSON to JavaScript array
-    var categories = <?php echo $categories_json; ?>;
-
-    // Generate dynamic colors based on the number of categories
-    var dynamicColors = [];
-    for (var i = 0; i < categories.length; i++) {
-        var r = Math.floor(Math.random() * 255);
-        var g = Math.floor(Math.random() * 255);
-        var b = Math.floor(Math.random() * 255);
-        dynamicColors.push('rgba(' + r + ', ' + g + ', ' + b + ', 0.6)');
-    }
-
-    // Create pie chart
-    var ctx = document.getElementById('pieChart').getContext('2d');
-    var pieChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: categories,
-            datasets: [{
-                data: <?php echo $counts_json; ?>,
-                backgroundColor: dynamicColors,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            // Your chart options
-        }
-    });
-</script>
-
     <!-- Your custom scripts -->
     <script src="../admin/script.js"></script>
     <script>

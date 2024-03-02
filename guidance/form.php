@@ -484,7 +484,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                         Swal.fire({
                                             icon: 'error',
                                             title: 'Error!',
-                                            text: 'An error occurred while deleting the category. Please try again.'
+                                            text: 'An error occurred while deleting the Form. Please try again.'
                                         });
                                     }
                                 });

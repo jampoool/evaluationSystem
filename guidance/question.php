@@ -168,35 +168,36 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-element">
-                            <form class="row g-3" method="POST">
-                                <div class="col-6">
-                                    <label class="form-label">Form Number</label>
-                                    <select id="formNumber" name="formNumber" class="form-select" aria-label="Default select example">
-                                        <option selected disabled>Choose</option>
+                            <div class="form-element">
+                                <form id="addQuestionForm" class="row g-3">
+                                    <div class="col-6">
+                                        <label class="form-label">Form Number</label>
+                                        <select id="formNumber" name="formNumber" class="form-select" aria-label="Default select example">
+                                            <option selected disabled>Choose</option>
                                             <?php
-                                               $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form");
-                                               while($rows = mysqli_fetch_array($sqlquery))
-                                                   { ?>
-                                                      <option value="<?php echo $rows['id'];?>"><?php echo $rows['form_description'];?></option>
-                                                    <?php
-                                                   }
-                                                ?>
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label">Question</label>
-                                    <input type="text" id="question" class="form-control" name="question">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                    </button>
-                                    <button id="saveChangesBtn" class="btn btn-primary" name="save_changes">Submit</button>
-                                </div>
-                            </form>
+                                            $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form");
+                                            while ($rows = mysqli_fetch_array($sqlquery)) { ?>
+                                                <option value="<?php echo $rows['id']; ?>"><?php echo $rows['form_description']; ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Question</label>
+                                        <input type="text" id="question" class="form-control" name="question[]">
+                                    </div>
+                                    <div id="additionalQuestions"></div> <!-- Container for dynamically added question inputs -->
+                                    <div class="col-12">
+                                        <button type="button" id="addQuestionBtn" class="btn btn-success">Add Another Question</button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button id="saveChangesBtn" class="btn btn-primary" name="save_changes">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-
-                    </div>
                 </div>
             </div>
         </div>
@@ -387,19 +388,21 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                 }
                             });
                         });
-                 $('#saveChangesBtn').click(function(e) {
-                            e.preventDefault();
-                            var formID = $('#formNumber').val(); 
-                            var question = $('#question').val(); 
-                            $.ajax({
-                                type: 'POST',
-                                url: 'save_question.php',
-                                data: {
-                                    formID: formID,
-                                    question: question,
-                                    save_changes: 1
-                                },
-                                success: function(response) {
+                            $('#addQuestionBtn').click(function() {
+                                // Clone the question input field and append it to the additionalQuestions container
+                                var clonedInput = $('#question').clone().removeAttr('id');
+                                $('#additionalQuestions').append(clonedInput);
+                            });
+
+                            $('#saveChangesBtn').click(function(e) {
+                                e.preventDefault();
+                                var formData = $('#addQuestionForm').serialize(); // Serialize form data including dynamically added inputs
+                                
+                                $.ajax({
+                                    type: 'POST',
+                                    url: 'save_question.php',
+                                    data: formData,
+                                    success: function(response) {
                                         // Display SweetAlert confirmation
                                         Swal.fire({
                                             icon: 'success',
