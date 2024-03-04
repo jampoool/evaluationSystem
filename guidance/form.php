@@ -152,13 +152,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                     </ul>
                 </div>
             </nav>
-                <h5>
-                <small class="text-muted p-5">Manage Form</small>
-                </h5>
-                <div id="page-content" class="col-md-12 px-5 py-1" >
-                <div class="row">
-                <div class="shadow p-3 mb-5 bg-body rounded ">
-                       <!-- Add Modal -->
+                         <!-- Add Modal -->
           <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -250,25 +244,32 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                 </div>
                             </div>
                         </div>
-                       
-                <button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    <i class="fa-solid fa-plus"></i> Add Form
-                </button>
-                <div class="table-responsive">
+                <h5>
+                <small class="text-muted p-5">Manage Form</small>
+                </h5>
+                <div id="page-content" class="col-md-12 px-5 py-1">
+    <div class="row">
+        <div class="shadow p-3 mb-5 bg-body rounded">
+            <button type="button" class="btn btn-primary mx-auto mb-3" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                <i class="fa-solid fa-plus"></i> Add Form
+            </button>
+
+            <div class="mt-2"></div>
+
+            <div class="table-responsive">
                 <table id="example" class="table table-striped" style="width:100%; font-size: 12px !important;">
-                                        <thead>
-                                            <tr>
-                                                <th style="display:none;">No.</th>
-                                                <th>No.</th>
-                                                <th>Category</th>
-                                                <th>Description</th>
-                                                <th>Status</th>
-                                                <th>Date Created</th>
-                                                <th>Date Updated</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Date Created</th>
+                            <th>Date Updated</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         <?php
                         $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form ORDER BY id DESC;");
                         $i = 1;
@@ -276,8 +277,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                         ?>
                         <tr>
                             <td><?php echo $i++; ?></td>
-                            <td style="display:none;"><?php echo $rows['id']; ?></td>
-                            <td style="width: 15%;">
+                            <td>
                                 <?php 
                                 // Fetching category description from tbl_category based on category_id
                                 $category_id = $rows['category_id'];
@@ -286,25 +286,23 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                 echo $category_row['category_description'];
                                 ?>
                             </td>
-                            <td style="width: 30%;"><?php echo $rows['form_description']; ?></td>
-                            <td style="width: 10%;"><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
-                            <td style="width: 15%;"><?php echo date('F j, Y, g:i A', strtotime($rows['created_at'])); ?></td>
-                            <td style="width: 15%;"> <?php 
-                                if (!empty($rows['updated_at'])) {
-                                    echo date('F j, Y, g:i A', strtotime($rows['updated_at'])); 
-                                } 
-                            ?>
-                            </td>
-                            <td style="width: 10%;">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-5">
-                                            <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-form-id="<?php echo $rows['id']; ?>">Edit</button>
-                                        </div>
-                                        <div class="col-5">
-                                            <button type="button" class="btn btn-danger btn-sm delete-btn" data-form-id="<?php echo $rows['id']; ?>">Delete</button>
-                                        </div>
+                            <td><?php echo $rows['form_description']; ?></td>
+                            <td><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
+                            <td><?php echo date('F j, Y, g:i A', strtotime($rows['created_at'])); ?></td>
+                            <td><?php echo !empty($rows['updated_at']) ? date('F j, Y, g:i A', strtotime($rows['updated_at'])) : ''; ?></td>
+                            <td>
+                                <div class="d-inline d-lg-none">
+                                    <button class="btn btn-primary btn-sm" id="ellipsisButton">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="ellipsis-menu" style="display: none;">
+                                        <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-form-id="<?php echo $rows['id']; ?>">Edit</button>
+                                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-form-id="<?php echo $rows['id']; ?>">Delete</button>
                                     </div>
+                                </div>
+                                <div class="d-none d-lg-inline">
+                                    <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-form-id="<?php echo $rows['id']; ?>" style="font-size: 12px !important;">Edit</button>
+                                    <button type="button" class="btn btn-danger btn-sm delete-btn" data-form-id="<?php echo $rows['id']; ?>" style="font-size: 12px !important;">Delete</button>
                                 </div>
                             </td>
                         </tr>
@@ -312,12 +310,13 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                         }
                         ?>
                     </tbody>
-                    </table>
-                    </div>
-                 </div>
-             </div>
-         </div>
+                </table>
+            </div>
         </div>
+    </div>
+</div>
+
+
     </div>
     
     

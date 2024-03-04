@@ -1,45 +1,37 @@
 <?php
-include "../connect.php";
+include("../connect.php");
 session_start();
-
-if (isset($_POST["save_changes"])) {
-    date_default_timezone_set('Asia/Manila');
-    $userID = $_SESSION['user_id'];
+// Check if the form was submitted
+if(isset($_POST['save_changes'])) {
+    // Retrieve form data
     $formID = $_POST['formID'];
-    $teacherIDs = json_decode($_POST['teacherIDs']); // Decode the JSON string into a PHP array
+    $teacherIDs = $_POST['teacherIDs'];
+    $userID = $_SESSION['user_id'];
+    date_default_timezone_set('Asia/Manila');
+    $dateCreated = date('Y-m-d H:i:s');
 
-    $timestamp = date('Y-m-d H:i:s');
-    $success = true;
-
+    // Insert data into the database
     foreach ($teacherIDs as $teacherID) {
-        $insertQuery = "INSERT INTO tbl_assign(instructor_id, evaluation_form_id, user_id, date_created) VALUES (?,?,?,?)";
-        $stmt = $con->prepare($insertQuery);
+        // Prepare and execute SQL statement
+        $stmt = $con->prepare("INSERT INTO tbl_assign (instructor_id, user_id, evaluation_form_id, date_created) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("iiis", $teacherID, $userID, $formID, $dateCreated);
 
-        if ($stmt) {
-            $stmt->bind_param("iiis", $teacherID, $formID, $userID, $timestamp);
-
-            if (!$stmt->execute()) {
-                $success = false;
-                break;
-            }
+        if ($stmt->execute()) {
+            // Data inserted successfully
+            echo "Data inserted successfully!";
         } else {
-            $success = false;
-            break;
+            // Error occurred
+            echo "Error: " . $stmt->error . ". Query: " . "INSERT INTO tbl_assign (instructor_id, user_id, evaluation_form_id, date_created) VALUES ('$teacherID', '$userID', '$formID', '$dateCreated')";
         }
     }
 
-    if ($success) {
-        $response = array('status' => 'success', 'message' => 'Form data added successfully');
-    } else {
-        $response = array('status' => 'error', 'message' => 'Failed to add form data');
-    }
-
+    // Close prepared statement
     $stmt->close();
-    echo json_encode($response);
-    exit();
+
+    // Close database connection
+    $con->close();
 } else {
-    $response = array('status' => 'error', 'message' => 'Invalid request');
-    echo json_encode($response);
-    exit();
+    // If 'save_changes' flag is not set, handle the situation accordingly
+    echo "Error: 'save_changes' flag is not set.";
 }
 ?>

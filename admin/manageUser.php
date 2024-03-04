@@ -126,58 +126,56 @@
             <i class="fa-solid fa-plus"></i>
             Add User
             </button>
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-element">
-                            <form class="row g-3" method="POST">
-                                <div class="col-5">
-                                    <label for="inputID4" class="form-label">Guidance ID</label>
-                                    <input type="text" class="form-control" id="inputID4" name="user_id">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="inputEmail4" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="inputEmail4" name="email">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="inputPassword4" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="inputPassword4" name="password">
-                                </div>
-                                <div class="col-12">
-                                    <label for="inputType" class="form-label">Type</label>
-                                    <select id="inputType" class="form-select" name="type">
-                                        <option selected>Choose...</option>
-                                        <option value="admin">Admin</option>
-                                        <option value="guidance">Guidance</option>
-                                        <option value="student">Student</option>
-                                        <option value="teacher">Teacher</option>
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <label for="inputDepartment" class="form-label">Department</label>
-                                    <select id="inputDepartment" class="form-select" name="department">
-                                        <option selected>Choose...</option>
-                                        <option value="1">Basic Education Department</option>
-                                        <option value="2">Higher Education Department</option>
-                                    </select>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                    </button>
-                                    <button id="saveChangesBtn" class="btn btn-primary" name="save_changes">Submit</button>
-                                </div>
-                            </form>
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-element">
+                    <form class="row g-3" id="userForm">
+                        <div class="col-5">
+                            <label for="inputID4" class="form-label">Guidance ID</label>
+                            <input type="text" class="form-control" id="inputID4" name="user_id">
                         </div>
-
-                    </div>
+                        <div class="col-md-6">
+                            <label for="inputEmail4" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="inputEmail4" name="email">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputPassword4" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="inputPassword4" name="password">
+                        </div>
+                        <div class="col-12">
+                            <label for="inputType" class="form-label">Type</label>
+                            <select id="inputType" class="form-select" name="type">
+                                <option selected>Choose...</option>
+                                <option value="admin">Admin</option>
+                                <option value="guidance">Guidance</option>
+                                <option value="student">Student</option>
+                                <option value="teacher">Teacher</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="inputDepartment" class="form-label">Department</label>
+                            <select id="inputDepartment" class="form-select" name="department">
+                                <option selected>Choose...</option>
+                                <option value="1">Basic Education Department</option>
+                                <option value="2">Higher Education Department</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button id="saveChangesBtn" class="btn btn-primary" name="save_changes">Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
         <div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -258,7 +256,8 @@
         </div>
     </div>
      <script src="manageUser.js"></script>
-                <script> $(document).ready(function () {
+      <script>
+       $(document).ready(function () {
         $("#ellipsisButton").on("click", function () {
             $(".ellipsis-menu").toggle();
         });

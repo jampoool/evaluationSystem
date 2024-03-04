@@ -152,15 +152,9 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                     </ul>
                 </div>
             </nav>
-                <h5>
-                <small class="text-muted p-5">Manage Form</small>
-                </h5>
-                <div id="page-content" class="col-md-12 px-5 py-1" >
-                <div class="row">
-                <div class="shadow p-3 mb-5 bg-body rounded ">
-
+            
                        <!-- Add Modal -->
-                       <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
@@ -185,31 +179,33 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                             </select>
                     </div>
                     <div class="col-md-8">
-                    <table id="teacherTable" class="table table-striped table-hover" style="width:100%;">
-                                <thead>
+                        <table id="teacherTable" class="table table-striped table-hover" style="width:100%;">
+                            <thead>
+                                <tr>
+                                <input type="checkbox" id="checkAllTeachers"><span>Check All</span>
+                                    &nbsp;
+                                    <th>Email</th>
+                                    <th>Assign</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sqlquery = mysqli_query($con, "SELECT * FROM user WHERE type='teacher'");
+                                while ($row = mysqli_fetch_array($sqlquery)) {
+                                ?>
                                     <tr>
-                                        <th>Email</th>
-                                        <th>Assign</th>
+                                        <td><?php echo $row['email']; ?></td>
+                                        <td><input type="checkbox" class="assign-checkbox" value="<?php echo $row['id']; ?>"></td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $sqlquery = mysqli_query($con, "SELECT * FROM user WHERE type='teacher'");
-                                    while ($row = mysqli_fetch_array($sqlquery)) {
-                                    ?>
-                                        <tr>
-                                            <td><?php echo $row['email']; ?></td>
-                                            <td><input type="checkbox" class="assign-checkbox" value="<?php echo $row['id']; ?>"></td>
-                                        </tr>
-                                    <?php
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
-                        </form>
+                                <?php
+                                }
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+            
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button id="assignTeachersBtn" class="btn btn-primary" name="save_changes">Submit</button>
@@ -221,78 +217,76 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
 
 
                         <!-- end of modal -->
+                <h5>
+                <small class="text-muted p-5">Manage Form</small>
+                </h5>
+                <div id="page-content" class="col-md-12 px-5 py-1">
+    <div class="row">
+        <div class="shadow p-3 mb-5 bg-body rounded">
+        <button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    <i class="fa-solid fa-plus"></i> Assign Teacher
+</button>
 
-                <button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    <i class="fa-solid fa-plus"></i> Assign Teacher
-                </button>
-                <div class="table-responsive">
-                <table id="example" class="table table-striped" style="width:100%; font-size: 12px !important;">
-                                        <thead>
-                                            <tr>
-                                                <th style="display:none;">No.</th>
-                                                <th>No.</th>
-                                                <th>Form No.</th>
-                                                <th>Teacher</th>
-                                                <th>Status</th>
-                                                <th>Date Created</th>
-                                                <th>Date Updated</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                        <?php
-                        $sqlquery = mysqli_query($con, "SELECT * FROM tbl_assign ORDER BY id DESC;");
-                        $i = 1;
-                        while ($rows = mysqli_fetch_array($sqlquery)) {
-                        ?>
-                        <tr>
-                            <td style="width: 10%;"><?php echo $i++; ?></td>
-                            <td style="display:none;"><?php echo $rows['id']; ?></td>
-                           
-                            <td style="width: 15%;">
-                                <?php 
-                                // Fetching category description from tbl_category based on category_id
-                                $formID = $rows['evaluation_form_id'];
-                                $formQuery = mysqli_query($con, "SELECT form_no FROM tbl_evaluation_form WHERE id = $formID");
-                                $formRow = mysqli_fetch_assoc($formQuery);
-                                echo $formRow['form_no'];
-                                ?>
-                            </td>
-                             <td style="width: 25%;">
-                                <?php 
-                                // Fetching category description from tbl_category based on category_id
-                                $teacherID = $rows['instructor_id'];
-                                $teacherQuery = mysqli_query($con, "SELECT email FROM user WHERE id = $teacherID");
-                                $teacherRow = mysqli_fetch_assoc($teacherQuery);
-                                echo $teacherRow['email'];
-                                ?>
-                            </td>
-                            <td style="width: 10%;">
-                                <?php if($rows['is_active'] == 1): ?>
-                                    <button type="button" class="btn btn-success btn-sm enable-btn" data-enable-id="<?php echo $rows['id']; ?>" data-is-active="<?php echo $rows['is_active']; ?>">Enabled</button>
-                                <?php elseif ($rows['is_active'] == 0): ?>
-                                    <button type="button" class="btn btn-secondary btn-sm enable-btn" data-enable-id="<?php echo $rows['id']; ?>" data-is-active="<?php echo $rows['is_active']; ?>">Disabled</button>
-                                <?php endif; ?>
-                            </td>
-                            <td style="width: 15%;"><?php echo date('F j, Y, g:i A', strtotime($rows['date_created'])); ?></td>
-                            <td style="width: 15%;"> <?php 
-                                if (!empty($rows['date_updated'])) {
-                                    echo date('F j, Y, g:i A', strtotime($rows['date_updated'])); 
-                                } 
-                            ?>
-                            </td>
-                        </tr>
-                        <?php
-                        }
-                        ?>
-                    </tbody>
-                    </table>
-                    </div>
-                 </div>
-             </div>
-         </div>
+<div class="mt-2"></div>
+
+<div class="table-responsive">
+    <table id="example" class="table table-striped" style="width:100%; font-size: 12px !important;">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Form No.</th>
+                <th>Teacher</th>
+                <th>Date Created</th> 
+                 <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $sqlquery = mysqli_query($con, "SELECT * FROM tbl_assign ORDER BY id DESC;");
+            $i = 1;
+            while ($rows = mysqli_fetch_array($sqlquery)) {
+            ?>
+            <tr>
+                <td><?php echo $i++; ?></td>
+                <td>
+                    <?php 
+                    // Fetching form number from tbl_evaluation_form based on evaluation_form_id
+                    $formID = $rows['evaluation_form_id'];
+                    $formQuery = mysqli_query($con, "SELECT form_no FROM tbl_evaluation_form WHERE id = $formID");
+                    $formRow = mysqli_fetch_assoc($formQuery);
+                    echo $formRow['form_no'];
+                    ?>
+                </td>
+                <td>
+                    <?php 
+                    // Fetching email of teacher from user based on instructor_id
+                    $teacherID = $rows['instructor_id'];
+                    $teacherQuery = mysqli_query($con, "SELECT email FROM user WHERE id = $teacherID");
+                    $teacherRow = mysqli_fetch_assoc($teacherQuery);
+                    echo $teacherRow['email'];
+                    ?>
+                </td>
+                <td><?php echo date('F j, Y, g:i A', strtotime($rows['date_created'])); ?></td>
+                <td>
+                <div class="form-check form-switch">
+                    <input class="form-check-input enable-toggle" type="checkbox" data-enable-id="<?php echo $rows['id']; ?>" <?php echo ($rows['is_active'] == 1) ? 'checked' : ''; ?>>
+                    <label class="form-check-label <?php echo ($rows['is_active'] == 1) ? 'text-success' : 'text-secondary'; ?>">
+                        <?php echo ($rows['is_active'] == 1) ? 'Enabled' : 'Disabled'; ?>
+                    </label>
+                </div>
+                </td>
+            </tr>
+            <?php
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
+
         </div>
     </div>
-    
+</div>
+
     
 
     <!-- Your custom scripts -->
@@ -300,7 +294,102 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     <script>
        new DataTable('#example');
     </script>
-    <script>$(document).ready(function() {
+    <script>
+       document.addEventListener('DOMContentLoaded', function () {
+         // Ensure jQuery is loaded and DOM is ready
+         $(document).ready(function() {
+            // When the "Submit" button is clicked
+            $("#assignTeachersBtn").click(function(event) {
+                event.preventDefault();
+
+                // Get the selected formID
+                var formID = $("#formID").val();
+
+                // Get all checked checkboxes
+                var teacherIDs = [];
+                $(".assign-checkbox:checked").each(function() {
+                    teacherIDs.push($(this).val());
+                });
+
+                // AJAX request to send formID and teacherIDs to the PHP script
+                $.ajax({
+                    type: "POST",
+                    url: "save_assign.php",
+                    data: {
+                        formID: formID,
+                        teacherIDs: teacherIDs,
+                        save_changes: true // Ensure this is set
+                    },
+                    success: function(response) {
+                        // Handle the response from the PHP script
+                        console.log(response);
+                        // Show SweetAlert notification
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Assigning saved successfully!',
+                        }).then(function() {
+                                // Hide modal after showing the SweetAlert
+                                $('#staticBackdrop').modal('hide');
+                                $('.modal-backdrop').remove();
+                                location.reload();
+                            });
+                    },
+                    error: function(xhr, status, error) {
+                        // Show SweetAlert notification for error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'An error occurred while saving assignments.',
+                        });
+                    }
+                });
+            });
+        });
+         // Add event listener for checkbox change
+         $('.enable-toggle').change(function() {
+                    // Get the data-enable-id attribute value
+                    var id = $(this).data('enable-id');
+                    
+                    // Get the current checked status of the checkbox
+                    var checked = $(this).prop('checked');
+                    
+                    // Update the label text and class based on the checked status
+                    $(this).next('.form-check-label').text(checked ? 'Enabled' : 'Disabled');
+                    $(this).next('.form-check-label').toggleClass('text-success', checked);
+                    $(this).next('.form-check-label').toggleClass('text-secondary', !checked);
+                    
+                    // Send AJAX request to update database
+                    $.ajax({
+                        url: 'update_status.php', // Change the URL to your update_status.php file
+                        type: 'POST',
+                        data: { id: id, is_active: checked ? 1 : 0 },
+                        success: function(response) {
+                            console.log('Database updated successfully');
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error updating database:', error);
+                        }
+                    });
+                });
+        const checkAllTeachersCheckbox = document.getElementById('checkAllTeachers');
+        const assignCheckboxes = document.querySelectorAll('.assign-checkbox');
+
+        // Function to check/uncheck all checkboxes
+        function toggleCheckboxes(checked) {
+            assignCheckboxes.forEach(function (checkbox) {
+                checkbox.checked = checked;
+            });
+        }
+
+        // Event listener for the "Check All" checkbox
+        checkAllTeachersCheckbox.addEventListener('change', function () {
+            toggleCheckboxes(this.checked);
+        });
+    });
+</script>
+    <script>
+    $(document).ready(function() {
     $('#teacherTable').DataTable({
         // Add any configuration options you need
         // For example:
@@ -311,71 +400,6 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     });
 });</script>
     
-      <script>
-            document.addEventListener('DOMContentLoaded', function () {
-    var assignTeachersBtn = document.getElementById('assignTeachersBtn');
-
-    if (assignTeachersBtn) {
-        assignTeachersBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            var teacherCheckboxes = document.querySelectorAll('#teacherFields input[name="teacherID[]"]:checked');
-            var formID = document.getElementById('formID');
-
-            if (formID) {
-                formID = formID.value;
-
-                var teacherIDs = [];
-                teacherCheckboxes.forEach(function (checkbox) {
-                    teacherIDs.push(checkbox.value);
-                });
-
-                console.log("Teacher IDs:", teacherIDs);
-                console.log("Form ID:", formID);
-
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'save_assign.php', true);
-                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            var response = JSON.parse(xhr.responseText);
-
-                            if (response.status === 'success') {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Success!',
-                                    text: response.message,
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                }).then(function () {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error!',
-                                    text: response.message
-                                });
-                            }
-                        } else {
-                            console.error('Error occurred during AJAX request:', xhr.statusText);
-                            alert('An error occurred while saving the form. Please try again.');
-                        }
-                    }
-                };
-                xhr.send('teacherIDs=' + JSON.stringify(teacherIDs) + '&formID=' + formID + '&save_changes=1');
-            } else {
-                console.error('Form ID element not found');
-                alert('An error occurred. Please try again.');
-            }
-        });
-    }
-});
-
-    </script>
-    
-    <script src="assign.js"></script>
 </body>
 
 </html>

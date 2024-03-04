@@ -40,6 +40,9 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <style>
+       
+    </style>
 </head>
 
 <body>
@@ -159,100 +162,56 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                 <div id="page-content" class="col-md-12 px-5 py-1" >
                 <div class="row">
                 <div class="shadow p-3 mb-5 bg-body rounded ">
-<?php
-
-    // Include your database connection file
-    include "../connect.php";
-    
-    // Check if the submit button is set
-    if (isset($_POST["submit"])) {
-        // Retrieve the form number and questions from the POST data
-        $formNumber = $_POST["formNumber"];
-        $questions = $_POST["questions"];
-        
-        // Count the number of questions
-        $count = count($questions);
-        
-        // Loop through the questions array and insert each question into the database
-        for ($i = 0; $i < $count; $i++) {
-            // Check if the question is not empty
-            if (trim($questions[$i] != '')) {
-                // Perform the database insertion using prepared statements to prevent SQL injection
-                $stmt = $con->prepare("INSERT INTO tbl_question (evaluation_form_id, question) VALUES (?, ?)");
-                $stmt->bind_param("is", $formNumber, $questions[$i]);
-                $stmt->execute();
-                if ($stmt->errno) {
-                    echo "Error: " . $stmt->error;
-                }
-                $stmt->close();
-            }
-        }
-        
-        // Check if at least one question was inserted successfully
-        if ($i > 0) {
-            echo "<script>alert('Questions inserted successfully');</script>";
-        } else {
-            echo "<script>alert('Please enter at least one question');</script>";
-        }
-    } else {
-        // Send an error response if submit is not set
-        $response = array("status" => "error", "message" => "Submit not set");
-        echo json_encode($response);
-    }
-    ?>
 
                 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Manage Question</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Manage Question</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-element">
+              <form id="add_name" class="row g-3" name="add_name" method="POST">
+                <div class="col-12">
+                  <label class="form-label">Form Number</label>
+                  <select id="formNumber" name="formNumber" class="form-select">
+                    <option selected disabled>Choose</option>
+                    <?php
+                      $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form");
+                      while ($rows = mysqli_fetch_array($sqlquery)) {
+                          echo "<option value='" . $rows['id'] . "'>" . $rows['form_description'] . "</option>";
+                      }
+                    ?>
+                  </select>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-element">
-                                <form id="add_name" class="row g-3" name="add_name" method="POST">
-                                    <div class="col-12">
-                                        <label class="form-label">Form Number</label>
-                                        <select id="formNumber" name="formNumber" class="form-select" aria-label="Default select example">
-                                            <option selected disabled>Choose</option>
-                                            <?php
-                                            $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form");
-                                            while ($rows = mysqli_fetch_array($sqlquery)) {
-                                                echo "<option value='" . $rows['id'] . "'>" . $rows['form_description'] . "</option>";
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <div class="col-12">
-                                        <label class="form-label">Question</label>
-                                        <input type="text" name="questions[]" placeholder="Enter Questions" class="form-control name_list" />
-                                    </div>
-                                    <div class="col-12">
-                                        <button type="button" name="add" id="add" class="btn btn-success">Add More</button>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <input type="submit" name="submit" id="submit" class="btn btn-info" value="Submit" />
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dynamic_field">
-                                    <tr>
-                                        
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Additional question fields go here -->
+              </form>
             </div>
+          </div>
+          <div class="col-md-6">
+            <div class="scrollable-area">
+              <table class="table table-bordered table-sm" id="dynamic_field">
+                <!-- Table content -->
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+  <!-- "Add More" button within the modal body -->
+        <button type="button" name="add" id="add" class="btn btn-sm rounded-pill btn-success add-more-button">Add More</button>
+        <div class="ms-auto">
+            <button type="button" class="btn btn-secondary btn-sm rounded-pill" data-bs-dismiss="modal">Close</button>
+            <input type="submit" name="submit" id="submit" class="btn btn-primary btn-sm rounded-pill" value="Submit" />
+        </div>
         </div>
     </div>
+  </div>
+</div>
+
                         <!-- edit modal -->
                         <div class="modal fade" id="editModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -364,7 +323,53 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
         </div>
     </div>
     
-    
+    <script>
+   $(document).ready(function(){
+    $('#submit').click(function(){
+        var formNumber = $('#formNumber').val(); // Get the selected form number
+        var questions = []; // Array to store questions
+
+        // Loop through each input field with class name_list (containing questions)
+        $('.name_list').each(function(){
+            questions.push($(this).val()); // Add the value of each input field to the questions array
+        });
+
+        // Send form data to PHP script using AJAX
+        $.ajax({
+            type: 'POST',
+            url: 'save_question.php',
+            data: {
+                formNumber: formNumber,
+                questions: questions
+            },
+            success: function(response){
+                // Handle successful response from server
+                console.log(response); // Log response for debugging
+                var responseData = JSON.parse(response); // Parse JSON response
+                if (responseData.status === "success") {
+                    // Show SweetAlert notification if questions are inserted successfully
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: responseData.message
+                    }).then(function() {
+                        $('#staticBackdrop').modal('hide');
+                        $('.modal-backdrop').remove();
+                        location.reload();
+                    });
+                } else {
+                    // Handle other cases if needed
+                    console.error(responseData.message);
+                }
+            },
+            error: function(xhr, status, error){
+                // Handle errors (if any)
+                console.error(error); // Log error for debugging
+            }
+        });
+    });
+});
+        </script>
 
     <!-- Your custom scripts -->
     <script src="../admin/script.js"></script>

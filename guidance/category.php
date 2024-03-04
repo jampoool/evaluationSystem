@@ -214,69 +214,65 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                         </div>
 <!-- end of modal -->
                        
-    <button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-        <i class="fa-solid fa-plus"></i> Add Category
-    </button>
-    <div class="mt-2"></div>
-    <div class="table-responsive">
-        <table id="example" class="table table-striped" style="width:100%; font-size: 14px !important;">
-            <thead>
-                <tr>
-                    <th style="display:none;">No.</th>
-                    <th>No.</th>
-                    <th>Category Description</th>
-                    <th>Status</th>
-                    <th>Date Created</th>
-                    <th>Date Updated</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $sqlquery = mysqli_query($con, "SELECT * FROM tbl_category ORDER BY id DESC;");
-                $i = 1;
-                while ($rows = mysqli_fetch_array($sqlquery)) {
-                ?>
-                <tr>
-                    <td style="width: 5%;"><?php echo $i++; ?></td>
-                    <td style="display:none;"><?php echo $rows['id']; ?></td>
-                    <td style="width: 25%;"><?php echo $rows['category_description']; ?></td>
-                    <td style="width: 15%;"><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
-                    <td style="width: 20%;"><?php echo date('F j, Y, g:i A', strtotime($rows['created_at'])); ?></td>
-                    <td style="width: 20%;"> <?php 
-                        if (!empty($rows['updated_at'])) {
-                            echo date('F j, Y, g:i A', strtotime($rows['updated_at'])); 
-                        } 
+<button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    <i class="fa-solid fa-plus"></i> Add Category
+</button>
+
+<div class="mt-2"></div>
+
+<div class="table-responsive">
+    <table id="example" class="table table-striped" style="width:100%; font-size: 14px !important;">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Category Description</th>
+                <th>Status</th>
+                <th>Date Created</th>
+                <th>Date Updated</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $sqlquery = mysqli_query($con, "SELECT * FROM tbl_category ORDER BY id DESC;");
+            $i = 1;
+            while ($rows = mysqli_fetch_array($sqlquery)) {
+            ?>
+            <tr>
+                <td><?php echo $i++; ?></td>
+                <td><?php echo $rows['category_description']; ?></td>
+                <td><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
+                <td><?php echo date('F j, Y, g:i A', strtotime($rows['created_at'])); ?></td>
+                <td>
+                    <?php 
+                    if (!empty($rows['updated_at'])) {
+                        echo date('F j, Y, g:i A', strtotime($rows['updated_at'])); 
+                    } 
                     ?>
-                    </td>
-                    <td style="width: 10%;">
-                        <div class="d-inline d-lg-none">
+                </td>
+                <td>
+                    <div class="d-inline d-lg-none">
                         <button class="btn btn-primary btn-sm" id="ellipsisButton">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </button>
-                            <div class="ellipsis-menu" style="display: none;">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div class="ellipsis-menu" style="display: none;">
                             <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-category-id="<?php echo $rows['id']; ?>">Edit</button>
                             <button type="button" class="btn btn-danger btn-sm delete-btn" data-category-id="<?php echo $rows['id']; ?>">Delete</button>
-                            </div>
                         </div>
-                        <div class="d-none d-lg-inline">
-                           <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-category-id="<?php echo $rows['id']; ?>">Edit</button>
-                            <button type="button" class="btn btn-danger btn-sm delete-btn" data-category-id="<?php echo $rows['id']; ?>">Delete</button>
-                            </div>
-                    </td>
-                </tr>
-                <?php
-                }
-                ?>
-                 </tbody>
-        </table>
-            </div>
-           
-        </div>
-            </div>
-        </div>
-    </div>
-    
+                    </div>
+                    <div class="d-none d-lg-inline">
+                        <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-category-id="<?php echo $rows['id']; ?>">Edit</button>
+                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-category-id="<?php echo $rows['id']; ?>">Delete</button>
+                    </div>
+                </td>
+            </tr>
+            <?php
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
+
 
     <!-- Your custom scripts -->
     <script src="../admin/script.js"></script>

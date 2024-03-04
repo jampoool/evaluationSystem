@@ -1,7 +1,8 @@
 <?php
 // Include your database connection file
 include "../connect.php";
-var_dump($_POST); 
+
+$response = array(); // Initialize a response array
 
 // Check if the form is submitted with POST method
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -18,20 +19,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         // Execute the update query
         if (mysqli_query($con, $sql)) {
-            // If update successful, redirect to the page where the update was initiated
-            header("Location: http://localhost/evaluationSystem/admin/manageUser.php");
-            exit();
+            // If update successful, set success response
+            $response['status'] = 'success';
+            $response['message'] = 'User data updated successfully';
         } else {
-            // If update fails, display an error message
-            echo "Error updating record: " . mysqli_error($con);
+            // If update fails, set error response
+            $response['status'] = 'error';
+            $response['message'] = 'Error updating user data: ' . mysqli_error($con);
         }
     } else {
-        // If required fields are not provided, display an error message
-        echo "Error: Required fields are missing";
+        // If required fields are not provided, set error response
+        $response['status'] = 'error';
+        $response['message'] = 'Required fields are missing';
     }
 } else {
-    // If the form is not submitted with POST method, redirect to the previous page
-    header("Location: previous_page.php");
-    exit();
+    // If the form is not submitted with POST method, set error response
+    $response['status'] = 'error';
+    $response['message'] = 'Invalid request method';
 }
+
+// Send JSON response
+header('Content-Type: application/json');
+echo json_encode($response);
 ?>

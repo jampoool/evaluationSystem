@@ -1,46 +1,49 @@
 <?php
+
 // Include your database connection file
 include "../connect.php";
-session_start();
 
-// Check if the request method is POST
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if the necessary POST data is set and if save_changes is set
-    if (isset($_POST["save_changes"]) && isset($_POST["formNumber"]) && isset($_POST["question"])) {
-        // Retrieve the form number and questions from the POST data
-        $formNumber = $_POST["formNumber"];
-        $questions = $_POST["question"];
-        $userID = $_SESSION['user_id'];
-        
-        // Validate or sanitize your input data as needed
-        
-        // Get the current timestamp
-        $currentTimestamp = date('Y-m-d H:i:s');
-        
-        // Loop through the questions array and insert each question into the database
-        foreach ($questions as $question) {
-            // Perform the database insertion using prepared statements to prevent SQL injection
-            // Adjust the SQL query according to your database schema
-            $stmt = $con->prepare("INSERT INTO tbl_question (evaluation_form_id, question, user_id, date_created) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("isis", $formNumber, $question, $userID, $currentTimestamp);
-            $stmt->execute();
-            if ($stmt->errno) {
-                echo "Error: " . $stmt->error;
+// Check if the form is submitted via AJAX
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["formNumber"]) && isset($_POST["questions"])) {
+    // Retrieve the form number and questions from the POST data
+    $formNumber = $_POST["formNumber"];
+    $questions = $_POST["questions"];
+
+    // Validate form number
+    if (!empty($formNumber)) {
+        // Check if at least one question is entered
+        if (!empty($questions)) {
+            // Prepare and execute the query for each question
+            foreach ($questions as $question) {
+                // Trim and sanitize the question input
+                $question = trim($question);
+                $question = mysqli_real_escape_string($con, $question);
+                
+                // Check if the question is not empty
+                if (!empty($question)) {
+                    // Perform the database insertion using prepared statements to prevent SQL injection
+                    $stmt = $con->prepare("INSERT INTO tbl_question (evaluation_form_id, question) VALUES (?, ?)");
+                    $stmt->bind_param("is", $formNumber, $question);
+                    $stmt->execute();
+                    
+                    if ($stmt->errno) {
+                        echo "Error: " . $stmt->error;
+                    }
+                    $stmt->close();
+                }
             }
-            $stmt->close();
+            // Provide a success response
+            echo json_encode(array("status" => "success", "message" => "Questions inserted successfully"));
+        } else {
+            // Provide an error response if no questions are entered
+            echo json_encode(array("status" => "error", "message" => "Please enter at least one question"));
         }
-        
-        // Send a success response back to the client
-        $response = array("status" => "success", "message" => "Questions saved successfully");
-        echo json_encode($response);
     } else {
-        // Send an error response if the necessary POST data is not set or save_changes is not set
-        $response = array("status" => "error", "message" => "Incomplete data received or save_changes not set");
-        echo json_encode($response);
+        // Provide an error response if form number is not selected
+        echo json_encode(array("status" => "error", "message" => "Please select a form number"));
     }
 } else {
-    // Send an error response if the request method is not POST
-    $response = array("status" => "error", "message" => "Invalid request method");
-    echo json_encode($response);
+    // Provide an error response if the request is not via AJAX or if required POST data is missing
+    echo json_encode(array("status" => "error", "message" => "Invalid request"));
 }
 ?>

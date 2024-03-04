@@ -2,11 +2,10 @@ $(document).ready(function () {
     // Initialize DataTable
     $('#example').DataTable();
 
-    // Event delegation for the "Edit" button click
     $(document).on('click', '.edit-btn', function () {
         // Retrieve the user ID from the clicked button's data attribute
         var userId = $(this).data('user-id');
-
+    
         if (userId) {
             // Fetch user details via AJAX and populate the edit modal
             $.ajax({
@@ -18,6 +17,7 @@ $(document).ready(function () {
                 },
                 success: function (response) {
                     $('#editModal .modal-body').html(response);
+                    $('#editModal').modal('show');
                 },
                 error: function () {
                     alert('Error occurred while fetching user details.');
@@ -27,7 +27,55 @@ $(document).ready(function () {
             console.error('Error: User ID not provided.');
         }
     });
-
+    
+    // Event listener for the submit button inside the edit modal
+    $(document).on('click', '#submitEditBtn', function () {
+        // Serialize form data
+        var formData = $('#editForm').serialize();
+    
+        // Submit form data via AJAX
+        $.ajax({
+            type: 'POST',
+            url: 'update.php',
+            data: formData,
+            dataType: 'json',
+            success: function (response) {
+                // Check the status returned from the server
+                if (response && response.status === 'success') {
+                    // Show success message using SweetAlert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: response.message,
+                        showConfirmButton: false,
+                        timer: 1500 // Hide after 1.5 seconds
+                    }).then(function() {
+                        // Hide the modal
+                        $('#editModal').modal('hide');
+                        $('.modal-backdrop').remove();
+                        // Reload the page
+                        location.reload();
+                    });
+                } else {
+                    // Show error message using SweetAlert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: response && response.message ? response.message : 'Unknown error occurred'
+                    });
+                }
+            },
+            error: function () {
+                // Show error message using SweetAlert
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'An error occurred while updating user. Please try again later.'
+                });
+            }
+        });
+    });
+    
     
     $('.delete-btn').on('click', function() {
         var idToDelete = $(this).data('id');
@@ -71,62 +119,50 @@ $(document).ready(function () {
             console.error('Data ID not set!');
         }
     });
-   
-    });
-
-
-  
-
-    $(document).on('click', '#saveChangesBtn', function (e) {
-        e.preventDefault();
-        var form = $('form');  // Assuming your form selector is 'form'
-    
-        // Create a custom data object
-        var customData = {
-            user_id: $('#inputID4').val(),  // Replace with the actual ID input field
-            email: $('#inputEmail4').val(),
-            password: $('#inputPassword4').val(),
-            type: $('#inputType').val(),
-            department: $('#inputDepartment').val()
-            // Add other fields as needed
-        };
-    
-        // Submit form data via AJAX
+    $('#saveChangesBtn').click(function(event) {
+        console.log("Button clicked");
+        event.preventDefault(); // Prevent default form submission
+        
+        var user_id = $('#inputID4').val();
+        var email = $('#inputEmail4').val();
+        var password = $('#inputPassword4').val();
+        var type = $('#inputType').val();
+        var department = $('#inputDepartment').val();
+        
         $.ajax({
-            async: true,
             type: 'POST',
             url: 'adminInsert.php',
-            data: customData,  // Send the custom data object
-            success: function (response) {
-                // Check the status returned from the server
-                if (response && response.status === 'success') {
-                    Swal.fire({
-                        title: 'Success!',
-                        text: response.message,
-                        icon: 'success'
-                    }).then((result) => {
-                        // Reload the entire page after a delay
-                        window.location.href = 'http://localhost/evaluationSystem/admin/manageUser.php';
-                    });
-                } else {
-                    // If the response indicates an error
-                    Swal.fire({
-                        title: 'Error!',
-                        text: response && response.message ? response.message : 'Unknown error occurred',
-                        icon: 'error'
-                    });
-                    console.error('Error in form submission:', response && response.message ? response.message : 'Unknown error occurred');
-                }
+            data: {
+                user_id: user_id,
+                email: email,
+                password: password,
+                type: type,
+                department: department,
+                save_changes: 1
             },
-            error: function (xhr, status, error) {
-                console.error("Error:", error);
-                // Handle network or server-side errors here
+            dataType: 'json',
+            success: function(response) {
+                // Display SweetAlert confirmation
                 Swal.fire({
-                    title: 'Error!',
-                    text: 'An error occurred while submitting the form. Please try again later.',
-                    icon: 'error'
+                    icon: 'success',
+                    title: 'Success!',
+                    text: response.message,
+                    showConfirmButton: false,
+                    timer: 1500 // Hide after 1.5 seconds
+                }).then(function() {
+                    // Hide modal after showing the SweetAlert
+                    $('#staticBackdrop').modal('hide');
+                    $('.modal-backdrop').remove();
+                    location.reload(); // Reload the page
                 });
-            }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                alert('An error occurred while saving the user. Please try again.');
+                }
+            });
         });
     });
+
+ 
     
