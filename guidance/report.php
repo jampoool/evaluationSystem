@@ -152,7 +152,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                 </div>
             </nav>
           
-                <div class="row px-5 py-5">
+                <div class="row px-5 py-5 ">
                 <div class="card">
                     <div style="display: flex; justify-content: space-between;">
                         <span>1 = Disagree</span>
