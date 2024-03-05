@@ -39,7 +39,7 @@
 
 <body>
     <div class="wrapper">
-        <aside id="sidebar">
+    <aside id="sidebar">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa-solid fa-bars"></i>
@@ -67,7 +67,12 @@
                         <span>Manage User</span>
                     </a>
                 </li>
-
+                <li class="sidebar-item">
+                    <a href="manageSubject.php" class="sidebar-link">
+                        <i class="fa-solid fa-house-user"></i>
+                        <span>Subject</span>
+                    </a>
+                </li>
                 <li class="sidebar-item">
                     <a href="manageClass.php" class="sidebar-link">
                         <i class="fa-solid fa-house-user"></i>

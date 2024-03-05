@@ -299,13 +299,13 @@ tl-item.active .tl-dot:before {
 </head>
 <body>
     <div class="wrapper">
-        <aside id="sidebar">
+    <aside id="sidebar">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <div class="sidebar-logo">
-                    <a href="#">Hello, Admin</a>
+                    <a href="#">Faculty Evaluation System</a>
                 </div>
             </div>
             <ul class="sidebar-nav">
@@ -327,7 +327,12 @@ tl-item.active .tl-dot:before {
                         <span>Manage User</span>
                     </a>
                 </li>
-
+                <li class="sidebar-item">
+                    <a href="manageSubject.php" class="sidebar-link">
+                        <i class="fa-solid fa-house-user"></i>
+                        <span>Subject</span>
+                    </a>
+                </li>
                 <li class="sidebar-item">
                     <a href="manageClass.php" class="sidebar-link">
                         <i class="fa-solid fa-house-user"></i>
@@ -343,7 +348,7 @@ tl-item.active .tl-dot:before {
             </ul>
             <div class="sidebar-footer">
                 <a href="../logout.php" class="sidebar-link">
-                <i class="fa-solid fa-right-from-bracket"></i>
+                    <i class="lni lni-exit"></i>
                     <span>Logout</span>
                 </a>
             </div>
