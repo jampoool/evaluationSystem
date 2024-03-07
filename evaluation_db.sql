@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Feb 29, 2024 at 05:24 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: 127.0.0.1:3307
+-- Generation Time: Mar 07, 2024 at 07:32 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -51,6 +51,16 @@ CREATE TABLE `tbl_assign` (
   `date_updated` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `tbl_assign`
+--
+
+INSERT INTO `tbl_assign` (`id`, `instructor_id`, `evaluation_form_id`, `user_id`, `is_active`, `date_created`, `date_updated`) VALUES
+(7, 3, 14, 2, 1, '2024-03-02 03:01:14', NULL),
+(8, 4, 14, 2, 0, '2024-03-02 03:05:15', '2024-03-02 03:05:15'),
+(9, 3, 18, 2, 1, '2024-03-02 03:09:21', NULL),
+(10, 4, 18, 2, 1, '2024-03-02 03:09:21', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -59,11 +69,10 @@ CREATE TABLE `tbl_assign` (
 
 CREATE TABLE `tbl_category` (
   `id` int(11) NOT NULL,
-  `category_no` int(11) NOT NULL,
   `category_description` varchar(50) NOT NULL,
   `user_id` int(11) NOT NULL,
   `is_active` int(11) NOT NULL DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -71,17 +80,19 @@ CREATE TABLE `tbl_category` (
 -- Dumping data for table `tbl_category`
 --
 
-INSERT INTO `tbl_category` (`id`, `category_no`, `category_description`, `user_id`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 1, '1', 2, 1, '2024-02-28 15:34:37', NULL),
-(2, 2, 'Performance', 2, 1, '2024-02-28 15:37:16', NULL),
-(3, 3, 'Good', 2, 1, '2024-02-28 15:37:32', NULL),
-(4, 4, 'Why', 2, 1, '2024-02-28 15:37:57', NULL),
-(5, 5, 'no', 2, 1, '2024-02-28 15:38:32', NULL),
-(6, 6, 'asd', 2, 1, '2024-02-28 15:39:29', NULL),
-(7, 7, 'Performance', 2, 1, '2024-02-28 15:40:36', NULL),
-(8, 8, 'Good', 2, 1, '2024-02-28 15:44:07', NULL),
-(9, 9, 'asd', 2, 1, '2024-02-28 15:45:03', NULL),
-(10, 10, '', 2, 1, '2024-02-28 16:06:34', NULL);
+INSERT INTO `tbl_category` (`id`, `category_description`, `user_id`, `is_active`, `created_at`, `updated_at`) VALUES
+(11, 'Category 1', 2, 1, '2024-02-29 00:24:24', NULL),
+(12, 'Category 2', 2, 1, '2024-02-29 00:26:02', NULL),
+(13, 'Category 3', 2, 1, '2024-02-29 00:29:21', NULL),
+(14, 'Category 4', 2, 1, '2024-02-29 00:31:26', NULL),
+(15, 'Category 5', 2, 1, '2024-02-29 00:31:37', NULL),
+(16, 'Category 6', 2, 1, '2024-02-29 00:31:53', NULL),
+(21, 'Category 7', 2, 1, '2024-02-29 00:35:54', NULL),
+(22, 'Category 1', 2, 1, '2024-02-29 00:42:48', NULL),
+(23, 'Category 1', 2, 1, '2024-02-29 00:43:32', NULL),
+(24, 'Category 2', 2, 1, '2024-02-29 00:44:03', NULL),
+(25, 'Category 9765', 2, 1, '2024-02-29 00:44:21', '2024-02-29 08:10:05'),
+(26, 'Category 123', 2, 1, '2024-02-29 07:45:16', '2024-02-29 01:08:24');
 
 -- --------------------------------------------------------
 
@@ -96,9 +107,18 @@ CREATE TABLE `tbl_evaluation_form` (
   `form_description` varchar(255) NOT NULL,
   `user_id` int(11) NOT NULL,
   `is_active` int(11) NOT NULL DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_evaluation_form`
+--
+
+INSERT INTO `tbl_evaluation_form` (`id`, `category_id`, `form_no`, `form_description`, `user_id`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 11, '1', 'This is a form', 2, 1, '2024-02-29 08:47:02', NULL),
+(14, 11, '2', 'Second form', 2, 1, '2024-02-29 08:50:27', NULL),
+(18, 13, '3', 'This is a form 1 with Category 2', 2, 1, '2024-02-29 08:53:34', NULL);
 
 -- --------------------------------------------------------
 
@@ -114,6 +134,29 @@ CREATE TABLE `tbl_question` (
   `is_active` int(11) NOT NULL DEFAULT 1,
   `date_created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `date_updated` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_question`
+--
+
+INSERT INTO `tbl_question` (`id`, `evaluation_form_id`, `user_id`, `question`, `is_active`, `date_created`, `date_updated`) VALUES
+(1, 1, 2, 'What is your house?', 1, '2024-03-02 01:45:27', NULL),
+(3, 14, 2, 'What is your house?', 1, '2024-03-02 02:00:51', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_subject`
+--
+
+CREATE TABLE `tbl_subject` (
+  `id` int(11) NOT NULL,
+  `subject_code` varchar(50) NOT NULL,
+  `subject_name` varchar(50) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `date_created` date NOT NULL DEFAULT current_timestamp(),
+  `date_updated` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -139,7 +182,9 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `user-id`, `email`, `password`, `type`, `department`, `date_created`, `date_updated`) VALUES
 (1, 'A2702241', 'a@gmail.com', '123', 'admin', 1, '2024-02-27', NULL),
-(2, 'G2702241', 'guidance@gmail.com', '123', 'guidance', 1, '2024-02-27', NULL);
+(2, 'G2702241', 'guidance@gmail.com', '123', 'guidance', 1, '2024-02-27', NULL),
+(3, 'T-123123', 'teacher@gmail.com', '123', 'teacher', 1, '2024-03-02', NULL),
+(4, 'T-123123123', 'teacher2@gmail.com', '123', 'teacher', 2, '2024-03-02', NULL);
 
 --
 -- Indexes for dumped tables
@@ -161,8 +206,7 @@ ALTER TABLE `tbl_assign`
 -- Indexes for table `tbl_category`
 --
 ALTER TABLE `tbl_category`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `category_no` (`category_no`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_evaluation_form`
@@ -175,6 +219,12 @@ ALTER TABLE `tbl_evaluation_form`
 -- Indexes for table `tbl_question`
 --
 ALTER TABLE `tbl_question`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_subject`
+--
+ALTER TABLE `tbl_subject`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -198,31 +248,37 @@ ALTER TABLE `tblactivity`
 -- AUTO_INCREMENT for table `tbl_assign`
 --
 ALTER TABLE `tbl_assign`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `tbl_category`
 --
 ALTER TABLE `tbl_category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `tbl_evaluation_form`
 --
 ALTER TABLE `tbl_evaluation_form`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `tbl_question`
 --
 ALTER TABLE `tbl_question`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT for table `tbl_subject`
+--
+ALTER TABLE `tbl_subject`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
