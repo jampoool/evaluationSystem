@@ -115,8 +115,8 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                 </div>
                             </nav>
                             <h5>
-                                <small class="text-muted p-5">Manage Form</small>
-                                </h5>
+                                <small class="text-muted p-5">Manage Subject</small>
+                            </h5>
         <div id="page-content" class="col-md-12 px-5 py-1" >
             <div class="row">
                    <div class="shadow p-3 mb-5 bg-body rounded ">

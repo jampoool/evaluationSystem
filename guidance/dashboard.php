@@ -40,6 +40,123 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
    
 </head>
 
+<style>
+    body {
+        background:#FAFAFA;
+    }
+
+    .order-card {
+        color: #fff;
+    }
+
+    .bg-c-blue {
+        background: linear-gradient(45deg,#4099ff,#73b4ff);
+    }
+
+    .bg-c-green {
+        background: linear-gradient(45deg,#2ed8b6,#59e0c5);
+    }
+
+    .bg-c-yellow {
+        background: linear-gradient(45deg,#FFB64D,#ffcb80);
+    }
+
+    .bg-c-pink {
+        background: linear-gradient(45deg,#FF5370,#ff869a);
+    }
+
+    .card {
+        border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
+        box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
+        border: none;
+        margin-bottom: 30px;
+        -webkit-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .card .card-block {
+        padding: 25px;
+    }
+
+    .order-card i {
+        font-size: 26px;
+    }
+
+    .f-left {
+          float: left;
+      }
+
+      .f-right {
+          float: right;
+      }
+      #card{
+        background-color: #1F2377;
+      }
+      path{
+         background-color: #1F2377;
+      }
+    @media (min-width:992px) {
+        .page-container {
+            max-width: 1140px;
+            margin: 0 auto
+        }
+
+        .page-sidenav {
+            display: block !important
+        }
+    }
+
+    .padding {
+        padding: 2rem
+    }
+
+    .w-32 {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: .85em
+    }
+
+    .tl-item .avatar {
+        z-index: 2
+    }
+
+    .circle {
+        border-radius: 500px
+    }
+
+    .gd-warning {
+        color: #fff;
+        border: none;
+        background: #f4c414 linear-gradient(45deg, #f4c414, #f45414)
+    }
+
+    .timeline {
+        position: relative;
+        border-color: rgba(160, 175, 185, .15);
+        padding: 0;
+        margin: 0
+    }
+
+    .p-4 {
+        padding: 1.5rem !important
+    }
+
+    .block,
+    .card {
+        background: #fff;
+        border-width: 0;
+        border-radius: .25rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+        margin-bottom: 1.5rem
+    }
+
+    .mb-4,
+    .my-4 {
+        margin-bottom: 1.5rem !important
+    }
+</style>
+
 <body>
     <div class="wrapper">
     <aside id="sidebar">
@@ -152,8 +269,94 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                 </div>
             </nav>
             <div class="container-fluid">
-                <div class="row">
-                
+                <div class="row shadow-sm p-2 mb-2 bg-white rounded">
+                <div class="col-md-4 col-xl-3">
+                        <div class="card order-card" id="card">
+                            <div class="card-block">
+                            <h6 class="m-b-20">Total Students</h6>
+                                <h2 class="text-right"><i class="bi bi-person"></i> <span> 
+                                         <?php
+                                                $sql = "SELECT * from user where type='student'";
+                                                if ($result = mysqli_query($con, $sql)) {
+                                                
+                                                    // Return the number of rows in result set
+                                                    $rowcount = mysqli_num_rows( $result );
+                                                    
+                                                    // Display result
+                                                    printf(" %d\n", $rowcount);
+                                                }
+                                             ?>
+                                        </span></h2>
+                                <a href="#" id="view" class="text-decoration-underline d-block mt-1 f-right" style="font-size: 13px;color: white; transition: text-decoration 0.5s;">View Details <i class="bi bi-arrow-right" style="font-size: 10px;"></i></a>
+                            </div>
+                        </div>
+                     </div>
+                    
+                    <div class="col-md-4 col-xl-3">
+                        <div class="card order-card" id="card">
+                            <div class="card-block">
+                                <h6 class="m-b-20">Total Guidance</h6>
+                                <h2 class="text-right"><i class="bi bi-person"></i> <span>
+                                         <?php
+                                                $sql = "SELECT * from user where type='Guidance'";
+                                                if ($result = mysqli_query($con, $sql)) {
+                                                
+                                                    // Return the number of rows in result set
+                                                    $rowcount = mysqli_num_rows( $result );
+                                                    
+                                                    // Display result
+                                                    printf(" %d\n", $rowcount);
+                                                }
+                                             ?>
+                                </span></h2>
+                                <a href="#" id="view" class="text-decoration-underline d-block mt-1 f-right" style="font-size: 13px;color: white; transition: text-decoration 0.5s;">View Details <i class="bi bi-arrow-right" style="font-size: 10px;"></i></a>
+                           </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 col-xl-3">
+                        <div class="card order-card" id="card">
+                            <div class="card-block">
+                                <h6 class="m-b-20">Total Teacher</h6>
+                                <h2 class="text-right"><i class="bi bi-person"></i> <span>
+                                        <?php
+                                                $sql = "SELECT * from user where type='teacher'";
+                                                if ($result = mysqli_query($con, $sql)) {
+                                                
+                                                    // Return the number of rows in result set
+                                                    $rowcount = mysqli_num_rows( $result );
+                                                    
+                                                    // Display result
+                                                    printf(" %d\n", $rowcount);
+                                                }
+                                             ?>
+                                </span></h2>
+                                <a href="#" id="view" class="text-decoration-underline d-block mt-1 f-right" style="font-size: 13px;color: white; transition: text-decoration 0.5s;">View Details <i class="bi bi-arrow-right" style="font-size: 10px;"></i></a>
+                          </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 col-xl-3">
+                        <div class="card order-card" id="card">
+                            <div class="card-block">
+                                <h6 class="m-b-20">Total Admin</h6>
+                                <h2 class="text-right"><i class="bi bi-person"></i> <span>
+                                         <?php
+                                                $sql = "SELECT * from user where type='admin'";
+                                                if ($result = mysqli_query($con, $sql)) {
+                                                
+                                                    // Return the number of rows in result set
+                                                    $rowcount = mysqli_num_rows( $result );
+                                                    
+                                                    // Display result
+                                                    printf(" %d\n", $rowcount);
+                                                }
+                                             ?>
+                                </span></h2>
+                                <a href="#" id="view" class="text-decoration-underline d-block mt-1 f-right" style="font-size: 13px;color: white; transition: text-decoration 0.5s;">View Details <i class="bi bi-arrow-right" style="font-size: 10px;"></i></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
