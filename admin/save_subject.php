@@ -1,6 +1,6 @@
 <?php
     include "../connect.php";
-    if (isset($_POST['save_changes'])) {
+    if (isset($_POST['addCode']) && isset($_POST['addName'])) {
     // Include your database connection file
     session_start();
     date_default_timezone_set('Asia/Manila');
@@ -11,7 +11,7 @@
     $addName =$_POST['addName'];
 
     // Attempt to insert data
-    $query = "INSERT INTO tbl_subject (subject_code, subject_name, user_id, created_at) VALUES ('$addCode', '$addName', '$userID', '$timestamp')";
+    $query = "INSERT INTO tbl_subject (subject_code, subject_name, user_id, date_created) VALUES ('$addCode', '$addName', '$userID', '$timestamp')";
     if (mysqli_query($con, $query)) {
         // Data inserted successfully
         $response['status'] = 'success';

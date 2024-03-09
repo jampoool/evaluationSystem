@@ -21,7 +21,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
     <!-- Your custom CSS -->
     <link rel="stylesheet" href="css/dashboard.css">
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
      <!-- DataTables CSS -->
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -147,7 +147,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                 <div class="modal-footer">
                                     <div class="ms-auto">
                                         <button type="button" class="btn btn-secondary btn-sm rounded-pill" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary btn-sm rounded-pill" form="add_subject">Submit</button>
+                                        <button type="submit" class="btn btn-primary btn-sm rounded-pill" form="add_subject" id="saveChangesBtn" name="save_changes">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -215,7 +215,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                                     <td><?php echo $rows['subject_code']; ?></td>
                                                     <td><?php echo $rows['subject_name']; ?></td>
                                                     <td><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
-                                                    <td><?php echo date('F j, Y, g:i A', strtotime($rows['created_at'])); ?></td>
+                                                    <td><?php echo date('F j, Y, g:i A', strtotime($rows['date_created'])); ?></td>
                                                     <td>
                                                         <div class="d-inline d-lg-none">
                                                             <button class="btn btn-primary btn-sm" id="ellipsisButton">
@@ -249,7 +249,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
 
     <script>
     $(document).ready(function(){
-        $('.edit-btn').click(function() {
+        $('.edit-btn').click(function () {
                 var subjectID = $(this).data('subject-id');
 
                 $.ajax({
@@ -259,62 +259,66 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                         subjectID: subjectID
                     },
                     dataType: 'json',
-                    success: function(response) {
-                        if (response.status === 'success' && response.categoryDescription) {
-                            $('#update_code').val(response.categoryDescription);
-                            $('#update_name').val(catID); 
-                            $('#').val(catID); 
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            $('#subject_id').val(response.subjectID);
+                            $('#update_code').val(response.subjectCode);
+                            $('#update_name').val(response.subjectName);
+
                             $('#editModal').modal('show');
                         } else {
-                            alert('Category description not found');
+                            alert('Error: ' + response.message);
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error(xhr.responseText);
-                        alert('An error occurred while fetching category description. Please try again.');
+                        alert('An error occurred while fetching subject details. Please check the console for more information.');
                     }
                 });
             });
-            $('#updateBtn').click(function(event) {
-                event.preventDefault(); 
+            $('#updateBtn').click(function (event) {
+                event.preventDefault();
+                var subjectID = $('#subject_id').val();
+                var updateCode = $('#update_code').val();
+                var updateName = $('#update_name').val();
 
-                    var updatedCatDescription = $('#updatedCatDescription').val();
-                    var catID = $('#updateCat').val(); 
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'update_category.php',
-                        data: {
-                            update: true,
-                            editID: catID, 
-                            editCatDescription: updatedCatDescription
-                        },
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.status === 'success') {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Success!',
-                                    text: response.message,
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                }).then(function() {
-                                    $('#editModal').modal('hide');
-                                    $('.modal-backdrop').remove();
-                                    location.reload();
-                                });
-                            } else {
-                                alert('Failed to update category');
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(xhr.responseText);
-                            alert('An error occurred while updating the category. Please try again.');
+                $.ajax({
+                    type: 'POST',
+                    url: 'update_subject.php',
+                    data: {
+                        updateBtn: true,
+                        subjectID: subjectID,
+                        updateCode: updateCode,
+                        updateName: updateName
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            // Use SweetAlert for a user-friendly notification
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Subject updated successfully',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(function () {
+                                $('#editModal').modal('hide');
+                                location.reload(); // You might want to handle this part based on your needs
+                            });
+                        } else {
+                            // Display an error alert if the update was not successful
+                            alert('Error updating subject: ' + response.message);
                         }
-                    });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        // Display an error alert if an error occurs during the AJAX request
+                        alert('An error occurred while updating subject. Please try again.');
+                    }
                 });
-                $('#saveChangesBtn').click(function(event) {
-                        event.preventDefault(); 
+            });
+                $('#add_subject').submit(function (event) {
+                        event.preventDefault();
 
                         var addCode = $('#add_code').val();
                         var addName = $('#add_name').val();
@@ -327,77 +331,77 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                 addName: addName
                             },
                             dataType: 'json',
-                            success: function(response) {
+                            success: function (response) {
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Success!',
                                     text: response.message,
                                     showConfirmButton: false,
-                                    timer: 1500 
-                                }).then(function() {
+                                    timer: 1500
+                                }).then(function () {
                                     $('#staticBackdrop').modal('hide');
                                     $('.modal-backdrop').remove();
-                                    location.reload(); 
+                                    location.reload();
                                 });
                             },
-                            error: function(xhr, status, error) {
+                            error: function (xhr, status, error) {
                                 console.error(xhr.responseText);
                                 alert('An error occurred while saving the data. Please try again.');
                             }
                         });
                     });
 
-                $('.delete-btn').click(function() {
-                        var catID = $(this).data('category-id');
+                    $('.delete-btn').click(function() {
+                            var subjectID = $(this).data('subject-id');
 
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: 'You will not be able to recover this category!',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonText: 'Yes, delete it!',
-                            cancelButtonText: 'No, cancel!',
-                            reverseButtons: true
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                $.ajax({
-                                    type: 'POST',
-                                    url: 'delete_category.php',
-                                    data: {
-                                        categoryID: catID
-                                    },
-                                    dataType: 'json',
-                                    success: function(response) {
-                                        if (response.status === 'success') {
-                                            Swal.fire({
-                                                icon: 'success',
-                                                title: 'Deleted!',
-                                                text: response.message,
-                                                showConfirmButton: false,
-                                                timer: 1500
-                                            }).then(function() {
-                                                location.reload();
-                                            });
-                                        } else {
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: 'You will not be able to recover this category!',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Yes, delete it!',
+                                cancelButtonText: 'No, cancel!',
+                                reverseButtons: true
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: 'delete_subject.php',
+                                        data: {
+                                            subjectID: subjectID  // Make sure the parameter name matches what your PHP script expects
+                                        },
+                                        dataType: 'json',
+                                        success: function(response) {
+                                            if (response.status === 'success') {
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    title: 'Deleted!',
+                                                    text: response.message,
+                                                    showConfirmButton: false,
+                                                    timer: 1500
+                                                }).then(function() {
+                                                    location.reload();
+                                                });
+                                            } else {
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Error!',
+                                                    text: response.message
+                                                });
+                                            }
+                                        },
+                                        error: function(xhr, status, error) {
+                                            console.error(xhr.responseText);
                                             Swal.fire({
                                                 icon: 'error',
                                                 title: 'Error!',
-                                                text: response.message
+                                                text: 'An error occurred while deleting the category. Please try again.'
                                             });
                                         }
-                                    },
-                                    error: function(xhr, status, error) {
-                                        console.error(xhr.responseText);
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Error!',
-                                            text: 'An error occurred while deleting the category. Please try again.'
-                      });
-                     }
-                });
-              }
-           });
-       });
+                                    });
+                                }
+                            });
+                        });
     });
 </script>                                           
     <!-- Your custom scripts -->

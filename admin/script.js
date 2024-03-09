@@ -1,6 +1,8 @@
-const hamBurger = document.querySelector(".toggle-btn");
+document.addEventListener("DOMContentLoaded", function() {
+  const hamBurger = document.querySelector(".toggle-btn");
+  const sidebar = document.querySelector("#sidebar");
 
-hamBurger.addEventListener("click", function () {
-  document.querySelector("#sidebar").classList.toggle("expand");
+  hamBurger.addEventListener("click", function () {
+    sidebar.classList.toggle("expand");
+  });
 });
-
