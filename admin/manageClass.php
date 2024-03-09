@@ -33,7 +33,13 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
      <!-- Font Awesome -->
      <script src="https://kit.fontawesome.com/658ff99b54.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-   
+    <style>
+        .btn-outline-primary.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+    </style>
 
 </head>
 
@@ -121,143 +127,202 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
             <div class="row">
                    <div class="shadow p-3 mb-5 bg-body rounded ">
                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Manage Class</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <!-- Buttons to toggle between tables -->
-                        <div class="btn-group mb-3" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-outline-primary" id="classTable">Class Table</button>
-                            <button type="button" class="btn btn-outline-primary" id="teacherTable">Teacher Table</button>
-                            <button type="button" class="btn btn-outline-primary" id="subjectTable">Subject Table</button>
-                        </div>
-                        <div class="classTableContainer">
-                        <div class="col-12">
-                            <label for="add_code" class="form-label">Subject Code</label>
-                            <input type="text" class="form-control" id="add_code" name="add_code">
-                        </div>
-                         <div class="col-12">
-                                <label for="add_name" class="form-label">Subject Name</label>
-                                <input type="text" class="form-control" id="add_name" name="add_name">
-                         </div>
-                         </div>
-                        <!-- Table for Teachers -->
-                        <div id="teacherTableContainer" style="display: none;">
-                            <table class="table table-bordered table-responsive" id="teacherTableContent">
-                                <thead>
-                                    <tr>
-                                        <th>Email</th>
-                                        <th>
-                                            <label class="form-check-label">
-                                                <input type="checkbox" id="checkAll_teacherTableContent"
-                                                    class="form-check-input">
-                                                Assign All
-                                            </label>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Add teacher table data here -->
-                                    <?php
-                                    $sqlquery = mysqli_query($con, "SELECT * FROM user WHERE type='teacher'");
-                                    while ($row = mysqli_fetch_array($sqlquery)) {
-                                    ?>
-                                    <tr>
-                                        <td><?php echo $row['email']; ?></td>
-                                        <td><input type="checkbox" class="assign-checkbox"
-                                                value="<?php echo $row['id']; ?>"> <label> Assign</label></td>
-                                    </tr>
-                                    <?php
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Manage Class</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <!-- Buttons to toggle between tables -->
+                                            <div class="btn-group mb-3" role="group" aria-label="Basic example">
+                                                <button type="button" class="btn btn-outline-primary" id="classTable">Class Table</button>
+                                                <button type="button" class="btn btn-outline-primary" id="teacherTable">Teacher Table</button>
+                                                <button type="button" class="btn btn-outline-primary" id="subjectTable">Subject Table</button>
+                                            </div>
+                                            <div class="classTableContainer">
+                                            <div class="col-6">
+                                                <label for="add_code" class="form-label">Class Code</label>
+                                                <input type="text" class="form-control" id="add_code" name="add_code">
+                                            </div>
+                                            <div class="col-6">
+                                                    <label for="add_name" class="form-label">Class Name</label>
+                                                    <input type="text" class="form-control" id="add_name" name="add_name">
+                                            </div>
+                                            </div>
+                                            <!-- Table for Teachers -->
+                                            <div id="teacherTableContainer" style="display: none;">
+                                                <table class="table table-bordered table-responsive" id="teacherTableContent">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Email</th>
+                                                            <th>
+                                                                <label class="form-check-label">
+                                                                    Action
+                                                                </label>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- Add teacher table data here -->
+                                                        <?php
+                                                        $sqlquery = mysqli_query($con, "SELECT * FROM user WHERE type='teacher'");
+                                                        while ($row = mysqli_fetch_array($sqlquery)) {
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $row['email']; ?></td>
+                                                            <td><input type="checkbox" class="assign-checkbox"
+                                                                    value="<?php echo $row['id']; ?>"> <label> Assign</label></td>
+                                                        </tr>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
 
-                        <!-- Table for Subjects -->
-                        <div id="subjectTableContainer" style="display: none;">
-                            <table class="table table-bordered table-responsive" id="subjectTableContent">
-                                <thead>
-                                    <tr>
-                                        <th>Subject Code</th>
-                                        <th>Subject Name</th>
-                                        <th>
-                                            <label class="form-check-label">
-                                                <input type="checkbox" id="checkAll_subjectTableContent"
-                                                    class="form-check-input">
-                                                Assign All
-                                            </label>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $sqlquery = mysqli_query($con, "SELECT * FROM tbl_subject");
-                                    while ($row = mysqli_fetch_array($sqlquery)) {
-                                    ?>
-                                    <tr>
-                                        <td><?php echo $row['subject_code']; ?></td>
-                                        <td><?php echo $row['subject_name']; ?></td>
-                                        <td><input type="checkbox" class="assign-checkbox"
-                                                value="<?php echo $row['id']; ?>"><label> Assign</label></td>
-                                    </tr>
-                                    <?php
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div class="ms-auto">
-                    <button type="button" class="btn btn-secondary btn-sm rounded-pill" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary btn-sm rounded-pill" form="add_class" id="saveChangesBtn" name="save_changes">Submit</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-                                    <!-- edit modal -->
-                                    <div class="modal fade" id="editModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="editModalLabel">Edit Subject</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                <div class="form-element">
-                                                            <form class="row g-3" method="POST">
-                                                                <input type="hidden" id="subject_id" name="subject_id">
-                                                                <div class="col-7">
-                                                                    <label class="form-label">Subject Code</label>
-                                                                    <input type="text" class="form-control" id="update_code" name="update_code">
-                                                                </div>
-                                                                <div class="col-7">
-                                                                    <label class="form-label">Subject Name</label>
-                                                                    <input type="text" class="form-control" id="update_name" name="update_name">
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                                                    </button>
-                                                                    <button id="updateBtn" class="btn btn-primary" name="update">Submit</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                </div>
+                                            <!-- Table for Subjects -->
+                                            <div id="subjectTableContainer" style="display: none;">
+                                                <table class="table table-bordered table-responsive" id="subjectTableContent">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Subject Code</th>
+                                                            <th>Subject Name</th>
+                                                            <th>
+                                                                <label class="form-check-label">
+                                                                    Action
+                                                                </label>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
+                                                        $sqlquery = mysqli_query($con, "SELECT * FROM tbl_subject");
+                                                        while ($row = mysqli_fetch_array($sqlquery)) {
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $row['subject_code']; ?></td>
+                                                            <td><?php echo $row['subject_name']; ?></td>
+                                                            <td><input type="checkbox" class="assign-checkbox"
+                                                                    value="<?php echo $row['id']; ?>"><label> Assign</label></td>
+                                                        </tr>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="ms-auto">
+                                        <button type="button" class="btn btn-secondary btn-sm rounded-pill" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary btn-sm rounded-pill" form="add_class" id="saveChangesBtn" name="save_changes">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                <!-- Edit Modal -->
+                    <div class="modal fade" id="editModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editModalLabel">Edit Subject</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <!-- Buttons to toggle between tables -->
+                                            <div class="btn-group mb-3" role="group" aria-label="Basic example">
+                                                <button type="button" class="btn btn-outline-primary" id="editClassTable">Class Table</button>
+                                                <button type="button" class="btn btn-outline-primary" id="editTeacherTable">Teacher Table</button>
+                                                <button type="button" class="btn btn-outline-primary" id="editSubjectTable">Subject Table</button>
+                                            </div>
+                                            <div class="updateClassTableContainer">
+                                                <div class="col-6">
+                                                    <label for="edit_code" class="form-label">Class Code</label>
+                                                    <input type="text" class="form-control" id="edit_code" name="edit_code">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label for="edit_name" class="form-label">Class Name</label>
+                                                    <input type="text" class="form-control" id="edit_name" name="edit_name">
+                                                </div>
+                                            </div>
+                                            <!-- Table for Teachers -->
+                                            <div id="updateTeacherTableContainer" style="display: none;">
+                                                <table class="table table-bordered table-responsive" id="teacherTableContentUpdate">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Email</th>
+                                                            <th>
+                                                                <label class="form-check-label">Action</label>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- Add teacher table data here -->
+                                                        <?php
+                                                        $sqlquery = mysqli_query($con, "SELECT * FROM user WHERE type='teacher'");
+                                                        while ($row = mysqli_fetch_array($sqlquery)) {
+                                                        ?>
+                                                            <tr>
+                                                                <td><?php echo $row['email']; ?></td>
+                                                                <td><input type="checkbox" class="assign-checkbox" value="<?php echo $row['id']; ?>"> <label> Assign</label></td>
+                                                            </tr>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <!-- Table for Subjects -->
+                                            <div id="updateSubjectTableContainer" style="display: none;">
+                                                <table class="table table-bordered table-responsive" id="subjectTableContentUpdate">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Subject Code</th>
+                                                            <th>Subject Name</th>
+                                                            <th>
+                                                                <label class="form-check-label">Action</label>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
+                                                        $sqlquery = mysqli_query($con, "SELECT * FROM tbl_subject");
+                                                        while ($row = mysqli_fetch_array($sqlquery)) {
+                                                        ?>
+                                                            <tr>
+                                                                <td><?php echo $row['subject_code']; ?></td>
+                                                                <td><?php echo $row['subject_name']; ?></td>
+                                                                <td><input type="checkbox" class="assign-checkbox" value="<?php echo $row['id']; ?>"><label> Assign</label></td>
+                                                            </tr>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button id="updateBtn" class="btn btn-primary" name="update">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                                 
                                     <button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                         <i class="fa-solid fa-plus"></i> Add Category
@@ -266,27 +331,45 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                     <div class="mt-2"></div>
 
                                     <div class="table-responsive">
-                                        <table id="example" class="table table-striped" style="width:100%; font-size: 14px !important;">
+                                        <table id="example" class="table table-striped" style="width:100%; font-size: 12px !important;">
                                             <thead>
                                                 <tr>
                                                     <th>No.</th>
-                                                    <th>Subject Code</th>
-                                                    <th>Subject Name</th>
+                                                    <th>Class</th>
+                                                    <th>Instructor</th>
+                                                    <th>Subject</th>
                                                     <th>Status</th>
-                                                    <th>Date Created</th>
+                                                    <th>Created at</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $sqlquery = mysqli_query($con, "SELECT * FROM tbl_subject ORDER BY id DESC;");
+                                                $sqlquery = mysqli_query($con, "SELECT * FROM tbl_class ORDER BY id DESC;");
                                                 $i = 1;
                                                 while ($rows = mysqli_fetch_array($sqlquery)) {
                                                 ?>
                                                 <tr>
                                                     <td><?php echo $i++; ?></td>
-                                                    <td><?php echo $rows['subject_code']; ?></td>
-                                                    <td><?php echo $rows['subject_name']; ?></td>
+                                                    <td><?php echo $rows['class_code'].' - '.$rows['class_name'] ?></td>
+                                                    <td>
+                                                        <?php 
+                                                        // Fetching email of teacher from user based on instructor_id
+                                                        $teacherID = $rows['instructor_id'];
+                                                        $teacherQuery = mysqli_query($con, "SELECT email FROM user WHERE id = $teacherID");
+                                                        $teacherRow = mysqli_fetch_assoc($teacherQuery);
+                                                        echo $teacherRow['email'];
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php 
+                                                        // Fetching email of teacher from user based on instructor_id
+                                                        $subjectID = $rows['subject_id'];
+                                                        $subjectQuery = mysqli_query($con, "SELECT subject_code, subject_name FROM tbl_subject WHERE id = $subjectID");
+                                                        $subjectRow = mysqli_fetch_assoc($subjectQuery);
+                                                        echo $subjectRow['subject_code'].' - '. $subjectRow['subject_name'] ;
+                                                        ?>
+                                                    </td>
                                                     <td><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
                                                     <td><?php echo date('F j, Y, g:i A', strtotime($rows['date_created'])); ?></td>
                                                     <td>
@@ -295,12 +378,12 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                                                 <i class="fas fa-ellipsis-v"></i>
                                                             </button>
                                                             <div class="ellipsis-menu" style="display: none;">
-                                                                <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-subject-id="<?php echo $rows['id']; ?>">Edit</button>
+                                                                <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-class-id="<?php echo $rows['id']; ?>">Edit</button>
                                                                 <button type="button" class="btn btn-danger btn-sm delete-btn" data-subject-id="<?php echo $rows['id']; ?>">Delete</button>
                                                             </div>
                                                         </div>
                                                         <div class="d-none d-lg-inline">
-                                                            <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-subject-id="<?php echo $rows['id']; ?>">Edit</button>
+                                                            <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-class-id="<?php echo $rows['id']; ?>">Edit</button>
                                                             <button type="button" class="btn btn-danger btn-sm delete-btn" data-subject-id="<?php echo $rows['id']; ?>">Delete</button>
                                                         </div>
                                                     </td>
@@ -320,161 +403,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 
     <script>
-    $(document).ready(function(){
-        $('.edit-btn').click(function () {
-                var subjectID = $(this).data('subject-id');
-
-                $.ajax({
-                    type: 'POST',
-                    url: 'fetch_subject.php',
-                    data: {
-                        subjectID: subjectID
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        if (response.status === 'success') {
-                            $('#subject_id').val(response.subjectID);
-                            $('#update_code').val(response.subjectCode);
-                            $('#update_name').val(response.subjectName);
-
-                            $('#editModal').modal('show');
-                        } else {
-                            alert('Error: ' + response.message);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                        alert('An error occurred while fetching subject details. Please check the console for more information.');
-                    }
-                });
-            });
-            $('#updateBtn').click(function (event) {
-                event.preventDefault();
-                var subjectID = $('#subject_id').val();
-                var updateCode = $('#update_code').val();
-                var updateName = $('#update_name').val();
-
-                $.ajax({
-                    type: 'POST',
-                    url: 'update_subject.php',
-                    data: {
-                        updateBtn: true,
-                        subjectID: subjectID,
-                        updateCode: updateCode,
-                        updateName: updateName
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        if (response.status === 'success') {
-                            // Use SweetAlert for a user-friendly notification
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success!',
-                                text: 'Subject updated successfully',
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(function () {
-                                $('#editModal').modal('hide');
-                                location.reload(); // You might want to handle this part based on your needs
-                            });
-                        } else {
-                            // Display an error alert if the update was not successful
-                            alert('Error updating subject: ' + response.message);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                        // Display an error alert if an error occurs during the AJAX request
-                        alert('An error occurred while updating subject. Please try again.');
-                    }
-                });
-            });
-                $('#add_subject').submit(function (event) {
-                        event.preventDefault();
-
-                        var addCode = $('#add_code').val();
-                        var addName = $('#add_name').val();
-
-                        $.ajax({
-                            type: 'POST',
-                            url: 'save_subject.php',
-                            data: {
-                                addCode: addCode,
-                                addName: addName
-                            },
-                            dataType: 'json',
-                            success: function (response) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Success!',
-                                    text: response.message,
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                }).then(function () {
-                                    $('#staticBackdrop').modal('hide');
-                                    $('.modal-backdrop').remove();
-                                    location.reload();
-                                });
-                            },
-                            error: function (xhr, status, error) {
-                                console.error(xhr.responseText);
-                                alert('An error occurred while saving the data. Please try again.');
-                            }
-                        });
-                    });
-
-                    $('.delete-btn').click(function() {
-                            var subjectID = $(this).data('subject-id');
-
-                            Swal.fire({
-                                title: 'Are you sure?',
-                                text: 'You will not be able to recover this category!',
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonText: 'Yes, delete it!',
-                                cancelButtonText: 'No, cancel!',
-                                reverseButtons: true
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    $.ajax({
-                                        type: 'POST',
-                                        url: 'delete_subject.php',
-                                        data: {
-                                            subjectID: subjectID  // Make sure the parameter name matches what your PHP script expects
-                                        },
-                                        dataType: 'json',
-                                        success: function(response) {
-                                            if (response.status === 'success') {
-                                                Swal.fire({
-                                                    icon: 'success',
-                                                    title: 'Deleted!',
-                                                    text: response.message,
-                                                    showConfirmButton: false,
-                                                    timer: 1500
-                                                }).then(function() {
-                                                    location.reload();
-                                                });
-                                            } else {
-                                                Swal.fire({
-                                                    icon: 'error',
-                                                    title: 'Error!',
-                                                    text: response.message
-                                                });
-                                            }
-                                        },
-                                        error: function(xhr, status, error) {
-                                            console.error(xhr.responseText);
-                                            Swal.fire({
-                                                icon: 'error',
-                                                title: 'Error!',
-                                                text: 'An error occurred while deleting the category. Please try again.'
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                        });
-                });
+   
             </script>                                           
     <!-- Your custom scripts -->
         <script src="script.js"></script>
@@ -484,7 +413,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
         </script>
 
         <script>
-            $(document).ready(function () {
+         $(document).ready(function () {
                 // Initialize DataTable for each table
                 $('#teacherTableContent').DataTable({
                     "pageLength": 5 // Set the limit to 5 entries per page
@@ -493,49 +422,201 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                 $('#subjectTableContent').DataTable({
                     "pageLength": 5 // Set the limit to 5 entries per page
                 });
+                $('#teacherTableContentUpdate').DataTable({
+                    "pageLength": 5 // Set the limit to 5 entries per page
+                });
 
-                // Show/hide tables based on button clicks
+                $('#subjectTableContentUpdate').DataTable({
+                    "pageLength": 5 // Set the limit to 5 entries per page
+                });
+                // Show/hide tables and fields based on button clicks
                 $('#classTable').click(function () {
                     $('#teacherTableContainer').hide();
                     $('#subjectTableContainer').hide();
                     $('#classTableContainer').show();
+                    $('.classTableContainer').show();  // Show subject code and subject name fields
+                    $('#add_code, #add_name').prop('disabled', false);  // Enable the fields
+
+                    // Add active class to the clicked button and remove it from others
+                    $(this).addClass('active').siblings().removeClass('active');
                 });
 
                 $('#teacherTable').click(function () {
                     $('#classTableContainer').hide();
                     $('#subjectTableContainer').hide();
                     $('#teacherTableContainer').show();
+                    $('.classTableContainer').hide();  // Hide subject code and subject name fields
+                    $('#add_code, #add_name').prop('disabled', true);  // Disable the fields
+
+                    // Add active class to the clicked button and remove it from others
+                    $(this).addClass('active').siblings().removeClass('active');
                 });
 
                 $('#subjectTable').click(function () {
                     $('#classTableContainer').hide();
                     $('#teacherTableContainer').hide();
                     $('#subjectTableContainer').show();
+                    $('.classTableContainer').hide();  // Show subject code and subject name fields
+                    $('#add_code, #add_name').prop('disabled', false);  // Enable the fields
+
+                    // Add active class to the clicked button and remove it from others
+                    $(this).addClass('active').siblings().removeClass('active');
                 });
+
+                // Variable to store the currently assigned teacher and subject IDs
+                    var assignedTeacherId;
+                    var assignedSubjectId;
+
+                    // Checkbox click event handler for teachers
+                    $('#teacherTableContent .assign-checkbox').click(function () {
+                        // Uncheck the previously assigned teacher checkbox
+                        if (assignedTeacherId && assignedTeacherId !== $(this).val()) {
+                            $('#teacherTableContent .assign-checkbox[value="' + assignedTeacherId + '"]').prop('checked', false);
+                        }
+
+                        // Store the currently assigned teacher ID
+                        assignedTeacherId = $(this).prop('checked') ? $(this).val() : null;
+                    });
+
+                    // Checkbox click event handler for subjects
+                    $('#subjectTableContent .assign-checkbox').click(function () {
+                        // Uncheck the previously assigned subject checkbox
+                        if (assignedSubjectId && assignedSubjectId !== $(this).val()) {
+                            $('#subjectTableContent .assign-checkbox[value="' + assignedSubjectId + '"]').prop('checked', false);
+                        }
+
+                        // Store the currently assigned subject ID
+                        assignedSubjectId = $(this).prop('checked') ? $(this).val() : null;
+                    });
+
+                // AJAX to save data when the Submit button is clicked
+                $('#saveChangesBtn').click(function () {
+                    // Get data from input fields
+                    var classCode = $('#add_code').val();
+                    var className = $('#add_name').val();
+
+                    // Check if both a teacher and a subject are selected
+                    if (assignedTeacherId && assignedSubjectId) {
+                        // Prepare data to send to the server
+                        var postData = {
+                            classCode: classCode,
+                            className: className,
+                            teacherId: assignedTeacherId,
+                            subjectId: assignedSubjectId
+                        };
+
+                        // Send data to the server using AJAX
+                        $.ajax({
+                            type: 'POST',
+                            url: 'save_class.php', // Replace with the actual path to your server-side script
+                            data: postData,
+                            success: function (response) {
+                                // Handle the response from the server
+                                console.log(response);
+
+                                // Display SweetAlert if data is saved successfully
+                                if (response.status === "success") {
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: "Data saved successfully!",
+                                        icon: "success",
+                                        showConfirmButton: false, // Hide the "OK" button
+                                        timer: 1500, // Auto-close after 1.5 seconds (adjust as needed),
+                                        didClose: () => {
+                                            // Close the modal
+                                            $('#staticBackdrop').modal('hide');
+                                            
+                                            // Clear the input fields if needed
+                                            $('#add_code').val('');
+                                            $('#add_name').val('');
+
+                                            // Refresh the DataTable
+                                            location.reload();
+                                        }
+                                    });
+                                } else {
+                                    // Handle errors (if any)
+                                    console.error(response.message);
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                // Handle errors (if any)
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    } else {
+                        alert('Please select one teacher and one subject.');
+                    }
+                });
+                function toggleEditTables(tableType) {
+                        // Hide all table containers
+                        $('.updateClassTableContainer, #updateTeacherTableContainer, #updateSubjectTableContainer').hide();
+
+                        // Show the selected table container
+                        switch (tableType) {
+                            case 'editClassTable':
+                                $('.updateClassTableContainer').show();
+                                break;
+                            case 'editTeacherTable':
+                                $('#updateTeacherTableContainer').show();
+                                break;
+                            case 'editSubjectTable':
+                                $('#updateSubjectTableContainer').show();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    // Event listener for the edit modal table buttons
+                    $('#editClassTable, #editTeacherTable, #editSubjectTable').click(function () {
+                        var tableType = $(this).attr('id');
+                        toggleEditTables(tableType);
+                    });
+
+                    // Fetch data when the edit button is clicked
+                    $('.edit-btn').click(function () {
+                        var classID = $(this).data('class-id');
+
+                        $.ajax({
+                            type: 'POST',
+                            url: 'fetch_class.php',
+                            data: {
+                                classID: classID
+                            },
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.status === 'success') {
+                                    console.log('Response:', response);
+                                    $('#edit_code').val(response.classCode);
+                                    $('#edit_name').val(response.className);
+
+                                    // Toggle the appropriate table container based on the type of data to be edited
+                                    toggleEditTables(response.editTableType);
+
+                                    // Check checkboxes based on the fetched data
+                                    response.checkedIDs.forEach(function (id) {
+                                            $('.assign-checkbox[value="' + id + '"]').prop('checked', true);
+                                        });
+
+                                        // Show the edit modal
+                                        $('#editModal').modal('show');
+                                    } else {
+                                        alert('Error: ' + response.message);
+                                    }
+                                },
+
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                                alert('An error occurred while fetching class details. Please check the console for more information.');
+                            }
+                        });
+                    });
 
 
             });
+
         </script>
-            <script>
-            // Check All function
-                function checkAll(tableId) {
-                    const checkboxes = document.querySelectorAll(`#${tableId} .assign-checkbox`);
-                    const checkAllCheckbox = document.getElementById(`checkAll_${tableId}`);
-
-                    checkboxes.forEach(checkbox => {
-                        checkbox.checked = checkAllCheckbox.checked;
-                    });
-                }
-
-                // Event listeners for Check All checkboxes
-                document.getElementById('checkAll_teacherTableContent').addEventListener('change', function () {
-                    checkAll('teacherTableContent');
-                });
-
-                document.getElementById('checkAll_subjectTableContent').addEventListener('change', function () {
-                    checkAll('subjectTableContent');
-                });
-            </script>
 
 </body>
 
