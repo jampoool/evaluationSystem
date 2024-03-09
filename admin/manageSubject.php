@@ -39,7 +39,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
 
 <body>
     <div class="wrapper">
-        <aside id="sidebar">
+        <aside id="sidebar" class="expand">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa-solid fa-bars"></i>

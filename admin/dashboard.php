@@ -299,7 +299,7 @@ tl-item.active .tl-dot:before {
 </head>
 <body>
     <div class="wrapper">
-    <aside id="sidebar">
+    <aside id="sidebar"  class="expand">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa-solid fa-bars"></i>
@@ -310,7 +310,7 @@ tl-item.active .tl-dot:before {
             </div>
             <ul class="sidebar-nav">
                 <li class="sidebar-item ">
-                    <a href="dashboard.php" class="sidebar-link active">
+                    <a href="dashboard.php" class="sidebar-link">
                         <i class="fa-solid fa-table-cells-large"></i>
                         <span>Dashboard</span>
                     </a>

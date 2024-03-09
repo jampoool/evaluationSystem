@@ -39,7 +39,7 @@
 
 <body>
     <div class="wrapper">
-    <aside id="sidebar">
+    <aside id="sidebar"  class="expand">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa-solid fa-bars"></i>
@@ -50,7 +50,7 @@
             </div>
             <ul class="sidebar-nav">
                 <li class="sidebar-item ">
-                    <a href="dashboard.php" class="sidebar-link active">
+                    <a href="dashboard.php" class="sidebar-link">
                         <i class="fa-solid fa-table-cells-large"></i>
                         <span>Dashboard</span>
                     </a>
@@ -62,7 +62,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="manageUser.php" class="sidebar-link">
+                    <a href="manageUser.php" class="sidebar-link active">
                         <i class="fa-solid fa-user-plus"></i>
                         <span>Manage User</span>
                     </a>

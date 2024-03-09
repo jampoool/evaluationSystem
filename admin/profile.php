@@ -38,7 +38,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
 
 <body>
     <div class="wrapper">
-        <aside id="sidebar">
+    <aside id="sidebar"  class="expand">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa-solid fa-bars"></i>
@@ -49,7 +49,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
             </div>
             <ul class="sidebar-nav">
                 <li class="sidebar-item ">
-                    <a href="dashboard.php" class="sidebar-link active">
+                    <a href="dashboard.php" class="sidebar-link">
                         <i class="fa-solid fa-table-cells-large"></i>
                         <span>Dashboard</span>
                     </a>
@@ -66,7 +66,12 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                         <span>Manage User</span>
                     </a>
                 </li>
-
+                <li class="sidebar-item">
+                    <a href="manageSubject.php" class="sidebar-link">
+                        <i class="fa-solid fa-house-user"></i>
+                        <span>Subject</span>
+                    </a>
+                </li>
                 <li class="sidebar-item">
                     <a href="manageClass.php" class="sidebar-link">
                         <i class="fa-solid fa-house-user"></i>
@@ -81,7 +86,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                 </li>
             </ul>
             <div class="sidebar-footer">
-                <a href="#" class="sidebar-link">
+                <a href="../logout.php" class="sidebar-link">
                     <i class="lni lni-exit"></i>
                     <span>Logout</span>
                 </a>

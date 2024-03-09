@@ -1,4 +1,5 @@
 <?php
+include "../connect.php";
 session_start();
 if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
     header("Location: unauthorized_access.php");
@@ -20,7 +21,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
     <!-- Your custom CSS -->
     <link rel="stylesheet" href="css/dashboard.css">
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
      <!-- DataTables CSS -->
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -38,7 +39,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
 
 <body>
     <div class="wrapper">
-        <aside id="sidebar">
+        <aside id="sidebar" class="expand">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa-solid fa-bars"></i>
@@ -94,63 +95,137 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
         </aside>
     
         <div class="main" style="background-color: #F5F5F5;">
-            <nav class="navbar navbar-expand px-4 py-3 shadow p-3 mb-5 bg-body roundedsticky-top">
-                <form action="#" class="d-none d-sm-inline-block">
-                </form>
-                <div class="navbar-collapse">
-                    <label for="">Faculty Evaluation System</label>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item dropdown">
-                            <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
-                                <img src="../img/cartoon-man-leaving-review.jpg" class="avatar img-fluid" alt="">
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end rounded">
-                            <i class="fa-solid fa-circle-plus"></i>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-            <div id="page-content" class="container-lg" >
-                <h5><small class="text-muted p-5">Manage Class</small></h5>
-                <div id="page-content" class="col-md-12 px-5 py-1" >
+                            <nav class="navbar navbar-expand px-4 py-3 shadow p-3 mb-5 bg-body roundedsticky-top">
+                                <form action="#" class="d-none d-sm-inline-block">
+                                </form>
+                                <div class="navbar-collapse">
+                                    <label for="">Faculty Evaluation System</label>
+                                </div>
+                                <div class="navbar-collapse collapse">
+                                    <ul class="navbar-nav ms-auto">
+                                        <li class="nav-item dropdown">
+                                            <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
+                                                <img src="../img/cartoon-man-leaving-review.jpg" class="avatar img-fluid" alt="">
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-end rounded">
+                                            <i class="fa-solid fa-circle-plus"></i>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                            <h5>
+                                <small class="text-muted p-5">Manage Class</small>
+                            </h5>
+        <div id="page-content" class="col-md-12 px-5 py-1" >
             <div class="row">
                    <div class="shadow p-3 mb-5 bg-body rounded ">
-
                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="staticBackdropLabel">Manage Subject</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6">
-                                            <form id="add_subject" class="row g-3" name="add_subject" method="POST">
-                                                <div class="col-12">
-                                                    <label for="add_code" class="form-label">Subject Code</label>
-                                                    <input type="text" class="form-control" id="add_code" name="add_code">
-                                                </div>
-                                                <div class="col-12">
-                                                    <label for="add_name" class="form-label">Subject Name</label>
-                                                    <input type="text" class="form-control" id="add_name" name="add_name">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="ms-auto">
-                                        <button type="button" class="btn btn-secondary btn-sm rounded-pill" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary btn-sm rounded-pill" form="add_subject">Submit</button>
-                                    </div>
-                                </div>
-                            </div>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Manage Class</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Buttons to toggle between tables -->
+                        <div class="btn-group mb-3" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-outline-primary" id="classTable">Class Table</button>
+                            <button type="button" class="btn btn-outline-primary" id="teacherTable">Teacher Table</button>
+                            <button type="button" class="btn btn-outline-primary" id="subjectTable">Subject Table</button>
+                        </div>
+                        <div class="classTableContainer">
+                        <div class="col-12">
+                            <label for="add_code" class="form-label">Subject Code</label>
+                            <input type="text" class="form-control" id="add_code" name="add_code">
+                        </div>
+                         <div class="col-12">
+                                <label for="add_name" class="form-label">Subject Name</label>
+                                <input type="text" class="form-control" id="add_name" name="add_name">
+                         </div>
+                         </div>
+                        <!-- Table for Teachers -->
+                        <div id="teacherTableContainer" style="display: none;">
+                            <table class="table table-bordered table-responsive" id="teacherTableContent">
+                                <thead>
+                                    <tr>
+                                        <th>Email</th>
+                                        <th>
+                                            <label class="form-check-label">
+                                                <input type="checkbox" id="checkAll_teacherTableContent"
+                                                    class="form-check-input">
+                                                Assign All
+                                            </label>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Add teacher table data here -->
+                                    <?php
+                                    $sqlquery = mysqli_query($con, "SELECT * FROM user WHERE type='teacher'");
+                                    while ($row = mysqli_fetch_array($sqlquery)) {
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $row['email']; ?></td>
+                                        <td><input type="checkbox" class="assign-checkbox"
+                                                value="<?php echo $row['id']; ?>"> <label> Assign</label></td>
+                                    </tr>
+                                    <?php
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table for Subjects -->
+                        <div id="subjectTableContainer" style="display: none;">
+                            <table class="table table-bordered table-responsive" id="subjectTableContent">
+                                <thead>
+                                    <tr>
+                                        <th>Subject Code</th>
+                                        <th>Subject Name</th>
+                                        <th>
+                                            <label class="form-check-label">
+                                                <input type="checkbox" id="checkAll_subjectTableContent"
+                                                    class="form-check-input">
+                                                Assign All
+                                            </label>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sqlquery = mysqli_query($con, "SELECT * FROM tbl_subject");
+                                    while ($row = mysqli_fetch_array($sqlquery)) {
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $row['subject_code']; ?></td>
+                                        <td><?php echo $row['subject_name']; ?></td>
+                                        <td><input type="checkbox" class="assign-checkbox"
+                                                value="<?php echo $row['id']; ?>"><label> Assign</label></td>
+                                    </tr>
+                                    <?php
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="ms-auto">
+                    <button type="button" class="btn btn-secondary btn-sm rounded-pill" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary btn-sm rounded-pill" form="add_class" id="saveChangesBtn" name="save_changes">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
                                     <!-- edit modal -->
                                     <div class="modal fade" id="editModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -203,7 +278,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- <?php
+                                                <?php
                                                 $sqlquery = mysqli_query($con, "SELECT * FROM tbl_subject ORDER BY id DESC;");
                                                 $i = 1;
                                                 while ($rows = mysqli_fetch_array($sqlquery)) {
@@ -213,7 +288,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                                     <td><?php echo $rows['subject_code']; ?></td>
                                                     <td><?php echo $rows['subject_name']; ?></td>
                                                     <td><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
-                                                    <td><?php echo date('F j, Y, g:i A', strtotime($rows['created_at'])); ?></td>
+                                                    <td><?php echo date('F j, Y, g:i A', strtotime($rows['date_created'])); ?></td>
                                                     <td>
                                                         <div class="d-inline d-lg-none">
                                                             <button class="btn btn-primary btn-sm" id="ellipsisButton">
@@ -232,24 +307,236 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                                 </tr>
                                                 <?php
                                                 }
-                                                ?> -->
+                                                ?>
                                             </tbody>
                                         </table>
                                     </div>
-                    </div>
-                </div> 
-        </div>
-            </div>
-        </div>
-    </div>
-    
-    
+                                </div>
+                            </div>
+                       </div>
+                     </div>
+                 </div>
 
-    <!-- Your custom scripts -->
-    <script src="script.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
     <script>
-       
-    </script>
+    $(document).ready(function(){
+        $('.edit-btn').click(function () {
+                var subjectID = $(this).data('subject-id');
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'fetch_subject.php',
+                    data: {
+                        subjectID: subjectID
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            $('#subject_id').val(response.subjectID);
+                            $('#update_code').val(response.subjectCode);
+                            $('#update_name').val(response.subjectName);
+
+                            $('#editModal').modal('show');
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        alert('An error occurred while fetching subject details. Please check the console for more information.');
+                    }
+                });
+            });
+            $('#updateBtn').click(function (event) {
+                event.preventDefault();
+                var subjectID = $('#subject_id').val();
+                var updateCode = $('#update_code').val();
+                var updateName = $('#update_name').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'update_subject.php',
+                    data: {
+                        updateBtn: true,
+                        subjectID: subjectID,
+                        updateCode: updateCode,
+                        updateName: updateName
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            // Use SweetAlert for a user-friendly notification
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Subject updated successfully',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(function () {
+                                $('#editModal').modal('hide');
+                                location.reload(); // You might want to handle this part based on your needs
+                            });
+                        } else {
+                            // Display an error alert if the update was not successful
+                            alert('Error updating subject: ' + response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        // Display an error alert if an error occurs during the AJAX request
+                        alert('An error occurred while updating subject. Please try again.');
+                    }
+                });
+            });
+                $('#add_subject').submit(function (event) {
+                        event.preventDefault();
+
+                        var addCode = $('#add_code').val();
+                        var addName = $('#add_name').val();
+
+                        $.ajax({
+                            type: 'POST',
+                            url: 'save_subject.php',
+                            data: {
+                                addCode: addCode,
+                                addName: addName
+                            },
+                            dataType: 'json',
+                            success: function (response) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(function () {
+                                    $('#staticBackdrop').modal('hide');
+                                    $('.modal-backdrop').remove();
+                                    location.reload();
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                                alert('An error occurred while saving the data. Please try again.');
+                            }
+                        });
+                    });
+
+                    $('.delete-btn').click(function() {
+                            var subjectID = $(this).data('subject-id');
+
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: 'You will not be able to recover this category!',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Yes, delete it!',
+                                cancelButtonText: 'No, cancel!',
+                                reverseButtons: true
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: 'delete_subject.php',
+                                        data: {
+                                            subjectID: subjectID  // Make sure the parameter name matches what your PHP script expects
+                                        },
+                                        dataType: 'json',
+                                        success: function(response) {
+                                            if (response.status === 'success') {
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    title: 'Deleted!',
+                                                    text: response.message,
+                                                    showConfirmButton: false,
+                                                    timer: 1500
+                                                }).then(function() {
+                                                    location.reload();
+                                                });
+                                            } else {
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Error!',
+                                                    text: response.message
+                                                });
+                                            }
+                                        },
+                                        error: function(xhr, status, error) {
+                                            console.error(xhr.responseText);
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Error!',
+                                                text: 'An error occurred while deleting the category. Please try again.'
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                });
+            </script>                                           
+    <!-- Your custom scripts -->
+        <script src="script.js"></script>
+        <script>
+        new DataTable('#example');
+        
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                // Initialize DataTable for each table
+                $('#teacherTableContent').DataTable({
+                    "pageLength": 5 // Set the limit to 5 entries per page
+                });
+
+                $('#subjectTableContent').DataTable({
+                    "pageLength": 5 // Set the limit to 5 entries per page
+                });
+
+                // Show/hide tables based on button clicks
+                $('#classTable').click(function () {
+                    $('#teacherTableContainer').hide();
+                    $('#subjectTableContainer').hide();
+                    $('#classTableContainer').show();
+                });
+
+                $('#teacherTable').click(function () {
+                    $('#classTableContainer').hide();
+                    $('#subjectTableContainer').hide();
+                    $('#teacherTableContainer').show();
+                });
+
+                $('#subjectTable').click(function () {
+                    $('#classTableContainer').hide();
+                    $('#teacherTableContainer').hide();
+                    $('#subjectTableContainer').show();
+                });
+
+
+            });
+        </script>
+            <script>
+            // Check All function
+                function checkAll(tableId) {
+                    const checkboxes = document.querySelectorAll(`#${tableId} .assign-checkbox`);
+                    const checkAllCheckbox = document.getElementById(`checkAll_${tableId}`);
+
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = checkAllCheckbox.checked;
+                    });
+                }
+
+                // Event listeners for Check All checkboxes
+                document.getElementById('checkAll_teacherTableContent').addEventListener('change', function () {
+                    checkAll('teacherTableContent');
+                });
+
+                document.getElementById('checkAll_subjectTableContent').addEventListener('change', function () {
+                    checkAll('subjectTableContent');
+                });
+            </script>
+
 </body>
 
 </html>
