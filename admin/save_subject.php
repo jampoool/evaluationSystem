@@ -7,8 +7,8 @@
     $timestamp = date('Y-m-d H:i:s'); // Get current timestamp
     $userID = $_SESSION['user_id'];
     // Escape user inputs for security (assuming you're using MySQLi)
-    $addCode = mysqli_real_escape_string($con, $_POST['add_code']);
-    $addName = mysqli_real_escape_string($con, $_POST['add_name']);
+    $addCode = $_POST['addCode'];
+    $addName =$_POST['addName'];
 
     // Attempt to insert data
     $query = "INSERT INTO tbl_subject (subject_code, subject_name, user_id, created_at) VALUES ('$addCode', '$addName', '$userID', '$timestamp')";
