@@ -371,7 +371,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                                         ?>
                                                     </td>
                                                     <td><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
-                                                    <td><?php echo date('F j, Y, g:i A', strtotime($rows['date_created'])); ?></td>
+                                                    <td><?php echo date('F j, Y, g:i A', strtotime($rows['created_at'])); ?></td>
                                                     <td>
                                                         <div class="d-inline d-lg-none">
                                                             <button class="btn btn-primary btn-sm" id="ellipsisButton">

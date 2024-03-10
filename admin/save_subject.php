@@ -11,7 +11,7 @@
     $addName =$_POST['addName'];
 
     // Attempt to insert data
-    $query = "INSERT INTO tbl_subject (subject_code, subject_name, user_id, date_created) VALUES ('$addCode', '$addName', '$userID', '$timestamp')";
+    $query = "INSERT INTO tbl_subject (subject_code, subject_name, user_id, created_at) VALUES ('$addCode', '$addName', '$userID', '$timestamp')";
     if (mysqli_query($con, $query)) {
         // Data inserted successfully
         $response['status'] = 'success';

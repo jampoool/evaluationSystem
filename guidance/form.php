@@ -211,8 +211,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                                     <div class="form-element">
                                                 <form class="row g-3" method="POST">
                                                 <div class="col-7">
-                                                        <label class="form-label">Form No</label>
-                                                        <input type="text" class="form-control" id="updateFormID" name="updateFormID">
+                                                        <input hidden type="text" class="form-control" id="updateFormID" name="updateFormID">
                                                     </div>
                                                     <input type="hidden" id="formID" name="formID">
                                                     <div class="col-6">

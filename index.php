@@ -74,50 +74,39 @@
     <link href="index.css" rel="stylesheet">
 </head>
 <body>
-        <section class="vh-100">
-          <div class="container-fluid h-custom">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-              <div class="col-md-9 col-lg-6 col-xl-5">
-                <img src="img/cartoon-man-leaving-review.jpg"
-                  class="img-fluid" alt="Sample image">
-              </div>
-              <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-
-                <form method="POST">
-                  <div class="form-outline mb-4 mt-4">
-                    <input type="email" class="form-control form-control-lg"
-                        placeholder="Enter a valid email address" name="email" />
-                    <label class="form-label" for="form3Example3">Email address</label>
-                    </div>
-                  <!-- Password input -->
-                  <div class="form-outline mb-3">
-                    <input type="password" id="form3Example4" class="form-control form-control-lg"
-                      placeholder="Enter password" name="password"/>
-                    <label class="form-label" for="form3Example4">Password</label>
+      <section class="vh-100">
+          <div class="container-fluid h-100">
+              <div class="row justify-content-center align-items-center h-100">
+                  <div class="col-lg-6 col-xl-5 d-none d-lg-block"> <!-- Hide this column on smaller screens -->
+                      <img src="img/cartoon-man-leaving-review.jpg" class="img-fluid" alt="Sample image">
                   </div>
-
-                
-                  <div class="d-flex justify-content-between align-items-center mt-4">
-                    <!-- Checkbox -->
-                    <div class="form-check mb-0">
-                      <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-                      <label class="form-check-label" for="form2Example3">
-                      Show Password
-                      </label>
-                    
-                    </div>
-                  
-                    <div class="d-grid gap-2 col-6 mx-end">
-                    <input class="btn btn-primary" type="submit" value="Login" name="login"/>
-                    </div>
-                
+                  <div class="col-lg-6 col-xl-5">
+                      <div class="card">
+                          <div class="card-body shadow">
+                              <h1 class="card-title text-center mb-4">Log in to your account</h1>
+                              <form method="POST">
+                                  <div class="form-group mb-4">
+                                      <label for="email" class="form-label">Email address</label>
+                                      <input type="email" class="form-control form-control-lg" id="email" placeholder="Enter a valid email address" name="email" required>
+                                  </div>
+                                  <div class="form-group mb-4">
+                                      <label for="password" class="form-label">Password</label>
+                                      <input type="password" class="form-control form-control-lg" id="password" placeholder="Enter password" name="password" required>
+                                  </div>
+                                  <div class="form-check mb-3">
+                                      <input class="form-check-input" type="checkbox" value="" id="showPassword">
+                                      <label class="form-check-label" for="showPassword">Show Password</label>
+                                  </div>
+                                  <div class="d-grid gap-2">
+                                      <button type="submit" class="btn btn-primary btn-lg" name="login">Login</button>
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
                   </div>
-                
-                </form>
               </div>
-            </div>
           </div>
-        </section>
+      </section>
    </body>
                  
 </html>
