@@ -13,21 +13,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($result) {
         $row = mysqli_fetch_assoc($result);
 
-        // Additional queries to fetch associated teacher and subject IDs
-        $fetchTeacherIDsQuery = "SELECT instructor_id FROM tbl_class WHERE id = $classID";
-        $fetchSubjectIDsQuery = "SELECT subject_id FROM tbl_class WHERE id = $classID";
-
-        $teacherIDsResult = mysqli_query($con, $fetchTeacherIDsQuery);
-        $subjectIDsResult = mysqli_query($con, $fetchSubjectIDsQuery);
+        // Fetch associated teacher and subject IDs
+        $teacherIDsResult = mysqli_query($con, "SELECT instructor_id FROM tbl_class WHERE id = $classID");
+        $subjectIDsResult = mysqli_query($con, "SELECT subject_id FROM tbl_class WHERE id = $classID");
 
         if ($teacherIDsResult && $subjectIDsResult) {
-            $teacherIDs = mysqli_fetch_assoc($teacherIDsResult)['instructor_id'];
-            $subjectIDs = mysqli_fetch_assoc($subjectIDsResult)['subject_id'];
+            $teacherIDs = [];
+            while ($teacherRow = mysqli_fetch_assoc($teacherIDsResult)) {
+                $teacherIDs[] = $teacherRow['instructor_id'];
+            }
+
+            $subjectIDs = [];
+            while ($subjectRow = mysqli_fetch_assoc($subjectIDsResult)) {
+                $subjectIDs[] = $subjectRow['subject_id'];
+            }
 
             // Send a JSON response with the fetched data and associated IDs
             echo json_encode(array(
                 'status' => 'success',
-                'classID' => $row['id'],
+                'classID' => $classID,
                 'classCode' => $row['class_code'],
                 'className' => $row['class_name'],
                 'teacherIDs' => $teacherIDs,
@@ -48,4 +52,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Invalid request method
     echo json_encode(array('status' => 'error', 'message' => 'Invalid request method'));
 }
+
 ?>
