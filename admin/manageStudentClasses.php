@@ -1,10 +1,14 @@
 <?php
+
+include "../connect.php";
 session_start();
 if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
     header("Location: unauthorized_access.php");
     exit();
 }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,7 +37,40 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
      <script src="https://kit.fontawesome.com/658ff99b54.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
    
+    <style>
+        .card {
+            border: none;
+            border-radius: 15px;
+            background-color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
 
+        .card:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-weight: bold;
+        }
+
+        .card-text {
+            color: #555555;
+        }
+
+        .assign-btn {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .assign-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
@@ -113,145 +150,118 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                     </ul>
                 </div>
             </nav>
-            <div id="page-content" class="container-lg" >
-                <h5><small class="text-muted p-5">Manage Student Classes</small></h5>
-                <div id="page-content" class="col-md-12 px-5 py-1" >
-                <div class="row">
-                   <div class="shadow p-3 mb-5 bg-body rounded ">
+            <div class="container">
+                <div class="row row-cols-1 row-cols-md-3 g-4" id="page-content">
+                    <?php
 
-                   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="staticBackdropLabel">Manage Subject</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6">
-                                            <form id="add_subject" class="row g-3" name="add_subject" method="POST">
-                                                <div class="col-12">
-                                                    <label for="add_code" class="form-label">Subject Code</label>
-                                                    <input type="text" class="form-control" id="add_code" name="add_code">
-                                                </div>
-                                                <div class="col-12">
-                                                    <label for="add_name" class="form-label">Subject Name</label>
-                                                    <input type="text" class="form-control" id="add_name" name="add_name">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="ms-auto">
-                                        <button type="button" class="btn btn-secondary btn-sm rounded-pill" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary btn-sm rounded-pill" form="add_subject">Submit</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        // Fetch entries from tbl_class along with instructor email from user table
+                        $query = "SELECT tbl_class.*, user.email AS instructor_email FROM tbl_class JOIN user ON tbl_class.instructor_id = user.id";
+                        $result = mysqli_query($con, $query);
 
-                                    <!-- edit modal -->
-                                    <div class="modal fade" id="editModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="editModalLabel">Edit Subject</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                <div class="form-element">
-                                                            <form class="row g-3" method="POST">
-                                                                <input type="hidden" id="subject_id" name="subject_id">
-                                                                <div class="col-7">
-                                                                    <label class="form-label">Subject Code</label>
-                                                                    <input type="text" class="form-control" id="update_code" name="update_code">
-                                                                </div>
-                                                                <div class="col-7">
-                                                                    <label class="form-label">Subject Name</label>
-                                                                    <input type="text" class="form-control" id="update_name" name="update_name">
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                                                    </button>
-                                                                    <button id="updateBtn" class="btn btn-primary" name="update">Submit</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                
-                                    <button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                        <i class="fa-solid fa-plus"></i> Add Category
-                                    </button>
+                        if ($result && mysqli_num_rows($result) > 0) {
+                            // Loop through the results and add each entry to the classEntries array
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                echo '<div class="col">';
+                                echo '<div class="card">';
+                                echo '<div class="card-body">';
+                                echo '<h5 class="card-title">' . $row['class_name'] . '</h5>';
+                                echo '<p class="card-text">Class Code: ' . $row['class_code'] . '</p>';
+                                echo '<p class="card-text">Instructor Email: ' . $row['instructor_email'] . '</p>';
+                                echo '<button class="btn btn-primary assign-btn" data-class-id="' . $row['id'] . '">Assign Students</button>';
+                                echo '</div></div></div>';
+                            }
+                        } else {
+                            echo '<div class="col">';
+                            echo '<p>No class entries found.</p>';
+                            echo '</div>';
+                        }
 
-                                    <div class="mt-2"></div>
-
-                                    <div class="table-responsive">
-                                        <table id="example" class="table table-striped" style="width:100%; font-size: 14px !important;">
-                                            <thead>
-                                                <tr>
-                                                    <th>No.</th>
-                                                    <th>Subject Code</th>
-                                                    <th>Subject Name</th>
-                                                    <th>Status</th>
-                                                    <th>Date Created</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <!-- <?php
-                                                $sqlquery = mysqli_query($con, "SELECT * FROM tbl_subject ORDER BY id DESC;");
-                                                $i = 1;
-                                                while ($rows = mysqli_fetch_array($sqlquery)) {
-                                                ?>
-                                                <tr>
-                                                    <td><?php echo $i++; ?></td>
-                                                    <td><?php echo $rows['subject_code']; ?></td>
-                                                    <td><?php echo $rows['subject_name']; ?></td>
-                                                    <td><?php echo ($rows['is_active'] == 1) ? 'Active' : 'Inactive'; ?></td>
-                                                    <td><?php echo date('F j, Y, g:i A', strtotime($rows['created_at'])); ?></td>
-                                                    <td>
-                                                        <div class="d-inline d-lg-none">
-                                                            <button class="btn btn-primary btn-sm" id="ellipsisButton">
-                                                                <i class="fas fa-ellipsis-v"></i>
-                                                            </button>
-                                                            <div class="ellipsis-menu" style="display: none;">
-                                                                <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-subject-id="<?php echo $rows['id']; ?>">Edit</button>
-                                                                <button type="button" class="btn btn-danger btn-sm delete-btn" data-subject-id="<?php echo $rows['id']; ?>">Delete</button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="d-none d-lg-inline">
-                                                            <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-subject-id="<?php echo $rows['id']; ?>">Edit</button>
-                                                            <button type="button" class="btn btn-danger btn-sm delete-btn" data-subject-id="<?php echo $rows['id']; ?>">Delete</button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <?php
-                                                }
-                                                ?> -->
-                                            </tbody>
-                                        </table>
-                                    </div>
-                    </div>
-                </div> 
-        </div>
+                        // Close the database connection
+                        ?>
+                </div>
             </div>
+
+
         </div>
             </div>
         </div>
     </div>
-    
-    
+      <!-- Modal for assigning students -->
+      <div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="assignModalLabel">Assign Students</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                       <!-- DataTable container -->
+                    <table id="studentTable" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Student ID</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                     
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Assign</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).on('click', '.assign-btn', function () {
+            var classId = $(this).data('class-id');
+
+            // Make an AJAX call to fetch data for the DataTable
+            $.ajax({
+                url: 'fetch_students.php', // Replace with the actual PHP script that fetches student data
+                type: 'POST',
+                data: { classId: classId },
+                dataType: 'json',
+                success: function (response) {
+                    // Populate DataTable with retrieved data
+                    var table = $('#studentTable').DataTable();
+                    table.clear().draw();
+                    $.each(response, function (index, data) {
+                        table.row.add([
+                            index + 1,
+                            data.student_id,
+                            data.email
+                        ]).draw(false);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+
+            // Show the modal
+            $('#assignModal').modal('show');
+        });
+
+        // Event listener for the modal assign button click
+        $('#assignModal').on('click', '.btn-primary', function () {
+            // Retrieve the class ID stored in the modal's data attribute
+            var classId = $('#assignModal').data('class-id');
+
+            // Perform actions with the class ID, such as assigning students
+            console.log('Assign students for class ID:', classId);
+
+            // Close the modal if needed
+            $('#assignModal').modal('hide');
+        });
+    </script>
 
     <!-- Your custom scripts -->
     <script src="script.js"></script>
-    <script>
-       
-    </script>
 </body>
 
 </html>

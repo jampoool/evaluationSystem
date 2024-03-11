@@ -173,7 +173,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                             ?>
                                             <tr>
                                                 <td><?php echo $row['email']; ?></td>
-                                                <td><input type="checkbox" class="assign-checkbox"
+                                                <td><input type="checkbox" class="assign-checkbox" id="updateTeacherID"
                                                         value="<?php echo $row['id']; ?>"> <label> Assign</label></td>
                                             </tr>
                                             <?php
@@ -205,7 +205,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                             <tr>
                                                 <td><?php echo $row['subject_code']; ?></td>
                                                 <td><?php echo $row['subject_name']; ?></td>
-                                                <td><input type="checkbox" class="assign-checkbox"
+                                                <td><input type="checkbox" class="assign-checkbox" id="updateSubjectID"
                                                         value="<?php echo $row['id']; ?>"><label> Assign</label></td>
                                             </tr>
                                             <?php
@@ -490,29 +490,29 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                         assignedSubjectId = $(this).prop('checked') ? $(this).val() : null;
                     });
                     
-                    var assignedTeacherId;
-                    var assignedSubjectId;
+                    var teacherIDEdit;
+                    var subjectEditID;
 
                     // Checkbox click event handler for teachers
                     $('#teacherTableContentUpdate .assign-checkbox').click(function () {
                         // Uncheck the previously assigned teacher checkbox
-                        if (assignedTeacherId && assignedTeacherId !== $(this).val()) {
-                            $('#teacherTableContentUpdate .assign-checkbox[value="' + assignedTeacherId + '"]').prop('checked', false);
+                        if (teacherIDEdit && teacherIDEdit !== $(this).val()) {
+                            $('#teacherTableContentUpdate .assign-checkbox[value="' + teacherIDEdit + '"]').prop('checked', false);
                         }
 
                         // Store the currently assigned teacher ID
-                        assignedTeacherId = $(this).prop('checked') ? $(this).val() : null;
+                        teacherIDEdit = $(this).prop('checked') ? $(this).val() : null;
                     });
 
                     // Checkbox click event handler for subjects
                     $('#subjectTableContentUpdate .assign-checkbox').click(function () {
                         // Uncheck the previously assigned subject checkbox
-                        if (assignedSubjectId && assignedSubjectId !== $(this).val()) {
-                            $('#subjectTableContentUpdate .assign-checkbox[value="' + assignedSubjectId + '"]').prop('checked', false);
+                        if (subjectEditID && subjectEditID !== $(this).val()) {
+                            $('#subjectTableContentUpdate .assign-checkbox[value="' + subjectEditID + '"]').prop('checked', false);
                         }
 
                         // Store the currently assigned subject ID
-                        assignedSubjectId = $(this).prop('checked') ? $(this).val() : null;
+                        subjectEditID = $(this).prop('checked') ? $(this).val() : null;
                     });
 
                 // AJAX to save data when the Submit button is clicked
@@ -600,91 +600,122 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                         toggleEditTables(tableType);
                     });
 
-                   // Fetch data when the edit button is clicked
-                    $('.edit-btn').click(function () {
-                        var classID = $(this).data('class-id');
+                  // Fetch data when the edit button is clicked
+                $('.edit-btn').click(function () {
+                    var classID = $(this).data('class-id');
 
-                        $.ajax({
-                            type: 'POST',
-                            url: 'fetch_class.php',
-                            data: {
-                                classID: classID
-                            },
-                            dataType: 'json',
-                            success: function (response) {
-                                if (response.status === 'success') {
-                                    console.log('Response:', response);
-                                    $('#classID').val(response.classID); // Set class ID in the modal
-                                    $('#edit_code').val(response.classCode);
-                                    $('#edit_name').val(response.className);
+                    $.ajax({
+                        type: 'POST',
+                        url: 'fetch_class.php',
+                        data: {
+                            classID: classID
+                        },
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.status === 'success') {
+                                console.log('Response:', response);
+                                $('#classID').val(response.classID); // Set class ID in the modal
+                                $('#edit_code').val(response.classCode);
+                                $('#edit_name').val(response.className);
 
-                                    // Toggle the appropriate table container based on the type of data to be edited
-                                    toggleEditTables(response.editTableType);
+                                // Toggle the appropriate table container based on the type of data to be edited
+                                toggleEditTables('editClassTable');
 
-                                    // Clear all checkboxes first
-                                    $('.assign-checkbox').prop('checked', false);
+                                // Clear all checkboxes first
+                                $('.assign-checkbox').prop('checked', false);
 
-                                    // Check checkboxes based on the fetched data and update assignedTeacherId and assignedSubjectId
-                                    response.teacherIDs.forEach(function (id) {
-                                        $('#updateTeacherTableContainer').find('.assign-checkbox[value="' + id + '"]').prop('checked', true);
-                                    });
+                                // Click event handler for teacher checkboxes
+                                $('#teacherTableContentUpdate .assign-checkbox').click(function () {
+                                    // Clear previously assigned teacher checkbox
+                                    $('#teacherTableContentUpdate .assign-checkbox').not(this).prop('checked', false);
+                                    assignedTeacherId = $(this).prop('checked') ? $(this).val() : null;
+                                });
 
-                                    response.subjectIDs.forEach(function (id) {
-                                        $('#updateSubjectTableContainer').find('.assign-checkbox[value="' + id + '"]').prop('checked', true);
-                                    });
-                                    
-                                    $('#updateTeacherTableContainer .assign-checkbox').click(function () {
-                                        assignedTeacherId = $(this).prop('checked') ? $(this).val() : null;
-                                    });
+                                // Click event handler for subject checkboxes
+                                $('#subjectTableContentUpdate .assign-checkbox').click(function () {
+                                    // Clear previously assigned subject checkbox
+                                    $('#subjectTableContentUpdate .assign-checkbox').not(this).prop('checked', false);
+                                    assignedSubjectId = $(this).prop('checked') ? $(this).val() : null;
+                                });
 
-                                    // Checkbox click event handler for subjects
-                                    $('#updateSubjectTableContainer .assign-checkbox').click(function () {
-                                        assignedSubjectId = $(this).prop('checked') ? $(this).val() : null;
-                                    });
+                                // Check checkboxes based on the fetched data and update assignedTeacherId and assignedSubjectId
+                                response.teacherIDs.forEach(function (id) {
+                                    $('#teacherTableContentUpdate').find('.assign-checkbox[value="' + id + '"]').prop('checked', true);
+                                });
 
-                                    // Show the edit modal
-                                    $('#editModal').modal('show');
-                                } else {
-                                    alert('Error: ' + response.message);
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.error(xhr.responseText);
-                                alert('An error occurred while fetching class details. Please check the console for more information.');
+                                response.subjectIDs.forEach(function (id) {
+                                    $('#subjectTableContentUpdate').find('.assign-checkbox[value="' + id + '"]').prop('checked', true);
+                                });
+
+                                // Show the edit modal
+                                $('#editModal').modal('show');
+                            } else {
+                                alert('Error: ' + response.message);
                             }
-                        });
-                    });
-
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                            alert('An error occurred while fetching class details. Please check the console for more information.');
+                        }
+                });
+            });
                     
-                    $('#updateBtn').click(function() {
-                            // Gather the updated data
-                            var updatedData = {
-                                classID: classID, // Assuming classID is available
-                                // Gather other updated data here
-                            };
+                $('#updateBtn').click(function () {
+                    // Gather the updated data
+                    var classID = $('#classID').val();
+                    var classCode = $('#edit_code').val();
+                    var className = $('#edit_name').val();
+                    var instructorID = $('#updateTeacherID').val(); // Assuming you have an input field with the ID 'instructorID'
+                    var subjectID = $('#updateSubjectID').val(); // Assuming you have an input field with the ID 'subjectID'
 
-                            // Send the updated data to the server for updating
-                            $.ajax({
-                                type: 'POST',
-                                url: 'update_class.php', // Assuming the URL for updating data
-                                data: updatedData,
-                                dataType: 'json',
-                                success: function(response) {
-                                    if (response.status === 'success') {
-                                        // Handle success
-                                        console.log('Data updated successfully');
-                                    } else {
-                                        // Handle failure
-                                        console.error('Error updating data:', response.message);
-                                        alert('Error updating data: ' + response.message);
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    console.error('An error occurred while updating data:', error);
-                                    alert('An error occurred while updating data. Please try again later.');
-                                }
+                    // Prepare the data to be sent to the server for updating
+                    var updatedData = {
+                        classID: classID,
+                        classCode: classCode,
+                        className: className,
+                        instructorID: instructorID,
+                        subjectID: subjectID
+                    };
+
+                    // Send the updated data to the server for updating
+                    $.ajax({
+                        type: 'POST',
+                        url: 'update_class.php',
+                        data: updatedData,
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.status === 'success') {
+                                // Display success message with SweetAlert
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: 'Data updated successfully',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(function () {
+                                    // Optionally, you can reload the page or perform other actions
+                                    location.reload(); // Reload the page
+                                });
+                            } else {
+                                // Display error message with SweetAlert
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: 'Error updating data: ' + response.message
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            // Display error message with SweetAlert
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: 'An error occurred while updating data. Please try again later.'
                             });
-                        });
+                        }
+                    });
+                });
+
 
                     $('.delete-btn').click(function() {
                             var classID = $(this).data('class-id');
