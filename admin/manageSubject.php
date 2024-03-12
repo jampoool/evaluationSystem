@@ -85,6 +85,12 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                         <span>Student Classes</span>
                     </a>
                 </li>
+                <li class="sidebar-item">
+                    <a href="report.php" class="sidebar-link">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <span>Report</span>
+                    </a>
+                </li>
             </ul>
             <div class="sidebar-footer">
                 <a href="../logout.php" class="sidebar-link">

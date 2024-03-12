@@ -154,65 +154,65 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
             </nav>
             
                        <!-- Add Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="staticBackdropLabel">Assign Teacher Evaluation</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <form id="teacherForm" method="POST">
-                            <label class="form-label">Evaluation Form</label>
-                            <select id="formID" name="formID" class="form-select" aria-label="Default select example">
-                                <option selected disabled>Choose</option>
-                                <?php
-                                    $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form");
-                                    while($row = mysqli_fetch_array($sqlquery)) {
-                                ?>
-                                    <option value="<?php echo $row['id']; ?>"><?php echo $row['form_description']; ?></option>
-                                <?php
-                                    }
-                                ?>
-                            </select>
-                    </div>
-                    <div class="col-md-8">
-                        <table id="teacherTable" class="table table-striped table-hover" style="width:100%;">
-                            <thead>
-                                <tr>
-                                <input type="checkbox" id="checkAllTeachers"><span>Check All</span>
-                                    &nbsp;
-                                    <th>Email</th>
-                                    <th>Assign</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $sqlquery = mysqli_query($con, "SELECT * FROM user WHERE type='teacher'");
-                                while ($row = mysqli_fetch_array($sqlquery)) {
-                                ?>
-                                    <tr>
-                                        <td><?php echo $row['email']; ?></td>
-                                        <td><input type="checkbox" class="assign-checkbox" value="<?php echo $row['id']; ?>"></td>
-                                    </tr>
-                                <?php
-                                }
-                                ?>
-                            </tbody>
-                        </table>
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title" id="staticBackdropLabel">Assign Teacher Evaluation</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <form id="teacherForm" method="POST">
+                                        <label class="form-label">Evaluation Form</label>
+                                        <select id="formID" name="formID" class="form-select" aria-label="Default select example">
+                                            <option selected disabled>Choose</option>
+                                            <?php
+                                                $sqlquery = mysqli_query($con, "SELECT * FROM tbl_evaluation_form");
+                                                while($row = mysqli_fetch_array($sqlquery)) {
+                                            ?>
+                                                <option value="<?php echo $row['id']; ?>"><?php echo $row['form_description']; ?></option>
+                                            <?php
+                                                }
+                                            ?>
+                                        </select>
+                                </div>
+                                <div class="col-md-8">
+                                    <table id="teacherTable" class="table table-striped table-hover" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                            <input type="checkbox" id="checkAllTeachers"><span>Check All</span>
+                                                &nbsp;
+                                                <th>Email</th>
+                                                <th>Assign</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $sqlquery = mysqli_query($con, "SELECT * FROM user WHERE type='teacher'");
+                                            while ($row = mysqli_fetch_array($sqlquery)) {
+                                            ?>
+                                                <tr>
+                                                    <td><?php echo $row['email']; ?></td>
+                                                    <td><input type="checkbox" class="assign-checkbox" value="<?php echo $row['id']; ?>"></td>
+                                                </tr>
+                                            <?php
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button id="assignTeachersBtn" class="btn btn-primary" name="save_changes">Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button id="assignTeachersBtn" class="btn btn-primary" name="save_changes">Submit</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 

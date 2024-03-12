@@ -1,22 +1,31 @@
 <?php
-// Include your database connection file
-include "../connect.php";
+// fetch_students.php
 
-// Fetch all students from the user table
-$query = "SELECT * FROM user WHERE role = 'student'";
-$result = mysqli_query($con, $query);
+// Include necessary files and initialize database connection
+include("../connect.php");
 
-// Initialize an array to store student data
-$students = array();
+if(isset($_POST['studentClassesID'])) {
+    $studentClassesID = $_POST['studentClassesID'];
 
-// Fetch student data and add it to the array
-while ($row = mysqli_fetch_assoc($result)) {
-    $students[] = $row;
+    // Prepare SQL statement to fetch student details from tbl_student_class and user tables
+    $sql = "SELECT tbl_student_class.student_id, user.`user-id`, user.id ,user.email, user.department FROM tbl_student_class JOIN user ON tbl_student_class.student_id = user.id WHERE tbl_student_class.class_id = ?";
+    $stmt = $con->prepare($sql);
+    $stmt->bind_param("i", $studentClassesID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Fetch the result into an associative array
+    $students = [];
+    while ($row = $result->fetch_assoc()) {
+        $students[] = $row;
+    }
+
+    // Close the prepared statement
+    $stmt->close();
+
+    // Return the result as JSON
+    echo json_encode($students);
+} else {
+    echo "Error: Class ID not provided";
 }
-
-// Close the database connection
-mysqli_close($con);
-
-// Return the student data as JSON
-echo json_encode($students);
 ?>
