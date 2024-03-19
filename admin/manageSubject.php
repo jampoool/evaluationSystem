@@ -123,9 +123,9 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                             <h5>
                                 <small class="text-muted p-5">Manage Subject</small>
                             </h5>
-        <div id="page-content" class="col-md-12 px-5 py-1" >
-            <div class="row">
-                   <div class="shadow p-3 mb-5 bg-body rounded ">
+                    <div id="page-content" class="col-md-12 px-5 py-1" >
+                        <div class="row">
+                            <div class="shadow p-3 mb-5 bg-body rounded ">
 
                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -137,14 +137,16 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                 <div class="modal-body">
                                     <div class="row justify-content-center">
                                         <div class="col-md-6">
-                                            <form id="add_subject" class="row g-3" name="add_subject" method="POST">
+                                            <form id="add_subject" class="row g-3 needs-validation" name="add_subject" method="POST" novalidate>
                                                 <div class="col-12">
-                                                    <label for="add_code" class="form-label">Subject Code</label>
-                                                    <input type="text" class="form-control" id="add_code" name="add_code">
+                                                    <label for="add_code" class="form-label">Subject Code <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" id="add_code" name="add_code" required>
+                                                    <div class="invalid-feedback">Please provide a subject code.</div>
                                                 </div>
                                                 <div class="col-12">
-                                                    <label for="add_name" class="form-label">Subject Name</label>
-                                                    <input type="text" class="form-control" id="add_name" name="add_name">
+                                                    <label for="add_name" class="form-label">Subject Name <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" id="add_name" name="add_name" required>
+                                                    <div class="invalid-feedback">Please provide a subject name.</div>
                                                 </div>
                                             </form>
                                         </div>
@@ -169,24 +171,25 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                <div class="form-element">
-                                                            <form class="row g-3" method="POST">
-                                                                <input type="hidden" id="subject_id" name="subject_id">
-                                                                <div class="col-7">
-                                                                    <label class="form-label">Subject Code</label>
-                                                                    <input type="text" class="form-control" id="update_code" name="update_code">
-                                                                </div>
-                                                                <div class="col-7">
-                                                                    <label class="form-label">Subject Name</label>
-                                                                    <input type="text" class="form-control" id="update_name" name="update_name">
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                                                    </button>
-                                                                    <button id="updateBtn" class="btn btn-primary" name="update">Submit</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
+                                                    <div class="form-element">
+                                                        <form class="row g-3 needs-validation" method="POST" novalidate>
+                                                            <input type="hidden" id="subject_id" name="subject_id">
+                                                            <div class="col-7">
+                                                                <label class="form-label" for="update_code">Subject Code <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" id="update_code" name="update_code" required>
+                                                                <div class="invalid-feedback">Please provide a subject code.</div>
+                                                            </div>
+                                                            <div class="col-7">
+                                                                <label class="form-label" for="update_name">Subject Name <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" id="update_name" name="update_name" required>
+                                                                <div class="invalid-feedback">Please provide a subject name.</div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button id="updateBtn" class="btn btn-primary" name="update">Submit</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -283,79 +286,122 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                 });
             });
             $('#updateBtn').click(function (event) {
-                event.preventDefault();
-                var subjectID = $('#subject_id').val();
-                var updateCode = $('#update_code').val();
-                var updateName = $('#update_name').val();
+                    event.preventDefault();
 
-                $.ajax({
-                    type: 'POST',
-                    url: 'update_subject.php',
-                    data: {
-                        updateBtn: true,
-                        subjectID: subjectID,
-                        updateCode: updateCode,
-                        updateName: updateName
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        if (response.status === 'success') {
-                            // Use SweetAlert for a user-friendly notification
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success!',
-                                text: 'Subject updated successfully',
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(function () {
-                                $('#editModal').modal('hide');
-                                location.reload(); // You might want to handle this part based on your needs
-                            });
-                        } else {
-                            // Display an error alert if the update was not successful
-                            alert('Error updating subject: ' + response.message);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                        // Display an error alert if an error occurs during the AJAX request
-                        alert('An error occurred while updating subject. Please try again.');
+                    // Get input values
+                    var subjectID = $('#subject_id').val();
+                    var updateCode = $('#update_code').val();
+                    var updateName = $('#update_name').val();
+
+                    // Remove existing invalid feedback
+                    $('#update_code, #update_name').removeClass('is-invalid');
+
+                    // Check if any required field is empty
+                    if (!updateCode || !updateName) {
+                        // Add is-invalid class to empty fields to outline them in red
+                        if (!updateCode) $('#update_code').addClass('is-invalid');
+                        if (!updateName) $('#update_name').addClass('is-invalid');
+                        
+                        // Display error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Please fill in all required fields.',
+                        });
+                        return; // Exit function if any required field is empty
                     }
-                });
-            });
-                $('#add_subject').submit(function (event) {
-                        event.preventDefault();
 
-                        var addCode = $('#add_code').val();
-                        var addName = $('#add_name').val();
-
-                        $.ajax({
-                            type: 'POST',
-                            url: 'save_subject.php',
-                            data: {
-                                addCode: addCode,
-                                addName: addName
-                            },
-                            dataType: 'json',
-                            success: function (response) {
+                    // Proceed with AJAX request if all fields are filled
+                    $.ajax({
+                        type: 'POST',
+                        url: 'update_subject.php',
+                        data: {
+                            updateBtn: true,
+                            subjectID: subjectID,
+                            updateCode: updateCode,
+                            updateName: updateName
+                        },
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.status === 'success') {
+                                // Use SweetAlert for a user-friendly notification
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Success!',
-                                    text: response.message,
+                                    text: 'Subject updated successfully',
                                     showConfirmButton: false,
                                     timer: 1500
                                 }).then(function () {
-                                    $('#staticBackdrop').modal('hide');
-                                    $('.modal-backdrop').remove();
-                                    location.reload();
+                                    $('#editModal').modal('hide');
+                                    location.reload(); // You might want to handle this part based on your needs
                                 });
-                            },
-                            error: function (xhr, status, error) {
-                                console.error(xhr.responseText);
-                                alert('An error occurred while saving the data. Please try again.');
+                            } else {
+                                // Display an error alert if the update was not successful
+                                alert('Error updating subject: ' + response.message);
                             }
-                        });
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                            // Display an error alert if an error occurs during the AJAX request
+                            alert('An error occurred while updating subject. Please try again.');
+                        }
                     });
+                });
+
+            $('#add_subject').submit(function (event) {
+                    event.preventDefault();
+
+                    // Get input values
+                    var addCode = $('#add_code').val();
+                    var addName = $('#add_name').val();
+
+                    // Remove existing invalid feedback
+                    $('#add_code, #add_name').removeClass('is-invalid');
+                    
+                    // Check if any required field is empty
+                    if (!addCode || !addName) {
+                        // Add is-invalid class to empty fields to outline them in red
+                        if (!addCode) $('#add_code').addClass('is-invalid');
+                        if (!addName) $('#add_name').addClass('is-invalid');
+                        
+                        // Display error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Please fill in all required fields.',
+                        });
+                        return; // Exit function if any required field is empty
+                    }
+                    
+                    // Proceed with AJAX request if all fields are filled
+                    $.ajax({
+                        type: 'POST',
+                        url: 'save_subject.php',
+                        data: {
+                            addCode: addCode,
+                            addName: addName
+                        },
+                        dataType: 'json',
+                        success: function (response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(function () {
+                                $('#staticBackdrop').modal('hide');
+                                $('.modal-backdrop').remove();
+                                location.reload();
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                            alert('An error occurred while saving the data. Please try again.');
+                        }
+                    });
+                });
+
 
                     $('.delete-btn').click(function() {
                             var subjectID = $(this).data('subject-id');

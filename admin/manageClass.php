@@ -150,12 +150,16 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                 </div>
                                 <div class="classTableContainer">
                                 <div class="col-6">
-                                    <label for="add_code" class="form-label">Class Code</label>
-                                    <input type="text" class="form-control" id="add_code" name="add_code">
+                                    <label for="add_code" class="form-label">Class Code <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="add_code" name="add_code" required>
+                                    <div class="invalid-feedback">Please provide a Class Code.</div>
+
                                 </div>
                                 <div class="col-6">
-                                        <label for="add_name" class="form-label">Class Name</label>
-                                        <input type="text" class="form-control" id="add_name" name="add_name">
+                                        <label for="add_name" class="form-label">Class Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="add_name" name="add_name" required>
+                                        <div class="invalid-feedback">Please provide a Class Name.</div>
+
                                 </div>
                                 </div>
                                 <!-- Table for Teachers -->
@@ -255,12 +259,14 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                     <div class="updateClassTableContainer">
                                         <div class="col-6">
                                             <input type="text" hidden id="classID">
-                                            <label for="edit_code" class="form-label">Class Code</label>
-                                            <input type="text" class="form-control" id="edit_code" name="edit_code">
+                                            <label for="edit_code" class="form-label">Class Code <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="edit_code" name="edit_code" required>
+                                            <div class="invalid-feedback">Please provide a Class Code.</div>
                                         </div>
                                         <div class="col-6">
-                                            <label for="edit_name" class="form-label">Class Name</label>
-                                            <input type="text" class="form-control" id="edit_name" name="edit_name">
+                                            <label for="edit_name" class="form-label">Class Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="edit_name" name="edit_name" required>
+                                            <div class="invalid-feedback">Please provide a Class Name.</div>
                                         </div>
                                     </div>
                                     <!-- Table for Teachers -->
@@ -523,9 +529,28 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
 
                 // AJAX to save data when the Submit button is clicked
                 $('#saveChangesBtn').click(function () {
-                    // Get data from input fields
+
                     var classCode = $('#add_code').val();
                     var className = $('#add_name').val();
+
+                    if (!classCode || !className) {
+                        // Add red outline to empty fields
+                        if (!classCode) $('#add_code').addClass('is-invalid');
+                        if (!className) $('#add_name').addClass('is-invalid');
+
+                        // Display SweetAlert error message
+                        Swal.fire({
+                            title: "Error",
+                            text: "Please fill in all required fields.",
+                            icon: "error"
+                        });
+                        return; // Exit function if any required field is empty
+                    }
+
+                    // Reset invalid feedback if fields are filled
+                    $('#add_code').removeClass('is-invalid');
+                    $('#add_name').removeClass('is-invalid');
+
 
                     // Check if both a teacher and a subject are selected
                     if (assignedTeacherId && assignedSubjectId) {
@@ -673,6 +698,24 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                     var className = $('#edit_name').val();
                     var instructorID = $('#updateTeacherID').val(); // Assuming you have an input field with the ID 'instructorID'
                     var subjectID = $('#updateSubjectID').val(); // Assuming you have an input field with the ID 'subjectID'
+
+                    if (!classCode || !className) {
+                        // Add red outline to empty fields
+                        if (!classCode) $('#edit_code').addClass('is-invalid');
+                        if (!className) $('#edit_name').addClass('is-invalid');
+
+                        // Display SweetAlert error message
+                        Swal.fire({
+                            title: "Error",
+                            text: "Please fill in all required fields.",
+                            icon: "error"
+                        });
+                        return; // Exit function if any required field is empty
+                    }
+
+                    // Reset invalid feedback if fields are filled
+                    $('#add_code').removeClass('is-invalid');
+                    $('#add_name').removeClass('is-invalid');
 
                     // Prepare the data to be sent to the server for updating
                     var updatedData = {

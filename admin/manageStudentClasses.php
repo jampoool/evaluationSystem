@@ -242,6 +242,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                                             <th>Student ID</th>
                                                             <th>Email</th>
                                                             <th>Department</th>
+                                                            <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -340,7 +341,6 @@ $(document).ready(function () {
         data: { studentClassesID: studentClassesID },
         dataType: 'json',
         success: function (response) {
-
             response.forEach(function(student) {
                 // Convert department ID to department name
                 student.department = (student.department == 1) ? 'Basic Education' : 'Higher Education';
@@ -351,7 +351,13 @@ $(document).ready(function () {
                 columns: [
                     { data: 'user-id' },
                     { data: 'email' },
-                    { data: 'department' }
+                    { data: 'department' },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button class="btn btn-danger remove-btn" data-studentclass-id="' + data['classID'] + '">Remove</button>';
+                        }
+                    }
                 ]
             });
         },
@@ -361,6 +367,62 @@ $(document).ready(function () {
         }
     });
 });
+
+        $(document).on('click', '.remove-btn', function (event) {
+            event.preventDefault();
+            var studentClassID = $(this).data('studentclass-id');
+            console.log(studentClassID);
+            Swal.fire({
+                title: 'Are you sure to remove this?',
+                text: 'You will not be able to recover this category!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, remove it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'remove_students.php',
+                        data: {
+                            studentClassID: studentClassID
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            console.log(response);
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Deleted!',
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: response.message
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: 'An error occurred while deleting the Class. Please try again.'
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+
     $("#assignStudentsBtn").click(function (event) {
         event.preventDefault();
 

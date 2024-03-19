@@ -32,7 +32,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    <style>
-   
+        .text-danger {
+            color: red;
+            font-size: 0.875rem;
+        }
    </style>
 
 </head>
@@ -125,9 +128,6 @@
             <div class="container-fluid shadow p-3 mb-5 bg-body rounded ">
         <div class="d-grid gap-2 col-2 mx-2">
             <h5>
-                <?php
-                    //  var_dump($_SESSION);
-                ?>
                 <p class="font-monospace "  style=" font-size: 20px !important;">Manage User</p>
             </h5>
         </div>
@@ -137,56 +137,72 @@
             <i class="fa-solid fa-plus"></i>
             Add User
             </button>
+
             <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-element">
-                    <form class="row g-3" id="userForm">
-                        <div class="col-5">
-                            <label for="inputID4" class="form-label">Guidance ID</label>
-                            <input type="text" class="form-control" id="inputID4" name="user_id">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">User Registration</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="col-md-6">
-                            <label for="inputEmail4" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="inputEmail4" name="email">
+                        <div class="modal-body">
+                            <div class="form-element">
+                                <form class="row g-3" id="userForm">
+                                    <div class="col-12">
+                                        <label for="inputID4" class="form-label">User ID</label>
+                                        <input type="text" class="form-control" id="inputID4" name="user_id" title="User ID" required>
+                                        <div class="invalid-feedback">Please provide a User ID.</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="inputFirstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="inputFirstName" name="firstname" title="First Name" required>
+                                        <div class="invalid-feedback">Please provide a First Name.</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="inputLastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="inputLastName" name="lastname" title="Last Name" required>
+                                        <div class="invalid-feedback">Please provide a Last Name.</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="inputEmail4" class="form-label">Email <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" id="inputEmail4" name="email" title="Email Address" required>
+                                        <div class="invalid-feedback">Please provide a Email.</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="inputPassword4" class="form-label">Password <span class="text-danger">*</span></label>
+                                        <input type="password" class="form-control" id="inputPassword4" name="password" required>
+                                        <div class="invalid-feedback">Please provide Password.</div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="inputType" class="form-label">Type <span class="text-danger">*</span></label>
+                                        <select id="inputType" class="form-select" name="type" required>
+                                            <option selected disabled>Choose...</option>
+                                            <option value="admin">Admin</option>
+                                            <option value="guidance">Guidance</option>
+                                            <option value="student">Student</option>
+                                            <option value="teacher">Teacher</option>
+                                        </select>
+                                        <div class="invalid-feedback">Please provide a Type of the User.</div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="inputDepartment" class="form-label">Department <span class="text-danger">*</span></label>
+                                        <select id="inputDepartment" class="form-select" name="department" required>
+                                            <option selected disabled>Choose...</option>
+                                            <option value="1">Basic Education Department</option>
+                                            <option value="2">Higher Education Department</option>
+                                        </select>
+                                        <div class="invalid-feedback">Please provide a Department of the User.</div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button id="saveChangesBtn" class="btn btn-primary" name="save_changes">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="inputPassword4" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="inputPassword4" name="password">
-                        </div>
-                        <div class="col-12">
-                            <label for="inputType" class="form-label">Type</label>
-                            <select id="inputType" class="form-select" name="type">
-                                <option selected>Choose...</option>
-                                <option value="admin">Admin</option>
-                                <option value="guidance">Guidance</option>
-                                <option value="student">Student</option>
-                                <option value="teacher">Teacher</option>
-                            </select>
-                        </div>
-                        <div class="col-12">
-                            <label for="inputDepartment" class="form-label">Department</label>
-                            <select id="inputDepartment" class="form-select" name="department">
-                                <option selected>Choose...</option>
-                                <option value="1">Basic Education Department</option>
-                                <option value="2">Higher Education Department</option>
-                            </select>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button id="saveChangesBtn" class="btn btn-primary" name="save_changes">Submit</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
         <div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -211,11 +227,11 @@
                     <th style="display:none;">No.</th>
                     <th>No.</th>
                     <th>User ID</th>
+                    <th>Name</th>
                     <th>Email</th>
                     <th>Type</th>
                     <th>Department</th>
                     <th>Date Created</th>
-                    <th>Date Updated</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -229,12 +245,12 @@
                      <td><?php echo $i++; ?></td>
                     <td style="display:none;"><?php echo $rows['id']; ?></td>
                     <td><?php echo $rows['user-id']; ?></td>
+                    <td><?php echo $rows['firstname'].' '.$rows['lastname'] ; ?></td>
                     <td><?php echo $rows['email']; ?></td>
                     <td><?php echo $rows['type']; ?></td>
                     <td><?php echo ($rows['department'] == 1) ? 'Basic Education Department' : 'Higher Education
                         Department'; ?></td>
                     <td><?php echo $rows['date_created']; ?></td>
-                    <td><?php echo $rows['date_updated']; ?></td>
                     <td>
                     <div class="d-inline d-lg-none">
                             <button class="btn btn-primary btn-sm" id="ellipsisButton">
