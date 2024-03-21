@@ -1,7 +1,6 @@
 <?php
     include "../connect.php";
     session_start();
-    var_dump($_SESSION);
 if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'student') {
     header("Location: unauthorized_access.php");
     exit();
@@ -11,7 +10,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'student') {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sidebar With Bootstrap</title>
@@ -21,77 +20,39 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'student') {
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
     <!-- Your custom CSS -->
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="../admin/css/dashboard.css">
     
-    
-     <!-- DataTables CSS -->
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-         <!-- DataTables JS -->
-    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    
      <!-- Font Awesome -->
      <script src="https://kit.fontawesome.com/658ff99b54.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-   
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.js"></script>
+    <!-- SweetAlert library from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+   
 </head>
+
+<style>
+    body {
+        background:#FAFAFA;
+    }
+</style>
 
 <body>
     <div class="wrapper">
-        <aside id="sidebar">
-            <div class="d-flex">
-                <button class="toggle-btn" type="button">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-                <div class="sidebar-logo">
-                    <a href="#">Faculty Evaluation System</a>
-                </div>
-            </div>
-            <ul class="sidebar-nav">
-                <li class="sidebar-item ">
-                    <a href="dashboard.php" class="sidebar-link active">
-                        <i class="fa-solid fa-table-cells-large"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="profile.php" class="sidebar-link">
-                        <i class="fa-solid fa-user"></i>
-                        <span>Profile</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="manageUser.php" class="sidebar-link">
-                        <i class="fa-solid fa-user-plus"></i>
-                        <span>Manage User</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item">
-                    <a href="manageClass.php" class="sidebar-link">
-                        <i class="fa-solid fa-house-user"></i>
-                        <span>Class</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="manageStudentClasses.php" class="sidebar-link">
-                        <i class="fa-solid fa-circle-plus"></i>
-                        <span>Student Classes</span>
-                    </a>
-                </li>
-            </ul>
-            <div class="sidebar-footer">
-                <a href="../logout.php" class="sidebar-link">
-                    <i class="lni lni-exit"></i>
-                    <span>Logout</span>
-                </a>
-            </div>
-        </aside>
-    
         <div class="main">
-            <nav class="navbar navbar-expand px-4 py-3 shadow p-3 mb-5 bg-body roundedsticky-top">
+            <nav class="navbar navbar-expand px-2 py-2 shadow p-3 mb-5 bg-body rounded sticky-top">
                 <form action="#" class="d-none d-sm-inline-block">
                 </form>
                 <div class="navbar-collapse">
@@ -110,20 +71,94 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'student') {
                     </ul>
                 </div>
             </nav>
-            <div id="page-content" class="container-lg" >
-                 <div class="row">
-                       
+            <div class="container-fluid">
+                <div class="row mb-4">
+                    <div class="col">
+                        <div class="card text-white mb-3" style="background-color: #1d216e">
+                            <div class="card-body">
+                                <h5 class="card-title">Welcome, 
+                                    <?php
+                                        
+                                    ?>
+                                </h5>
+                                <p class="card-text">You are logged in as a student.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                <div class="row mb-4">
+                        <?php
+                        // Assuming that $_SESSION['user_id'] is the session variable holding the user ID
+                        $userId = $_SESSION['user_id'];
+                        // Ensure to properly sanitize user input to prevent SQL injection
+                        $userId = mysqli_real_escape_string($con, $userId);
+                        // Fetch classes assigned to the student
+                        $sql = "SELECT sc.*, c.class_name, CONCAT (u.firstname,' ',u.lastname) AS instructor_name, u.id as teacher_id, CONCAT(s.subject_name,' ',s.subject_code) AS subject_name
+                                FROM tbl_student_class sc 
+                                JOIN tbl_class c ON sc.class_id = c.id
+                                JOIN tbl_subject s ON c.id = s.id
+                                JOIN user u ON c.instructor_id = u.id
+                                WHERE sc.student_id = '$userId'
+                                AND EXISTS (SELECT 1 FROM user WHERE id = c.instructor_id)";
+                        $result = mysqli_query($con, $sql);
+                        if ($result) {
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                $className = $row['class_name'];
+                                $teacherName = $row['instructor_name'];
+                                $subjectName= $row['subject_name'];
+                                $teacherID = $row['teacher_id'];
+                                // Display class card
+                                echo "<div class='col-lg-4'>
+                                        <div class='card text-white mb-4' style='background-color: #1d216e'>
+                                            <div class='card-header'>$className</div>
+                                            <div class='card-body'>
+                                                <h5 class='card-title'>Teacher: $teacherName</h5>
+                                                <p class='card-title'>Subject: $subjectName</p>
+                                                <p class='card-text'>Evaluate your teacher here.</p>
+                                                <button onclick='checkEvaluation($teacherID)' class='btn btn-light'>Evaluate</button>
+                                            </div>
+                                        </div>
+                                    </div>";
+                            }
+                        } else {
+                            echo "Error: " . mysqli_error($con);
+                        }
+                        ?>
                 </div>
             </div>
         </div>
-    </div>
-    
-    
 
-    <!-- Your custom scripts -->
-    <script src="script.js"></script>
-    <script>
        
+    <script src="../admin/script.js"></script>
+    <script>
+         function checkEvaluation(teacherID) {
+        // Make AJAX request to check the status of teacher evaluation
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var response = xhr.responseText;
+                    if (response === 'active') {
+                        // If evaluation is active, proceed to evaluationForm.php
+                        window.location.href = 'evaluationForm.php?teacher_id=' + teacherID;
+                    } else {
+                        // If evaluation is not active, show a SweetAlert message
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Evaluation Closed',
+                                text: 'Evaluation for this teacher is closed.'
+                            });
+                    }
+                } else {
+                    // Handle error
+                    console.error('Error:', xhr.statusText);
+                }
+            }
+        };
+        xhr.open('GET', 'check_evaluation.php?teacher_id=' + teacherID, true);
+        xhr.send();
+    }
     </script>
 </body>
 

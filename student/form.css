@@ -1,0 +1,61 @@
+/* Table Styling */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border: 1px solid #dee2e6;
+}
+
+.table th {
+    text-align: center;
+}
+
+.table thead th {
+    background-color: #343a40;
+    color: #fff;
+    border-color: #454d55;
+}
+
+.table tbody th {
+    background-color: #f8f9fa;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+/* Form Matrix Table */
+.form-matrix-table th,
+.form-matrix-table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.form-matrix-table th {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.form-matrix-table tbody th {
+    background-color: #f8f9fa;
+    font-weight: normal;
+}
+
+.form-matrix-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.form-matrix-table tbody tr:hover {
+    background-color: #e9ecef;
+}
