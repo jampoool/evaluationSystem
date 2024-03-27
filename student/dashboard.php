@@ -58,18 +58,19 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'student') {
                 <div class="navbar-collapse">
                     <label for="">Faculty Evaluation System</label>
                 </div>
-                <div class="navbar-collapse collapse">
+               <div class="navbar-collapse collapse">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item dropdown">
-                            <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
-                                <img src="../img/cartoon-man-leaving-review.jpg" class="avatar img-fluid" alt="">
+                            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="../img/cartoon-man-leaving-review.jpg" class="avatar img-fluid" alt="Avatar">
                             </a>
-                            <div class="dropdown-menu dropdown-menu-end rounded">
-                            <i class="fa-solid fa-circle-plus"></i>
-                            </div>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="../logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
+
             </nav>
             <div class="container-fluid">
                 <div class="row mb-4">
@@ -110,16 +111,17 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'student') {
                                 $teacherID = $row['teacher_id'];
                                 // Display class card
                                 echo "<div class='col-lg-4'>
-                                        <div class='card text-white mb-4' style='background-color: #1d216e'>
-                                            <div class='card-header'>$className</div>
-                                            <div class='card-body'>
-                                                <h5 class='card-title'>Teacher: $teacherName</h5>
-                                                <p class='card-title'>Subject: $subjectName</p>
-                                                <p class='card-text'>Evaluate your teacher here.</p>
-                                                <button onclick='checkEvaluation($teacherID)' class='btn btn-light'>Evaluate</button>
-                                            </div>
+                                    <div class='card text-white mb-4' style='background-color: #1d216e'>
+                                        <div class='card-header'>$className</div>
+                                        <div class='card-body'>
+                                            <h5 class='card-title'>Teacher: $teacherName</h5>
+                                            <p class='card-title'>Subject: $subjectName</p>
+                                            <p class='card-text'>Evaluate your teacher here.</p>
+                                            <button onclick=\"checkEvaluation('$teacherID')\" class=\"btn btn-light\">Evaluate</button>
                                         </div>
-                                    </div>";
+                                    </div>
+                                </div>";
+                        
                             }
                         } else {
                             echo "Error: " . mysqli_error($con);
@@ -140,21 +142,29 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'student') {
                 if (xhr.status === 200) {
                     var response = xhr.responseText;
                     if (response === 'active') {
-                        // If evaluation is active, proceed to evaluationForm.php
+                    // If evaluation is active, proceed to evaluationForm.php
                         window.location.href = 'evaluationForm.php?teacher_id=' + teacherID;
+                    } else if (response === 'evaluated') {
+                        // If the student has already evaluated the teacher, show a SweetAlert message
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Evaluation Already Completed',
+                            text: 'You have already evaluated this teacher.'
+                        });
                     } else {
                         // If evaluation is not active, show a SweetAlert message
-                            Swal.fire({
-                                icon: 'warning',
-                                title: 'Evaluation Closed',
-                                text: 'Evaluation for this teacher is closed.'
-                            });
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Evaluation Closed',
+                            text: 'Evaluation for this teacher is closed.'
+                        });
                     }
-                } else {
-                    // Handle error
-                    console.error('Error:', xhr.statusText);
+                    
+                    } else {
+                        // Handle error
+                        console.error('Error:', xhr.statusText);
+                    }
                 }
-            }
         };
         xhr.open('GET', 'check_evaluation.php?teacher_id=' + teacherID, true);
         xhr.send();

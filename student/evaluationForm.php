@@ -5,8 +5,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'student') {
     header("Location: unauthorized_access.php");
     exit();
 }
-
-
+  
 ?>
 
 <!DOCTYPE html>
@@ -40,6 +39,8 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'student') {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
      <!-- Custom CSS -->
      <link rel="stylesheet" href="form.css">
 
@@ -47,7 +48,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'student') {
 
 <body>
     <div class="wrapper">
-    
+       
         <div class="main">
             <!-- Navbar -->
             <nav class="navbar navbar-expand-lg navbar-light bg-light px-4 py-3 shadow p-3 bg-body rounded sticky-top">
@@ -76,8 +77,11 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'student') {
 
             <div class="col-md-12 px-5 py-1 mt-5">
                 <div class="row">
-                  
                     <div class="col-md-12">
+                    <div class="container mt-3 mb-4">
+                        <a href="dashboard.php" class="btn btn-secondary">Back</a>
+                    </div>
+                    <form id="evaluationForm">
                         <div class="form-group">
                             <label for="ratingMatrix">Evaluation Rating:</label>
                             <div class="table-responsive">
@@ -140,21 +144,75 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'student') {
                                         } else {
                                             echo "<tr><td colspan='6'>No questions found.</td></tr>";
                                         }
-
+                                     
                                         // Close database connection
                                         $con->close();
                                         ?>
                                     </tbody>
                                 </table>
+                                <button type="button" id="submitButton" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
+                    </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Your custom scripts -->
-    <script src="../admin/script.js"></script>
+    <script>
+          $(document).ready(function() {
+            // Add click event listener to the submit button
+            $("#submitButton").click(function() {
+                // Get the teacher ID from the URL
+                var teacherID = getParameterByName('teacher_id'); // Function to extract URL parameters
+
+                // Serialize the form data
+                var formData = $("#evaluationForm").serialize();
+
+                // Send AJAX request
+                $.ajax({
+                    url: "process_responses.php",
+                    type: "POST",
+                    data: {
+                        formData: formData,
+                        teacherID: teacherID
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        // Display success message using SweetAlert
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Responses inserted successfully",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                            onClose: function() {
+                                // Redirect to dashboard.php
+                                window.location.href = "dashboard.php";
+                            }
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error
+                        console.error(xhr.responseText);
+                        alert("An error occurred while processing the responses.");
+                    }
+                });
+            });
+        });
+
+
+      // Function to extract URL parameters
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+        </script> 
+           <script src="../admin/script.js"></script>
     <script>
        new DataTable('#example');
     </script>

@@ -151,78 +151,9 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                     </ul>
                 </div>
             </nav>
-          
-                <div class="row px-5 py-5 ">
-                <div class="card">
-                    <div style="display: flex; justify-content: space-between;">
-                        <span>1 = Disagree</span>
-                        <span>2 = Slightly Disagree</span>
-                        <span>3 = Moderate</span>
-                        <span>4 = Agree</span>
-                        <span>5 = Strongly Agree</span>
-                    </div>
-                </div>
-                <form style="" id="teacherForm" method="POST" action="javascript:void(0)" accept-charset="utf-8" enctype="multipart/form-data"> 
-    <?php
-        $sql = "SELECT Q.id, Q.question, C.category_description 
-                FROM tbl_question Q
-                JOIN tbl_evaluation_form F ON Q.evaluation_form_id = F.id
-                JOIN tbl_category C ON F.category_id = C.id
-                ORDER BY C.category_description"; // Order by category for grouping
-
-        $result = $con->query($sql);
-        echo'<div class="card shadow mt-3">';
-        echo'<div class="card-body mt-3">';
-        if ($result->num_rows > 0) {
-            $currentCategory = null;
-            $j=1;
-            while ($row = $result->fetch_assoc()) {
-                if ($currentCategory !== $row["category_description"]) {
-                    // If category changed, display new category header
-                    $currentCategory = $row["category_description"];
-
-                    echo '<div class="row">';
-                        echo '<div class="col">';
-                            echo '<h3>' . $currentCategory . '</h3>';
-                        echo '</div>';  
-                    echo '</div>';
-
-                    echo '<hr>';
-                    // $j=1;
-                }
-                echo '<div class="row">';
-                    echo '<div class="col">';
-                        echo '<label for="">' . $j++ . '. </label> <label for="question_' .$row["id"] . '" class="form-label">' .$row["question"] .' </label>';
-                    echo '</div>'; 
-                echo '</div>';
-                                                
-                echo '<div class="row mb-1">';
-                for ($i = 1; $i <= 5; $i++) {
-                    echo '<div class="col-auto">';
-                        echo '<label class="radio-label btn btn-outline-primary px-2 py-2">';
-                            echo '<input type="radio" name="responses[' . $row["id"] . ']" value="' . $i . '" autocomplete="off">' . $i;
-                        echo '</label>';
-                    echo '</div>';
-                } 
-                echo '</div>';  
-                echo '<hr>';
-            } 
-        } else {
-            echo "0 results";
-        }
-
-        echo'<div class="text-center">';
-        echo'<button type="submit" class="btn btn-primary">Submit</button>';
-        echo'</div>';
-        
-        echo '</div>';
-        echo '</div>';
-    ?>
-</form> 
-
-                </div>
         </div>
-        </div>
+                        
+
     </div>
     
     <!-- Your custom scripts -->
