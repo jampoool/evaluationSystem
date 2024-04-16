@@ -315,12 +315,12 @@ tl-item.active .tl-dot:before {
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
+                <!-- <li class="sidebar-item">
                     <a href="profile.php" class="sidebar-link">
                         <i class="fa-solid fa-user"></i>
                         <span>Profile</span>
                     </a>
-                </li>
+                </li> -->
                 <li class="sidebar-item">
                     <a href="manageUser.php" class="sidebar-link">
                         <i class="fa-solid fa-user-plus"></i>
@@ -345,16 +345,16 @@ tl-item.active .tl-dot:before {
                         <span>Student Classes</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
+                <!-- <li class="sidebar-item">
                     <a href="report.php" class="sidebar-link">
                         <i class="fa-solid fa-circle-plus"></i>
                         <span>Report</span>
                     </a>
-                </li>
+                </li> -->
             </ul>
             <div class="sidebar-footer">
                 <a href="../logout.php" class="sidebar-link">
-                    <i class="lni lni-exit"></i>
+                    <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
                 </a>
             </div>
@@ -382,8 +382,8 @@ tl-item.active .tl-dot:before {
             </nav>
         
             <div class="container">
-                <div class="row shadow-sm p-2 mb-2 bg-white rounded">
-                      <div class="col-md-4 col-xl-3">
+                <div class="col-md-12 px-5 py-1 shadow-sm p-2 mb-2 bg-white rounded row">
+                      <div class="col-md-6 col-xl-3">
                         <div class="card order-card" id="card">
                             <div class="card-block">
                             <h6 class="m-b-20">Total Students</h6>
@@ -405,7 +405,7 @@ tl-item.active .tl-dot:before {
                         </div>
                      </div>
                     
-                    <div class="col-md-4 col-xl-3">
+                    <div class="col-md-6 col-xl-3">
                         <div class="card order-card" id="card">
                             <div class="card-block">
                                 <h6 class="m-b-20">Total Guidance</h6>
@@ -427,7 +427,7 @@ tl-item.active .tl-dot:before {
                         </div>
                     </div>
                     
-                    <div class="col-md-4 col-xl-3">
+                    <div class="col-md-6 col-xl-3">
                         <div class="card order-card" id="card">
                             <div class="card-block">
                                 <h6 class="m-b-20">Total Teacher</h6>
@@ -474,9 +474,9 @@ tl-item.active .tl-dot:before {
           </div>
           
                       <div class="col-md-12 px-5 py-1">
-                      <p class="col-md-4">Recent Added Users</p>
+                      <p class="col-md-12">Recent Added Users</p>
                                   <div class="row">
-                                  <div class="col-sm-7 shadow p-3 mb-5 bg-body rounded">
+                                  <div class="col-sm-12 shadow p-3 mb-5 bg-body rounded">
                                       <div class="table-responsive">
                                       <table id="example" class="table table-hover" style="width:100%; font-size: 12px !important;">
                                               <thead class="bg-primary text-white">
@@ -524,13 +524,6 @@ tl-item.active .tl-dot:before {
                                           </table>
                                       </div>
                                   </div>
-
-                                  <div class="col-sm-5 shadow p-3 mb-5 bg-body rounded">
-                                  <p>Basic Timeline</p>
-                                        <div class="timeline p-4 block mb-4" id="timelineContainer">
-                                            
-                                        </div>
-                                    </div>
 
     <!-- Your custom scripts -->
     <script src="script.js"></script>

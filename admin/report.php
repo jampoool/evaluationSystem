@@ -91,12 +91,12 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
+                <!-- <li class="sidebar-item">
                     <a href="profile.php" class="sidebar-link">
                         <i class="fa-solid fa-user"></i>
                         <span>Profile</span>
                     </a>
-                </li>
+                </li> -->
                 <li class="sidebar-item">
                     <a href="manageUser.php" class="sidebar-link">
                         <i class="fa-solid fa-user-plus"></i>

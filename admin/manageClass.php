@@ -61,12 +61,12 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
+                <!-- <li class="sidebar-item">
                     <a href="profile.php" class="sidebar-link">
                         <i class="fa-solid fa-user"></i>
                         <span>Profile</span>
                     </a>
-                </li>
+                </li> -->
                 <li class="sidebar-item">
                     <a href="manageUser.php" class="sidebar-link">
                         <i class="fa-solid fa-user-plus"></i>
@@ -91,16 +91,16 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                         <span>Student Classes</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
+                <!-- <li class="sidebar-item">
                     <a href="report.php" class="sidebar-link">
                         <i class="fa-solid fa-circle-plus"></i>
                         <span>Report</span>
                     </a>
-                </li>
+                </li> -->
             </ul>
             <div class="sidebar-footer">
                 <a href="../logout.php" class="sidebar-link">
-                    <i class="lni lni-exit"></i>
+                <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
                 </a>
             </div>

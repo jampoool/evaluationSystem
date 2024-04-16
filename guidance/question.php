@@ -47,7 +47,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
 
 <body>
     <div class="wrapper">
-    <aside id="sidebar">
+    <aside id="sidebar" class="expand">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa-solid fa-bars"></i>
@@ -130,7 +130,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
             </ul>
             <div class="sidebar-footer">
                 <a href="../logout.php" class="sidebar-link">
-                    <i class="lni lni-exit"></i>
+                <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
                 </a>
             </div>

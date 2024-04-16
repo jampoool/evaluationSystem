@@ -159,7 +159,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
 
 <body>
     <div class="wrapper">
-    <aside id="sidebar">
+    <aside id="sidebar" class="expand">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa-solid fa-bars"></i>
@@ -202,7 +202,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                 </div>
             </div>
             <ul class="sidebar-nav">
-                <li class="sidebar-item ">
+                <li class="sidebar-item" >
                     <a href="dashboard.php" class="sidebar-link">
                         <i class="fa-solid fa-table-cells-large"></i>
                         <span>Dashboard</span>
@@ -242,7 +242,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
             </ul>
             <div class="sidebar-footer">
                 <a href="../logout.php" class="sidebar-link">
-                    <i class="lni lni-exit"></i>
+                <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
                 </a>
             </div>
@@ -358,12 +358,93 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                         </div>
                     </div>
                 </div>
-            </div>
 
+                  <!-- Begin Page Content -->
+        <div class="container-fluid">
 
+            <!-- DataTales Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Student Respondent</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                    <?php
+                        // Execute the SQL query
+                            $sql = "SELECT
+                            GROUP_CONCAT(DISTINCT u.firstname ORDER BY u.firstname ASC) AS student_firstname,
+                            GROUP_CONCAT(DISTINCT u.lastname ORDER BY u.lastname ASC) AS student_lastname,
+                            GROUP_CONCAT(DISTINCT u2.firstname ORDER BY u2.firstname ASC) AS instructor_firstname,
+                            GROUP_CONCAT(DISTINCT u2.lastname ORDER BY u2.lastname ASC) AS instructor_lastname,
+                            c.class_code
+                            FROM
+                            user u
+                            JOIN
+                            tbl_responses tr ON u.id = tr.student_id
+                            JOIN
+                            tbl_student_class sc ON u.id = sc.student_id
+                            JOIN
+                            tbl_class c ON sc.class_id = c.id
+                            JOIN
+                            user u2 ON c.instructor_id = u2.id
+                            WHERE
+                            u.type = 'student'
+                            GROUP BY
+                            c.class_code";
+
+                            $result = $con->query($sql);
+
+                            // Generate the HTML table
+                            if ($result->num_rows > 0) {
+                            echo '<table id="assignedTeacher" class="table table-bordered" id="dataTable" width="100%" cellspacing="0">';
+                            echo '<thead>';
+                            echo '<tr>';
+                            echo '<th>Student Name</th>';
+                            echo '<th>Instructor Name</th>';
+                            echo '<th>Class Code</th>';
+                            echo '</tr>';
+                            echo '</thead>';
+                            echo '<tbody>';
+
+                            // Output data of each row
+                            while($row = $result->fetch_assoc()) {
+                            echo '<tr>';
+                            echo '<td>' . $row["student_firstname"] . ' ' . $row["student_lastname"] . '</td>';
+                            echo '<td>' . $row["instructor_firstname"] . ' ' . $row["instructor_lastname"] . '</td>';
+                            echo '<td>' . $row["class_code"] . '</td>';
+                            echo '</tr>';
+                            }
+
+                            echo '</tbody>';
+                            echo '</table>';
+                            } else {
+                            echo "0 results";
+                            }
+
+                            // Close conection
+                            $con->close();
+                            ?>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+    <!-- /.container-fluid -->
+
+                </div>
+  <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Evaluation System 2024</span>
+                    </div>
+                </div>
+            </footer>
     <script src="../admin/script.js"></script>
+    
+
     <script>
-       
+       new DataTable('#assignedTeacher');
     </script>
 </body>
 
