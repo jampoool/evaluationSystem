@@ -37,7 +37,18 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.js"></script>
+    
+    <style>
+    .custom-gutter {
+        margin-right: -15px;
+        margin-left: -15px;
+    }
 
+    .custom-gutter > .col, .custom-gutter > [class*="col-"] {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+</style>
 </head>
 
 <body>
@@ -151,16 +162,57 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                     </ul>
                 </div>
             </nav>
-        </div>
-                        
+            <?php
+                    // Assuming you have already established a database connection
 
-    </div>
-    
+                    // SQL query to select all teachers who have been rated
+                    $sql = "SELECT user.firstname, user.lastname, user.email, AVG(tbl_responses.rating) AS avg_rating
+                            FROM tbl_responses
+                            INNER JOIN user ON tbl_responses.teacher_id = user.id
+                            WHERE user.type = 'teacher'
+                            GROUP BY tbl_responses.teacher_id";
+
+                    $result = mysqli_query($con, $sql);
+
+                    if (mysqli_num_rows($result) > 0) {
+                        ?>
+                         <div class="container">
+                          <div class="row row-cols-1 row-cols-md-2 g-2 mt-4">
+                        <?php
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            ?>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $row['firstname'].' '.$row['lastname']; ?></h5>
+                                        <p class="card-text"><?php echo $row['email']; ?></p>
+                                        <p class="card-text">Average Rating: <?php echo number_format($row['avg_rating'], 1); ?></p>
+                                        <!-- You can add additional information here if needed -->
+                                        <a href="#" class="btn btn-primary">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                        ?>
+                        </div>
+                        <?php
+                    } else {
+                        // If no teachers have been rated
+                        echo "No teachers have been rated.";
+                    }
+                    ?>
+        </div>
+        </div>
+        </div>
+        </div>
+                   
     <!-- Your custom scripts -->
     <script src="../admin/script.js"></script>
     <script>
        new DataTable('#example');
     </script>
+   
 </body>
 
 </html>

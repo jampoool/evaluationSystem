@@ -117,7 +117,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'student') {
                                             <h5 class='card-title'>Teacher: $teacherName</h5>
                                             <p class='card-title'>Subject: $subjectName</p>
                                             <p class='card-text'>Evaluate your teacher here.</p>
-                                            <button onclick=\"checkEvaluation('$teacherID')\" class=\"btn btn-light\">Evaluate</button>
+                                            <button onclick=\"checkEvaluation('$teacherID')\" class=\"btn btn-primary\">Evaluate</button>
                                         </div>
                                     </div>
                                 </div>";
