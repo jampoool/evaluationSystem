@@ -157,7 +157,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                 </div>
             </nav>
                 <h5>
-                <small class="text-muted p-5">Manage Form</small>
+                <small class="text-muted p-5">Manage Questions</small>
                 </h5>
                 <div id="page-content" class="col-md-12 px-5 py-1" >
                 <div class="row">

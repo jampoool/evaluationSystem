@@ -268,7 +268,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                     </ul>
                 </div>
             </nav>
-            <div class="container-fluid">
+            <div class="col-md-12 px-5 py-2">
                 <div class="row shadow-sm p-2 mb-2 bg-white rounded">
                 <div class="col-md-4 col-xl-3">
                         <div class="card order-card" id="card">
@@ -360,7 +360,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                 </div>
 
                   <!-- Begin Page Content -->
-        <div class="container-fluid">
+        <div class="col-md-12 mt-4">
 
             <!-- DataTales Example -->
             <div class="card shadow mb-4">

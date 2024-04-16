@@ -161,7 +161,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                 </div>
             </nav>
             <h5>
-                                <small class="text-muted p-5">Manage Subject</small>
+                                <small class="text-muted p-5">Assign Student in a Class</small>
                             </h5>
         <div id="page-content" class="col-md-12 px-5 py-1" >
             <div class="row">
@@ -255,7 +255,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                     </div>
                                 
                                     <button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                        <i class="fa-solid fa-plus"></i> Add Category
+                                        <i class="fa-solid fa-plus"></i> Assign Student
                                     </button>
 
                                     <div class="mt-2"></div>

@@ -151,7 +151,9 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                     </ul>
                 </div>
             </nav>
-           
+    <h5>
+        <small class="text-muted p-5">Manage Category</small>
+    </h5>
       <div id="page-content" class="col-md-12 px-5 py-1">
       <div class="row">
       <div class="container-fluid shadow p-3 mb-5 bg-body rounded ">
@@ -272,8 +274,18 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
         </tbody>
     </table>
 </div>
-
-
+      </div>
+      </div>
+      </div>
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Evaluation System 2024</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
     <!-- Your custom scripts -->
     <script src="../admin/script.js"></script>
     <script>

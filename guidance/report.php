@@ -162,11 +162,15 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                     </ul>
                 </div>
             </nav>
+            <h2 class="mt-5">
+                <small class="text-muted p-5">Evaluation Report</small>
+            </h2>
+            <div class="col-md-12 px-5 py-1">
             <?php
                     // Assuming you have already established a database connection
 
                     // SQL query to select all teachers who have been rated
-                    $sql = "SELECT user.firstname, user.lastname, user.email, AVG(tbl_responses.rating) AS avg_rating
+                    $sql = "SELECT user.id, user.firstname, user.lastname, user.email, AVG(tbl_responses.rating) AS avg_rating
                             FROM tbl_responses
                             INNER JOIN user ON tbl_responses.teacher_id = user.id
                             WHERE user.type = 'teacher'
@@ -175,28 +179,29 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
                     $result = mysqli_query($con, $sql);
 
                     if (mysqli_num_rows($result) > 0) {
-                        ?>
-                         <div class="container">
-                          <div class="row row-cols-1 row-cols-md-2 g-2 mt-4">
-                        <?php
-                        while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                    <div class="container-fluid">
+                        <div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
+                            <?php
+                            while ($row = mysqli_fetch_assoc($result)) {
                             ?>
-                            <div class="col-md-3">
-                                <div class="card bg-light">
+                            <div class="col-md-4">
+                                <div class="card shadow-lg">
                                     <div class="card-body">
-                                        <h5 class="card-title"><?php echo $row['firstname'].' '.$row['lastname']; ?></h5>
+                                        <h5 class="card-title"><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></h5>
                                         <p class="card-text"><?php echo $row['email']; ?></p>
                                         <p class="card-text">Average Rating: <?php echo number_format($row['avg_rating'], 1); ?></p>
                                         <!-- You can add additional information here if needed -->
-                                        <a href="#" class="btn btn-primary">View Details</a>
+                                        <a href="teacher_details.php?id=<?php echo $row['id']; ?>" class="btn btn-primary">View Details</a>
                                     </div>
                                 </div>
                             </div>
                             <?php
-                        }
-                        ?>
+                            }
+                            ?>
                         </div>
-                        <?php
+                    </div>
+                    <?php
                     } else {
                         // If no teachers have been rated
                         echo "No teachers have been rated.";

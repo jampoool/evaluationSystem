@@ -218,7 +218,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'guidance') {
 
                         <!-- end of modal -->
                 <h5>
-                <small class="text-muted p-5">Manage Form</small>
+                <small class="text-muted p-5">Assign a Teacher to Evaluate</small>
                 </h5>
                 <div id="page-content" class="col-md-12 px-5 py-1">
     <div class="row">

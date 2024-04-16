@@ -196,7 +196,7 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'admin') {
                                     </div>
                                 
                                     <button type="button" class="btn btn-primary mx-auto" style="font-size: 12px !important;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                        <i class="fa-solid fa-plus"></i> Add Category
+                                        <i class="fa-solid fa-plus"></i> Add Subject
                                     </button>
 
                                     <div class="mt-2"></div>

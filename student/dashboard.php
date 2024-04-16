@@ -60,33 +60,50 @@ if (!isset($_SESSION['type']) || $_SESSION['type'] !== 'student') {
                 </div>
                <div class="navbar-collapse collapse">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="../img/cartoon-man-leaving-review.jpg" class="avatar img-fluid" alt="Avatar">
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="../logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                            </ul>
-                        </li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../img/cartoon-man-leaving-review.jpg" class="avatar img-fluid" alt="Avatar">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">  
+                            <li><a class="dropdown-item" href="settings.php"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><a class="dropdown-item" href="../logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
                     </ul>
                 </div>
 
             </nav>
             <div class="container-fluid">
-                <div class="row mb-4">
-                    <div class="col">
-                        <div class="card text-white mb-3" style="background-color: #1d216e">
-                            <div class="card-body">
-                                <h5 class="card-title">Welcome, 
-                                    <?php
-                                        
-                                    ?>
-                                </h5>
-                                <p class="card-text">You are logged in as a student.</p>
-                            </div>
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="card text-white mb-3" style="background-color: #1d216e">
+                        <div class="card-body">
+                            <h5 class="card-title">Welcome, 
+                                <?php
+                                // Assuming that $_SESSION['user_id'] is the session variable holding the user ID
+                                $userId = $_SESSION['user_id'];
+
+                                // Ensure to properly sanitize user input to prevent SQL injection
+                                $userId = mysqli_real_escape_string($con, $userId);
+
+                                // Query to fetch student name based on user ID
+                                $student_query = "SELECT firstname, lastname FROM user WHERE id = '$userId'";
+                                $student_result = mysqli_query($con, $student_query);
+
+                                // Check if query executed successfully and returned any rows
+                                if ($student_result && mysqli_num_rows($student_result) > 0) {
+                                    $student_data = mysqli_fetch_assoc($student_result);
+                                    echo $student_data['firstname'] . ' ' . $student_data['lastname'];
+                                } else {
+                                    echo "Student Name";
+                                }
+                                ?>
+                            </h5>
+                            <p class="card-text">You are logged in as a student.</p>
                         </div>
                     </div>
                 </div>
+            </div>
                 <div class="container-fluid">
                 <div class="row mb-4">
                         <?php
